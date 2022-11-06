@@ -7,10 +7,49 @@
     xmlns:local="using:PureRadio.Uwp.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls" 
+    xmlns:viewmodels="using:PureRadio.Uwp.ViewModels" 
+    d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
     mc:Ignorable="d"
     muxc:BackdropMaterial.ApplyToRootOrPageBackground="True">
     <!--muxc:BackdropMaterial.ApplyToRootOrPageBackground="True"-->
+    <Page.Resources>
+        <Flyout x:Key="UserInfoFlyout" Placement="BottomEdgeAlignedRight" 
+                FlyoutPresenterStyle="{StaticResource UserInfoFlyoutStyle}">
+            <StackPanel Orientation="Vertical">
+                <Grid HorizontalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <muxc:PersonPicture 
+                        Grid.Column="0"
+                        VerticalAlignment="Center" Width="48" Height="48"
+                        ProfilePicture="https://docs.microsoft.com/windows/uwp/contacts-and-calendar/images/shoulder-tap-static-payload.png"/>
+                    <StackPanel
+                        Grid.Column="1"
+                        Orientation="Vertical"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Left">
+                        <TextBlock 
+                            Text="User Name"
+                            Style="{StaticResource BodyTextBlockStyle}"/>
+                        <TextBlock
+                            Text="Phone Number"
+                            Style="{StaticResource CaptionTextBlockStyle}"/>
+                        <Button
+                            x:Name="AccountStateButoon"
+                            Style="{StaticResource TextButtonStyle}">
+                            <TextBlock Text="SignIn"/>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+                <TextBlock 
+                    Text="Your own personal introduction"
+                    Style="{StaticResource BodyTextBlockStyle}"/>
+            </StackPanel>
+        </Flyout>
+    </Page.Resources>
     <Grid>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
@@ -157,7 +196,8 @@
             <Button
                 Style="{StaticResource TitleBarPersonButtonStyle}"
                 Grid.Column="3"
-                Margin="6,0">
+                Margin="6,0"
+                Flyout="{StaticResource UserInfoFlyout}">
                 <muxc:PersonPicture
                     ProfilePicture="https://docs.microsoft.com/windows/uwp/contacts-and-calendar/images/shoulder-tap-static-payload.png"
                     Width="28"

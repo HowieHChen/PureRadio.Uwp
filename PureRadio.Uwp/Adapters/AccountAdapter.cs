@@ -10,11 +10,11 @@ namespace PureRadio.Uwp.Adapters.Interfaces
 {
     public class AccountAdapter : IAccountAdapter
     {
-        public (AccountInfo, TokenInfo) ConvertToAccountInfo(SignInUserItem item)
+        public (AccountInfo, TokenInfo) ConvertToAccountInfo(SignInUserItem item, string phoneNumber)
         {
             AccountInfo accountInfo = new(
                 item.QingtingId, item.NickName, item.NickName, item.CreateTime, item.Birthday, 
-                item.Gender, item.Location, item.Signature, item.Avatar, item.IsBlocked
+                item.Gender, item.Location, item.Signature, item.Avatar, item.IsBlocked, phoneNumber
                 );
             TokenInfo tokenInfo = new(item.QingtingId, item.AccessToken, item.RefreshToken, item.ExpiresIn);
 

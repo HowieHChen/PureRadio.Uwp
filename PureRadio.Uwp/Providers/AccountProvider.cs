@@ -168,10 +168,12 @@ namespace PureRadio.Uwp.Providers
             {
                 if (!string.IsNullOrEmpty(_tokenInfo?.RefreshToken) && settings.GetValue<bool>(AppConstants.SettingsKey.AccountOnline))
                 {
+                    var phoneNumber = settings.GetValue<string>(AppConstants.SettingsKey.AccountPhone);
+                    var password = settings.GetValue<string>(AppConstants.SettingsKey.AccountPassword);
                     var parameters = new Dictionary<string, string>
                     {
-                        { Query.QingTingId, settings.GetValue<string>(AppConstants.SettingsKey.AccountPhone) },
-                        { Query.Password, settings.GetValue<string>(AppConstants.SettingsKey.AccountPassword) },
+                        { Query.QingTingId, phoneNumber },
+                        { Query.Password, password },
                     };
                     var httpProvider = Ioc.Default.GetRequiredService<IHttpProvider>();
                     var request = await httpProvider.GetRequestMessageAsync(ApiConstants.Account.Login, HttpMethod.Post, parameters, RequestType.Auth, false, false);
@@ -179,7 +181,7 @@ namespace PureRadio.Uwp.Providers
                     var result = await httpProvider.ParseAsync<SignInResponse>(response);
                     if (result.ErrorNo != 0)
                     {
-                        var solved = accountAdapter.ConvertToAccountInfo(result.Data);
+                        var solved = accountAdapter.ConvertToAccountInfo(result.Data, phoneNumber);
                         _accountInfo = solved.Item1;
                         _tokenInfo = solved.Item2;
                         State = AuthorizeState.SignedIn;

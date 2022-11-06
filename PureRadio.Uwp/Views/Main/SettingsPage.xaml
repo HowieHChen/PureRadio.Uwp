@@ -316,11 +316,21 @@
                     </muxc:Expander.Header>
                     <muxc:Expander.Content>
                         <StackPanel Margin="28,0,0,0" Orientation="Vertical">
-                            <HyperlinkButton Content="Microsoft/microsoft-ui-xaml" NavigateUri="https://github.com/microsoft/microsoft-ui-xaml" />
-                            <HyperlinkButton Content="Microsoft/WinUI-Gallery" NavigateUri="https://github.com/microsoft/WinUI-Gallery" />
-                            <HyperlinkButton Content="CommunityToolkit/MVVM-Samples" NavigateUri="https://github.com/CommunityToolkit/MVVM-Samples" />
-                            <HyperlinkButton Content="CommunityToolkit/WindowsCommunityToolkit" NavigateUri="https://github.com/CommunityToolkit/WindowsCommunityToolkit" />
-                            <HyperlinkButton Content="Richasy/Bili.Uwp" NavigateUri="https://github.com/Richasy/Bili.Uwp" />
+                            <HyperlinkButton NavigateUri="https://github.com/microsoft/microsoft-ui-xaml" >
+                                <TextBlock Text="Microsoft/microsoft-ui-xaml" TextTrimming="CharacterEllipsis"/>
+                            </HyperlinkButton>
+                            <HyperlinkButton NavigateUri="https://github.com/microsoft/WinUI-Gallery" >
+                                <TextBlock Text="Microsoft/WinUI-Gallery" TextTrimming="CharacterEllipsis"/>
+                            </HyperlinkButton>
+                            <HyperlinkButton NavigateUri="https://github.com/CommunityToolkit/MVVM-Samples" >
+                                <TextBlock Text="CommunityToolkit/MVVM-Samples" TextTrimming="CharacterEllipsis"/>
+                            </HyperlinkButton>
+                            <HyperlinkButton NavigateUri="https://github.com/CommunityToolkit/WindowsCommunityToolkit" >
+                                <TextBlock Text="CommunityToolkit/WindowsCommunityToolkit" TextTrimming="CharacterEllipsis"/>
+                            </HyperlinkButton>
+                            <HyperlinkButton NavigateUri="https://github.com/Richasy/Bili.Uwp" >
+                                <TextBlock Text="Richasy/Bili.Uwp" TextTrimming="CharacterEllipsis"/>
+                            </HyperlinkButton>
                         </StackPanel>
                     </muxc:Expander.Content>
                 </muxc:Expander>

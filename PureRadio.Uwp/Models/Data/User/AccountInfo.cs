@@ -13,9 +13,12 @@ namespace PureRadio.Uwp.Models.Data.User
         /// <summary>
         /// 完整构造(在线账号)
         /// </summary>
-        public AccountInfo(string qingtingId, string nickName, string userName, string createTime, string birthday, string gender, string location, string signature, string avatar, string isBlocked)
+        public AccountInfo(
+            string qingtingId, string nickName, string userName, string createTime, string birthday, 
+            string gender, string location, string signature, string avatar, string isBlocked, string phoneNumber)
         {
             IsOnline = true;
+            PhoneNumber = phoneNumber;
             QingtingId = qingtingId;
             NickName = nickName;
             UserName = userName;
@@ -35,6 +38,7 @@ namespace PureRadio.Uwp.Models.Data.User
         {
             var resourceLoader = Windows.ApplicationModel.Resources.ResourceLoader.GetForCurrentView();
             IsOnline = false;
+            PhoneNumber = string.Empty;
             QingtingId = string.Empty;
             NickName = UserName = resourceLoader.GetString("LangLocalAccountName");
             CreateTime = string.Empty;
@@ -51,7 +55,11 @@ namespace PureRadio.Uwp.Models.Data.User
         /// </summary>
         public bool IsOnline { get; set; }
         /// <summary>
-        /// 用户Id.
+        /// 手机号
+        /// </summary>
+        public string PhoneNumber { get; set; }
+        /// <summary>
+        /// 用户Id
         /// </summary>
         public string QingtingId { get; set; }
         /// <summary>
