@@ -1,0 +1,330 @@
+﻿<Page
+    x:Class="PureRadio.Uwp.Views.Main.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:animatedVisuals="using:Microsoft.UI.Xaml.Controls.AnimatedVisuals"
+    xmlns:animations="using:Microsoft.Toolkit.Uwp.UI.Animations"
+    xmlns:local="using:PureRadio.Uwp.Views"
+    xmlns:convert="using:PureRadio.Uwp.Resources.Converter"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    mc:Ignorable="d"
+    Background="Transparent">
+    <Page.Resources>
+        <ResourceDictionary>
+            <convert:BooleanToDisplayConverter x:Key="BooleanToDisplayConverter"/>
+            <convert:ThemeToDisplayConverter x:Key="ThemeToDisplayConverter"/>
+            <convert:ThemeToIndexConverter x:Key="ThemeToIndexConverter"/>
+            <convert:LanguageToDisplayConverter x:Key="LanguageToDisplayConverter"/>
+            <convert:LanguageToIndexConverter x:Key="LanguageToIndexConverter"/>
+            <convert:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+            <convert:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            <convert:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
+        </ResourceDictionary>
+    </Page.Resources>
+    <Grid>
+        <ScrollViewer
+            x:Name="contentSV"
+            Padding="36,0,36,0"
+            Margin="0,0,0,0"
+            IsTabStop="False"
+            UseSystemFocusVisuals="False"
+            VerticalScrollBarVisibility="Auto"
+            VerticalScrollMode="Auto">
+            <StackPanel 
+                HorizontalAlignment="Stretch" Margin="0,0,0,100">
+                <!-- Settings -->
+                <TextBlock
+                    x:Uid="PageSrttingsTitle"
+                    Style="{StaticResource TitleTextBlockStyle}"
+                    Margin="0,32,0,0"
+                    Text="Settings" >
+                    <animations:Implicit.Animations>
+                        <animations:OffsetAnimation Duration="0:0:0.2"/>
+                    </animations:Implicit.Animations>
+                </TextBlock>
+                <!-- Appearance -->
+                <TextBlock
+                    x:Uid="PageSettingsAppearanceTitle"
+                    Style="{StaticResource BodyTextBlockStyle}"
+                    Margin="0,8,0,0"
+                    Text="Appearance" >
+                    <animations:Implicit.Animations>
+                        <animations:OffsetAnimation Duration="0:0:0.2"/>
+                    </animations:Implicit.Animations>
+                </TextBlock>
+                <!-- Theme Selection-->
+                <muxc:Expander 
+                    Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
+                    HorizontalAlignment="Stretch" 
+                    HorizontalContentAlignment="Stretch"
+                    CornerRadius="4"
+                    Margin="0,8,0,0">
+                    <animations:Implicit.Animations>
+                        <animations:OffsetAnimation Duration="0:0:0.2"/>
+                    </animations:Implicit.Animations>
+                    <muxc:Expander.Header>
+                        <Grid Height="68">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="Auto" MaxWidth="320" />
+                            </Grid.ColumnDefinitions>
+                            <FontIcon 
+                                Grid.Column="0"
+                                Width="24"
+                                Height="24"
+                                FontFamily="{StaticResource FluentIcons}" 
+                                Glyph="&#xE790;"/>
+                            <TextBlock 
+                                x:Uid="PageSettingsThemeTitle"
+                                Grid.Column="1"
+                                VerticalAlignment="Center"
+                                Margin="16,0,0,0"
+                                Text="Theme"/>
+                            <TextBlock
+                                Grid.Column="2"
+                                VerticalAlignment="Center"
+                                Text="{x:Bind ViewModel.Theme, Mode=OneWay, Converter={StaticResource ThemeToDisplayConverter}}"/>
+                        </Grid>
+                    </muxc:Expander.Header>
+                    <muxc:Expander.Content>
+                        <muxc:RadioButtons 
+                            x:Name="ThemeRadioButtons" 
+                            SelectedIndex="{x:Bind ViewModel.Theme,Mode=TwoWay,Converter={StaticResource ThemeToIndexConverter}}"
+                            Margin="40,0,0,0">
+                            <RadioButton x:Name="ThemeRadioButtonSystem" x:Uid="PageSettingsThemeSystem" />
+                            <RadioButton x:Name="ThemeRadioButtonLight" x:Uid="PageSettingsThemeLight" />
+                            <RadioButton x:Name="ThemeRadioButtonDark" x:Uid="PageSettingsThemeDark" />
+                        </muxc:RadioButtons>
+                    </muxc:Expander.Content>
+                </muxc:Expander>
+                <!-- Language Selection-->
+                <muxc:Expander 
+                    Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
+                    HorizontalAlignment="Stretch" 
+                    HorizontalContentAlignment="Stretch"
+                    CornerRadius="4"
+                    Margin="0,4,0,0">
+                    <animations:Implicit.Animations>
+                        <animations:OffsetAnimation Duration="0:0:0.2"/>
+                    </animations:Implicit.Animations>
+                    <muxc:Expander.Header>
+                        <Grid Height="68">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="Auto" MaxWidth="320" />
+                            </Grid.ColumnDefinitions>
+                            <FontIcon 
+                                Grid.Column="0"
+                                Width="24"
+                                Height="24"
+                                FontFamily="{StaticResource FluentIcons}" 
+                                Glyph="&#xF2B7;"/>
+                            <TextBlock 
+                                x:Uid="PageSettingsLangTitle"
+                                Grid.Column="1"
+                                VerticalAlignment="Center"
+                                Margin="16,0,0,0"
+                                Text="Language"/>
+                            <TextBlock
+                                Grid.Column="2"
+                                VerticalAlignment="Center"
+                                Text="{x:Bind ViewModel.Language, Mode=OneWay, Converter={StaticResource LanguageToDisplayConverter}}"/>
+                        </Grid>
+                    </muxc:Expander.Header>
+                    <muxc:Expander.Content>
+                        <muxc:RadioButtons 
+                            x:Name="LanguageRadioButtons"
+                            SelectedIndex="{x:Bind ViewModel.Language, Mode=TwoWay, Converter={StaticResource LanguageToIndexConverter}}"
+                            Margin="40,0,0,0">
+                            <RadioButton x:Name="LanguageRadioButtonSystem" x:Uid="PageSettingsLangSystem" />
+                            <RadioButton x:Name="LanguageRadioButtonZHCN" x:Uid="PageSettingsLangZHCN" />
+                            <RadioButton x:Name="LanguageRadioButtonENUS" x:Uid="PageSettingsLangENUS" />
+                        </muxc:RadioButtons>
+                    </muxc:Expander.Content>
+                </muxc:Expander>
+                <!-- General -->
+                <TextBlock
+                    x:Uid="PageSettingsGeneralTitle"
+                    Style="{StaticResource BodyTextBlockStyle}"
+                    Margin="0,16,0,0"
+                    Text="General" >
+                    <animations:Implicit.Animations>
+                        <animations:OffsetAnimation Duration="0:0:0.2"/>
+                    </animations:Implicit.Animations>
+                </TextBlock>
+                <!-- Timer -->
+                <muxc:Expander 
+                    Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
+                    HorizontalAlignment="Stretch" 
+                    HorizontalContentAlignment="Stretch"
+                    CornerRadius="4"
+                    Margin="0,8,0,0">
+                    <animations:Implicit.Animations>
+                        <animations:OffsetAnimation Duration="0:0:0.2"/>
+                    </animations:Implicit.Animations>
+                    <muxc:Expander.Header>
+                        <Grid Height="68">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <FontIcon 
+                                Grid.Column="0"
+                                Width="24"
+                                Height="24"
+                                FontFamily="{StaticResource FluentIcons}" 
+                                Glyph="&#xECC5;"/>
+                            <TextBlock 
+                                x:Uid="PageSettingsTimerTitle"
+                                Grid.Column="1"
+                                VerticalAlignment="Center"
+                                Margin="16,0,0,0"
+                                Text="Timer"/>
+                            <TextBlock
+                                Grid.Column="2"
+                                VerticalAlignment="Center"
+                                Text="{x:Bind ViewModel.TimerStatus, Mode=OneWay, Converter={StaticResource BooleanToDisplayConverter}}"/>
+                        </Grid>
+                    </muxc:Expander.Header>
+                    <muxc:Expander.Content>
+                        <Grid Margin="40,0,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <TextBlock 
+                                Grid.Row="0" Grid.Column="0" 
+                                VerticalAlignment="Center" 
+                                Visibility="{x:Bind ViewModel.TimerStatus,Mode=OneWay,Converter={StaticResource InverseBooleanToVisibilityConverter}}"
+                                x:Name="TimerPickerTitle" 
+                                x:Uid="PageSettingsTimerPickerTitle" 
+                                Text="Timer"/>
+                            <TimePicker 
+                                Grid.Row="0" Grid.Column ="1"  
+                                Visibility="{x:Bind ViewModel.TimerStatus,Mode=OneWay,Converter={StaticResource InverseBooleanToVisibilityConverter}}"
+                                x:Name="TimerPicker" 
+                                HorizontalAlignment="Right" 
+                                SelectedTime="{x:Bind ViewModel.Delay, Mode=TwoWay}" ClockIdentifier="24HourClock"/>
+                            <ToggleSwitch 
+                                Grid.Row="1" Grid.Column="0" 
+                                x:Name="TimerToggle" 
+                                MinWidth="72"
+                                IsOn="{x:Bind ViewModel.TimerStatus, Mode=TwoWay}" 
+                                IsEnabled="{x:Bind ViewModel.TimerToggleEnabled, Mode=OneWay}"/>
+                            <TextBlock 
+                                Grid.Row="1" Grid.Column="1" 
+                                VerticalAlignment="Center" 
+                                x:Name="TimerDelay" 
+                                HorizontalAlignment="Right" 
+                                Text="{x:Bind ViewModel.CloseTime, Mode=OneWay}"/>
+                        </Grid>
+                    </muxc:Expander.Content>
+                </muxc:Expander>
+                <!-- Cache -->
+                <Grid
+                    Margin="0,4,0,0"
+                    CornerRadius="4"
+                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                    BorderThickness="1"
+                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                    Height="68">
+                    <animations:Implicit.Animations>
+                        <animations:OffsetAnimation Duration="0:0:0.2"/>
+                    </animations:Implicit.Animations>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <FontIcon 
+                        Margin="16,0,0,0"                                
+                        Grid.Column="0"                                
+                        Width="24"                                
+                        Height="24"                                
+                        FontFamily="{StaticResource FluentIcons}"                                
+                        Glyph="&#xE96A;"/>
+                    <TextBlock                                 
+                        x:Uid="PageSettingsClearCacheTitle"                                
+                        Grid.Column="1"                                
+                        VerticalAlignment="Center"                                
+                        Margin="16,0,0,0"                                
+                        Text="Clear Cache"/>
+                    <muxc:ProgressRing
+                        x:Name="ClearCacheRing"
+                        Grid.Column="2"
+                        Visibility="{x:Bind ViewModel.ClearingCache,Mode=OneWay,Converter={StaticResource BooleanToVisibilityConverter}}"
+                        HorizontalAlignment="Left"/>
+                    <Button 
+                        Margin="16,0,16,0"
+                        x:Name="ClearCacheButton"
+                        x:Uid="PageSettingsClearCacheButton"
+                        MinWidth="100"
+                        Grid.Column="3"
+                        Content="Clear"
+                        IsEnabled="{x:Bind ViewModel.ClearingCache, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}"
+                        Click="{x:Bind ViewModel.ClearCache}" />
+                </Grid>
+                <!-- About -->
+                <TextBlock
+                    x:Uid="PageSettingsAboutTitle"
+                    Style="{StaticResource BodyTextBlockStyle}"
+                    Margin="0,16,0,0"
+                    Text="About" >
+                    <animations:Implicit.Animations>
+                        <animations:OffsetAnimation Duration="0:0:0.2"/>
+                    </animations:Implicit.Animations>
+                </TextBlock>
+                <!-- References -->
+                <muxc:Expander 
+                    Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
+                    HorizontalAlignment="Stretch" 
+                    HorizontalContentAlignment="Stretch"
+                    CornerRadius="4"
+                    Margin="0,8,0,0">
+                    <animations:Implicit.Animations>
+                        <animations:OffsetAnimation Duration="0:0:0.2"/>
+                    </animations:Implicit.Animations>
+                    <muxc:Expander.Header>
+                        <Grid Height="68">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <FontIcon 
+                                Grid.Column="0"
+                                Width="24"
+                                Height="24"
+                                FontFamily="{StaticResource FluentIcons}" 
+                                Glyph="&#xE82D;"/>
+                            <TextBlock 
+                                x:Uid="PageSettingsReferencesTitle"
+                                Grid.Column="1"
+                                VerticalAlignment="Center"
+                                Margin="16,0,0,0"
+                                Text="References"/>
+                        </Grid>
+                    </muxc:Expander.Header>
+                    <muxc:Expander.Content>
+                        <StackPanel Margin="28,0,0,0" Orientation="Vertical">
+                            <HyperlinkButton Content="Microsoft/microsoft-ui-xaml" NavigateUri="https://github.com/microsoft/microsoft-ui-xaml" />
+                            <HyperlinkButton Content="Microsoft/WinUI-Gallery" NavigateUri="https://github.com/microsoft/WinUI-Gallery" />
+                            <HyperlinkButton Content="CommunityToolkit/MVVM-Samples" NavigateUri="https://github.com/CommunityToolkit/MVVM-Samples" />
+                            <HyperlinkButton Content="CommunityToolkit/WindowsCommunityToolkit" NavigateUri="https://github.com/CommunityToolkit/WindowsCommunityToolkit" />
+                            <HyperlinkButton Content="Richasy/Bili.Uwp" NavigateUri="https://github.com/Richasy/Bili.Uwp" />
+                        </StackPanel>
+                    </muxc:Expander.Content>
+                </muxc:Expander>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>
