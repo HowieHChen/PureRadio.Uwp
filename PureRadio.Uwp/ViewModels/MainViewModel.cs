@@ -28,6 +28,8 @@ namespace PureRadio.Uwp.ViewModels
         private CancellationTokenSource _suggestionCancellationTokenSource;
         private bool _isKeywordChanged;
 
+        public string _noResultTip;
+
         private string _keyword;
         public string Keyword
         {
@@ -35,7 +37,7 @@ namespace PureRadio.Uwp.ViewModels
             set
             {
                 HandleKeywordChanged(value);
-                _keyword = value;
+                SetProperty(ref _keyword, value);
             }
         }
 
@@ -53,6 +55,8 @@ namespace PureRadio.Uwp.ViewModels
                 Interval = TimeSpan.FromMilliseconds(350),
             };
             _suggestionTimer.Tick += OnSuggestionTimerTickAsync;
+            var resourceLoader = Windows.ApplicationModel.Resources.ResourceLoader.GetForCurrentView();
+            _noResultTip = resourceLoader.GetString("LangSearchNoResultTip");
         }
 
         public void Navigate(PageIds pageId, object parameter = null)
@@ -93,7 +97,7 @@ namespace PureRadio.Uwp.ViewModels
                 {
                     return;
                 }
-                SearchSuggest = suggestion;
+                SearchSuggest = suggestion.Count > 0 ? suggestion : new List<string>() { _noResultTip };
             }
             catch (TaskCanceledException)
             {

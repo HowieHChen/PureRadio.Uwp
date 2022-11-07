@@ -129,6 +129,9 @@
   <data name="LangLocalAccountSignature" xml:space="preserve">
     <value>Sign in to your QingTing account to enjoy the full service</value>
   </data>
+  <data name="LangSearchNoResultTip" xml:space="preserve">
+    <value>No results found</value>
+  </data>
   <data name="LangSettingsSwitchOff" xml:space="preserve">
     <value>Off</value>
   </data>
@@ -149,6 +152,9 @@
   </data>
   <data name="navSettings.Content" xml:space="preserve">
     <value>Settings</value>
+  </data>
+  <data name="PageSearchTitle.Text" xml:space="preserve">
+    <value>Search</value>
   </data>
   <data name="PageSettingsAboutTitle.Text" xml:space="preserve">
     <value>About this app</value>

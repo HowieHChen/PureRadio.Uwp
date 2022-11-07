@@ -43,17 +43,17 @@ namespace PureRadio.Uwp.Models.Enums
         /// </summary>
         Settings = 5,
 
+        /// 二级页面[100,1000)
+
         /// <summary>
-        /// 用户页
+        /// 用户页(仅预留)
         /// </summary>
-        User = 6,
+        User = 100,
 
         /// <summary>
         /// 搜索结果页
         /// </summary>
-        Search = 7,
-
-        /// 二级页面[100,1000)
+        Search = 101,
 
         /// <summary>
         /// 全屏的播放页

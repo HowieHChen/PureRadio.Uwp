@@ -64,6 +64,7 @@ namespace PureRadio.Uwp.Providers
             var request = await _httpProvider.GetRequestMessageAsync(ApiConstants.Search.Radio, HttpMethod.Post, parameters, RequestType.Search);
             var response = await _httpProvider.SendAsync(request);
             var result = await _httpProvider.ParseAsync<SearchRadioResponse>(response);
+            _radioPageNumber++;
             var items = result.Data.SearchRadioResults?.SearchDatas == null
                 ? new List<RadioInfoSearch>()
                 : result.Data.SearchRadioResults.SearchDatas.Select(p => _searchAdapter.ConvertToSearchResultView(p));
@@ -82,6 +83,7 @@ namespace PureRadio.Uwp.Providers
             var request = await _httpProvider.GetRequestMessageAsync(ApiConstants.Search.Radio, HttpMethod.Post, parameters, RequestType.Search);
             var response = await _httpProvider.SendAsync(request);
             var result = await _httpProvider.ParseAsync<SearchContentResponse>(response);
+            _contentPageNumber++;
             var items = result.Data.SearchContentResults?.SearchDatas == null
                 ? new List<ContentInfoSearch>()
                 : result.Data.SearchContentResults.SearchDatas.Select(p => _searchAdapter.ConvertToSearchResultView(p));

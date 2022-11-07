@@ -185,6 +185,7 @@ namespace PureRadio.Uwp.Providers
                         _accountInfo = solved.Item1;
                         _tokenInfo = solved.Item2;
                         State = AuthorizeState.SignedIn;
+                        _lastAuthorizeTime = DateTimeOffset.Now;
                     }
                 }
             }
@@ -235,13 +236,14 @@ namespace PureRadio.Uwp.Providers
             State = AuthorizeState.Loading;
 
             var httpProvider = Ioc.Default.GetRequiredService<IHttpProvider>();
-            var request = await httpProvider.GetRequestMessageAsync(ApiConstants.Account.Login, HttpMethod.Post, null, RequestType.Login, false, false);
+            var request = await httpProvider.GetRequestMessageAsync(ApiConstants.Account.RefreshToken, HttpMethod.Post, null, RequestType.Auth, false, false);
             var response = await httpProvider.SendAsync(request);
             var result = await httpProvider.ParseAsync<TokenInfoResponse>(response);
             if (result.ErrorNo != 0)
             {
                 _tokenInfo = result.Data;
                 State = AuthorizeState.SignedIn;
+                _lastAuthorizeTime = DateTimeOffset.Now;
                 return _tokenInfo.AccessToken;
             }
             else

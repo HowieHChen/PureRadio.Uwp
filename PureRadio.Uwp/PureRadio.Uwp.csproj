@@ -141,6 +141,7 @@
     <Compile Include="Models\Enums\NavigationType.cs" />
     <Compile Include="Models\Enums\PageIds.cs" />
     <Compile Include="Models\Enums\RequestType.cs" />
+    <Compile Include="Models\Local\IncrementalLoadingObservableCollection.cs" />
     <Compile Include="Models\Local\PlaySnapshot.cs" />
     <Compile Include="Models\QingTing\Search\SearchContentItem.cs" />
     <Compile Include="Models\QingTing\Search\SearchContentResponse.cs" />
@@ -169,6 +170,7 @@
     <Compile Include="Services\Interfaces\INavigateService.cs" />
     <Compile Include="Services\NavigateService.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\SearchViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -187,6 +189,9 @@
     <Compile Include="Services\SettingsService.cs" />
     <Compile Include="Views\Main\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Secondary\SearchPage.xaml.cs">
+      <DependentUpon>SearchPage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -318,6 +323,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Main\SettingsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Secondary\SearchPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

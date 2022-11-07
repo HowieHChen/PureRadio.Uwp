@@ -26,6 +26,7 @@ using static System.Net.Mime.MediaTypeNames;
 using Windows.UI.Xaml.Media.Animation;
 using PureRadio.Uwp.Views.Main;
 using Windows.UI;
+using PureRadio.Uwp.Views.Secondary;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -95,6 +96,10 @@ namespace PureRadio.Uwp.Views
             if(e.Type == NavigationType.Main)
             {
                 NavigateToMainView(e.PageId, e.Parameter);
+            }
+            else if(e.Type == NavigationType.Secondary)
+            {
+                NavigateToSecondaryView(e.PageId, e.Parameter);
             }
         }
 
@@ -180,12 +185,6 @@ namespace PureRadio.Uwp.Views
                 case PageIds.Settings:
                     pageType = typeof(SettingsPage);
                     break;
-                case PageIds.User:
-
-                    break;
-                case PageIds.Search:
-
-                    break;
             }
             if (pageType != null)
             {
@@ -194,6 +193,28 @@ namespace PureRadio.Uwp.Views
                     ContentFrame.Navigate(pageType, parameter, new EntranceNavigationTransitionInfo());
                     _currentPageId = pageId;
                 }
+            }
+        }
+
+        private void NavigateToSecondaryView(PageIds pageId, object parameter = null)
+        {
+            Type pageType = null;
+            switch (pageId)
+            {
+                case PageIds.None:
+                default:
+                    break;
+                case PageIds.User:
+                    
+                    break;
+                case PageIds.Search:
+                    pageType = typeof(SearchPage);
+                    break;
+            }
+            if (pageType != null)
+            {
+                ContentFrame.Navigate(pageType, parameter, new EntranceNavigationTransitionInfo());
+                _currentPageId = pageId;
             }
         }
 
@@ -212,6 +233,7 @@ namespace PureRadio.Uwp.Views
         private void On_Navigated(object sender, NavigationEventArgs e)
         {
             var item = _pages.FirstOrDefault(p => p.Page == e.SourcePageType);
+            
             if (NavView.SelectedItem == null ||
                 (NavView.SelectedItem is muxc.NavigationViewItem navItem && item.Tag != null &&
                 navItem.Tag.ToString() != item.Tag))
@@ -303,20 +325,23 @@ namespace PureRadio.Uwp.Views
 
         private void AppTitleSearchBar_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
+            string keyword = string.Empty;
             if (args.ChosenSuggestion != null)
             {
+                keyword = (string)args.ChosenSuggestion;
                 // User selected an item from the suggestion list, take an action on it here.                
                 // ContentFrame.Navigate(typeof(SearchResultPage), args.ChosenSuggestion.ToString());
             }
             else if (!string.IsNullOrEmpty(args.QueryText))
             {
+                keyword = args.QueryText;
                 // ContentFrame.Navigate(typeof(SearchResultPage), args.QueryText);
             }
-        }
-
-        private void AppTitleSearchBar_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
-        {
-
+            if (!string.IsNullOrEmpty(keyword) && keyword != ViewModel._noResultTip) 
+            {
+                ViewModel.Navigate(PageIds.Search, keyword);
+                ViewModel.Keyword = string.Empty;
+            }
         }
     }
 }

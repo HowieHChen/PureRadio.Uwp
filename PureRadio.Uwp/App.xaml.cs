@@ -157,6 +157,7 @@ namespace PureRadio.Uwp
                         // Viewmodels
                         .AddTransient<MainViewModel>()
                         .AddTransient<SettingsViewModel>()
+                        .AddTransient<SearchViewModel>()
                         // Build
                         .BuildServiceProvider());
             }

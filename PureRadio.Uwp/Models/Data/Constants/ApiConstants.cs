@@ -52,7 +52,7 @@ namespace PureRadio.Uwp.Models.Data.Constants
             /// <summary>
             /// 搜索请求字符串模板
             /// </summary>
-            public const string SearchFormat = "{\"query\":\"{searchResultsPage(keyword:\\\"{0}\\\", page:{1}, include:\\\"{2}\\\" ) {numFound,searchData}}\"}";
+            public const string SearchFormat = "{{\"query\":\"{{searchResultsPage(keyword:\\\"{0}\\\", page:{1}, include:\\\"{2}\\\" ) {{numFound,searchData}}}}\"}}";
             /// <summary>
             /// 搜索请求字符串模板关键字
             /// </summary>

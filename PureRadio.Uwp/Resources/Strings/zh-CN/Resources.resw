@@ -129,6 +129,9 @@
   <data name="LangLocalAccountSignature" xml:space="preserve">
     <value>登录蜻蜓账号以享受完整服务</value>
   </data>
+  <data name="LangSearchNoResultTip" xml:space="preserve">
+    <value>没有找到结果</value>
+  </data>
   <data name="LangSettingsSwitchOff" xml:space="preserve">
     <value>关</value>
   </data>
@@ -145,10 +148,13 @@
     <value>库</value>
   </data>
   <data name="navRadio.Content" xml:space="preserve">
-    <value>广播</value>
+    <value>电台</value>
   </data>
   <data name="navSettings.Content" xml:space="preserve">
     <value>设置</value>
+  </data>
+  <data name="PageSearchTitle.Text" xml:space="preserve">
+    <value>搜索</value>
   </data>
   <data name="PageSettingsAboutTitle.Text" xml:space="preserve">
     <value>关于此应用</value>

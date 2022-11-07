@@ -37,11 +37,10 @@
                         <TextBlock
                             Text="Phone Number"
                             Style="{StaticResource CaptionTextBlockStyle}"/>
-                        <Button
-                            x:Name="AccountStateButoon"
-                            Style="{StaticResource TextButtonStyle}">
+                        <HyperlinkButton
+                            x:Name="AccountStateButoon">
                             <TextBlock Text="SignIn"/>
-                        </Button>
+                        </HyperlinkButton>
                     </StackPanel>
                 </Grid>
                 <TextBlock 
@@ -188,6 +187,7 @@
                 MaxWidth="600" Height="32"
                 ItemsSource="{x:Bind ViewModel.SearchSuggest, Mode=OneWay}"
                 Text="{x:Bind ViewModel.Keyword, Mode=TwoWay}"
+                UpdateTextOnSelect="False"
                 QuerySubmitted="AppTitleSearchBar_QuerySubmitted">
                 <animations:Implicit.Animations>
                     <animations:OffsetAnimation Duration="0:0:0.3"/>

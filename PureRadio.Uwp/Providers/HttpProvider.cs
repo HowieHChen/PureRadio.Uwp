@@ -45,38 +45,38 @@ namespace PureRadio.Uwp.Providers
             _httpClient = client;
         }
 
-        public async Task<HttpRequestMessage> GetRequestMessageAsync(
-            string url,
-            HttpMethod method, 
-            Dictionary<string, string> parameters = null, 
-            RequestType requestType = RequestType.Default, 
-            bool needToken = false, 
-            bool needSign = false)
-        {
-            HttpRequestMessage requestMessage;
-            if (method == HttpMethod.Get)
-            {
-                var query = await _accountProvider.GenerateAuthorizedQueryStringAsync(url, parameters, requestType, needToken);
-                url += $"?{query}";
-                requestMessage = new HttpRequestMessage(method, url);
-            }
-            else
-            {
+        //public async Task<HttpRequestMessage> GetRequestMessageAsync(
+        //    string url,
+        //    HttpMethod method,
+        //    Dictionary<string, string> parameters = null,
+        //    RequestType requestType = RequestType.Default,
+        //    bool needToken = false,
+        //    bool needSign = false)
+        //{
+        //    HttpRequestMessage requestMessage;
+        //    if (method == HttpMethod.Get)
+        //    {
+        //        var query = await _accountProvider.GenerateAuthorizedQueryStringAsync(url, parameters, requestType, needToken);
+        //        url += $"?{query}";
+        //        requestMessage = new HttpRequestMessage(method, url);
+        //    }
+        //    else
+        //    {
 
-                var query = await _accountProvider.GenerateAuthorizedQueryDictionaryAsync(url, parameters, requestType, needToken);
-                requestMessage = new HttpRequestMessage(method, url);
-                requestMessage.Content = new FormUrlEncodedContent(query);
-            }
-            return requestMessage;
-        }
+        //        var query = await _accountProvider.GenerateAuthorizedQueryDictionaryAsync(url, parameters, requestType, needToken);
+        //        requestMessage = new HttpRequestMessage(method, url);
+        //        requestMessage.Content = new FormUrlEncodedContent(query);
+        //    }
+        //    return requestMessage;
+        //}
 
         public async Task<HttpRequestMessage> GetRequestMessageAsync(
             string url, 
             HttpMethod method,
             Dictionary<string, string> parameters = null,
             RequestType requestType = RequestType.Default,
-            bool needToken = true,
-            Dictionary<string, string> ExtraParams = null)
+            bool needToken = false,
+            bool needSign = false)
         {
             HttpRequestMessage requestMessage;
             if (method == HttpMethod.Get)
