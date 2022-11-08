@@ -21,6 +21,7 @@ namespace PureRadio.Uwp.ViewModels
 
         [ObservableProperty]
         private string _keyword;
+        
 
         public IncrementalLoadingObservableCollection<RadioInfoSearch> RadioResult { get; set; }
         public IncrementalLoadingObservableCollection<ContentInfoSearch> ContentResult { get; set; }
@@ -39,13 +40,13 @@ namespace PureRadio.Uwp.ViewModels
 
         private async Task<IEnumerable<RadioInfoSearch>> SearchForRadio(CancellationToken cancelToken)
         {
-            var resultSet = await searchProvider.GetRadioSearchResultAsync(Keyword);
+            var resultSet = await searchProvider.GetRadioSearchResultAsync(Keyword, cancelToken);
             return resultSet.Items;
         }
 
         private async Task<IEnumerable<ContentInfoSearch>> SearchForContent(CancellationToken cancelToken)
         {
-            var resultSet = await searchProvider.GetContentSearchResultAsync(Keyword);
+            var resultSet = await searchProvider.GetContentSearchResultAsync(Keyword, cancelToken);
             return resultSet.Items;
         }
 

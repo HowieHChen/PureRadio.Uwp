@@ -143,6 +143,12 @@
     <Compile Include="Models\Enums\RequestType.cs" />
     <Compile Include="Models\Local\IncrementalLoadingObservableCollection.cs" />
     <Compile Include="Models\Local\PlaySnapshot.cs" />
+    <Compile Include="Models\QingTing\Content\ContentDetailItem.cs" />
+    <Compile Include="Models\QingTing\Content\ContentDetailResponse.cs" />
+    <Compile Include="Models\QingTing\Radio\RadioDetailItem.cs" />
+    <Compile Include="Models\QingTing\Radio\RadioDetailResponse.cs" />
+    <Compile Include="Models\QingTing\Radio\RadioPlaylistItem.cs" />
+    <Compile Include="Models\QingTing\Radio\RadioPlaylistResponse.cs" />
     <Compile Include="Models\QingTing\Search\SearchContentItem.cs" />
     <Compile Include="Models\QingTing\Search\SearchContentResponse.cs" />
     <Compile Include="Models\QingTing\Search\SearchRadioItem.cs" />

@@ -27,15 +27,17 @@ namespace PureRadio.Uwp.Providers.Interfaces
         /// 获取电台搜索结果.
         /// </summary>
         /// <param name="keyword">搜索关键词.</param>
+        /// <param name="cancellationToken">异步中止令牌.</param>
         /// <returns>用户搜索结果.</returns>
-        Task<SearchSet<RadioInfoSearch>> GetRadioSearchResultAsync(string keyword);
+        Task<SearchSet<RadioInfoSearch>> GetRadioSearchResultAsync(string keyword, CancellationToken cancellationToken);
 
         /// <summary>
         /// 获取内容(专辑)搜索结果.
         /// </summary>
         /// <param name="keyword">搜索关键词.</param>
+        /// <param name="cancellationToken">异步中止令牌.</param>
         /// <returns>文章搜索结果.</returns>
-        Task<SearchSet<ContentInfoSearch>> GetContentSearchResultAsync(string keyword);
+        Task<SearchSet<ContentInfoSearch>> GetContentSearchResultAsync(string keyword, CancellationToken cancellationToken);
 
         /// <summary>
         /// 重置电台搜索请求的状态.

@@ -53,7 +53,7 @@ namespace PureRadio.Uwp.Providers
                 : null;
         }
 
-        public async Task<SearchSet<RadioInfoSearch>> GetRadioSearchResultAsync(string keyword)
+        public async Task<SearchSet<RadioInfoSearch>> GetRadioSearchResultAsync(string keyword, CancellationToken cancellationToken)
         {
             Dictionary<string, string> parameters = new()
             {
@@ -65,14 +65,14 @@ namespace PureRadio.Uwp.Providers
             var response = await _httpProvider.SendAsync(request);
             var result = await _httpProvider.ParseAsync<SearchRadioResponse>(response);
             _radioPageNumber++;
-            var items = result.Data.SearchRadioResults?.SearchDatas == null
+            var items = cancellationToken.IsCancellationRequested || result.Data.SearchRadioResults?.SearchDatas == null
                 ? new List<RadioInfoSearch>()
                 : result.Data.SearchRadioResults.SearchDatas.Select(p => _searchAdapter.ConvertToSearchResultView(p));
             return new SearchSet<RadioInfoSearch>(items, result.Data.SearchRadioResults.ResultCount < _radioPageNumber * 15);
         }
 
 
-        public async Task<SearchSet<ContentInfoSearch>> GetContentSearchResultAsync(string keyword)
+        public async Task<SearchSet<ContentInfoSearch>> GetContentSearchResultAsync(string keyword, CancellationToken cancellationToken)
         {
             Dictionary<string, string> parameters = new()
             {
@@ -84,7 +84,7 @@ namespace PureRadio.Uwp.Providers
             var response = await _httpProvider.SendAsync(request);
             var result = await _httpProvider.ParseAsync<SearchContentResponse>(response);
             _contentPageNumber++;
-            var items = result.Data.SearchContentResults?.SearchDatas == null
+            var items = cancellationToken.IsCancellationRequested || result.Data.SearchContentResults?.SearchDatas == null
                 ? new List<ContentInfoSearch>()
                 : result.Data.SearchContentResults.SearchDatas.Select(p => _searchAdapter.ConvertToSearchResultView(p));
             return new SearchSet<ContentInfoSearch>(items, result.Data.SearchContentResults.ResultCount < _contentPageNumber * 15);
