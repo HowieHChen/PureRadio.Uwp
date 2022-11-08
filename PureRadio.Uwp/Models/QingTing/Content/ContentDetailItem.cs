@@ -61,7 +61,7 @@ namespace PureRadio.Uwp.Models.QingTing.Content
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore, PropertyName = "categoryId", Required = Required.Default)]
         public int CategoryId { get; set; }
         /// <summary>
-        /// 内容(专辑)分类("free" -> 免费, "channel-sale" -> 付费 )
+        /// 内容(专辑)分类("free" -> 免费, "channel-sale" -> 付费, "program-sale" -> 付费 )
         /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore, PropertyName = "channelType", Required = Required.Default)]
         public string ContentType { get; set; }

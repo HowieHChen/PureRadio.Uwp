@@ -145,6 +145,8 @@
     <Compile Include="Models\Local\PlaySnapshot.cs" />
     <Compile Include="Models\QingTing\Content\ContentDetailItem.cs" />
     <Compile Include="Models\QingTing\Content\ContentDetailResponse.cs" />
+    <Compile Include="Models\QingTing\Content\ContentProgramListItem.cs" />
+    <Compile Include="Models\QingTing\Content\ContentProgramListResponse.cs" />
     <Compile Include="Models\QingTing\Radio\RadioDetailItem.cs" />
     <Compile Include="Models\QingTing\Radio\RadioDetailResponse.cs" />
     <Compile Include="Models\QingTing\Radio\RadioPlaylistItem.cs" />

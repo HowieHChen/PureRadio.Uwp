@@ -54,42 +54,42 @@ namespace PureRadio.Uwp.Models.QingTing.Content
     public class RecommendedContent
     {
         /// <summary>
-        /// 
+        /// 内容(专辑)Id
         /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore, PropertyName = "channelId", Required = Required.Default)]
         public int ContentId { get; set; }
         /// <summary>
-        /// 张召忠谈天下
+        /// 内容(专辑)标题
         /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore, PropertyName = "title", Required = Required.Default)]
         public string Title { get; set; }
         /// <summary>
-        /// 局座最近在干嘛？张召忠特辑，三言两语，幽默犀利，带您领略军事风采。搜索微信公众号：复兴路7号 ，看局座更多图文内容
+        /// 内容(专辑)简介
         /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore, PropertyName = "desc", Required = Required.Default)]
         public string Description { get; set; }
         /// <summary>
-        /// 
+        /// 内容(专辑)封面图片(URL)
         /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore, PropertyName = "img", Required = Required.Default)]
         public string Cover { get; set; }
         /// <summary>
-        /// 
+        /// 内容(专辑)评分 (0 ~ 10)
         /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore, PropertyName = "score", Required = Required.Default)]
         public int Rating { get; set; }
         /// <summary>
-        /// 2.1亿
+        /// 内容(专辑)播放量
         /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore, PropertyName = "playCount", Required = Required.Default)]
         public string PlayCount { get; set; }
         /// <summary>
-        /// 
+        /// 内容(专辑)分类(0 -> 免费, 1 -> 付费(小说), 2 -> 付费(专辑) )
         /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore, PropertyName = "itemType", Required = Required.Default)]
         public int ContentType { get; set; }
         /// <summary>
-        /// 
+        /// 内容(专辑)所包含的节目个数
         /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore, PropertyName = "programCount", Required = Required.Default)]
         public int ProgramCount { get; set; }
