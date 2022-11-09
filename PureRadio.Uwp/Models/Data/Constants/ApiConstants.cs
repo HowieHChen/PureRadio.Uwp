@@ -14,6 +14,32 @@ namespace PureRadio.Uwp.Models.Data.Constants
         public const string _userBase = "https://user.qingting.fm";
 
         /// <summary>
+        /// 网络 API
+        /// </summary>
+        public static class Network
+        {
+            /// <summary>
+            /// 获取IP地址
+            /// </summary>
+            public const string IpAddr = "https://ip.qtfm.cn";
+        }
+
+        /// <summary>
+        /// 首页推荐 API
+        /// </summary>
+        public static class Recommend
+        {
+            /// <summary>
+            /// 电台推荐
+            /// </summary>
+            public const string Radio = _webBase;
+            /// <summary>
+            /// 电台推荐请求内容
+            /// </summary>
+            public const string RequestContent = "{\"query\":\"{radioPage {radioPlaying,replayRadio}}\"}";
+        }
+
+        /// <summary>
         /// 账户 API
         /// </summary>
         public static class Account

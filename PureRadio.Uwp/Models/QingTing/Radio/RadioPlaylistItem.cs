@@ -36,6 +36,11 @@ namespace PureRadio.Uwp.Models.QingTing.Radio
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore, PropertyName = "channel_id", Required = Required.Default)]
         public int RadioId { get; set; }
         /// <summary>
+        /// 节目的ID
+        /// </summary>
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore, PropertyName = "program_id", Required = Required.Default)]
+        public int ProgramId { get; set; }
+        /// <summary>
         /// 节目标题
         /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore, PropertyName = "title", Required = Required.Default)]

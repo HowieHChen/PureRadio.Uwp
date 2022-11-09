@@ -51,6 +51,11 @@ namespace PureRadio.Uwp.Models.QingTing.Radio
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore, PropertyName = "top_category_title", Required = Required.Default)]
         public string TopCategoryTitle { get; set; }
         /// <summary>
+        /// 更新时间
+        /// </summary>
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore, PropertyName = "update_time", Required = Required.Default)]
+        public string UpdateTime { get; set; }
+        /// <summary>
         /// 所属地区Id
         /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore, PropertyName = "region_id", Required = Required.Default)]
@@ -66,6 +71,11 @@ namespace PureRadio.Uwp.Models.QingTing.Radio
     [JsonObject(MemberSerialization.OptIn)]
     public class NowplayingProgram
     {
+        /// <summary>
+        /// 节目的ID
+        /// </summary>
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore, PropertyName = "id", Required = Required.Default)]
+        public int ProgramId { get; set; }
         /// <summary>
         /// 节目时长
         /// </summary>
@@ -91,5 +101,10 @@ namespace PureRadio.Uwp.Models.QingTing.Radio
         /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore, PropertyName = "title", Required = Required.Default)]
         public string Title { get; set; }
+        /// <summary>
+        /// 主播(可能有多个)
+        /// </summary>
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore, PropertyName = "broadcasters", Required = Required.Default)]
+        public List<BroadcastersItem> Broadcasters { get; set; }
     }
 }
