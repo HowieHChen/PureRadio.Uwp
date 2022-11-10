@@ -1,4 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Microsoft.Toolkit.Uwp.UI.Controls;
 using PureRadio.Uwp.Models.Data.Content;
 using PureRadio.Uwp.Models.Data.Radio;
 using PureRadio.Uwp.Models.Local;
@@ -11,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace PureRadio.Uwp.ViewModels
 {
@@ -21,7 +24,25 @@ namespace PureRadio.Uwp.ViewModels
 
         [ObservableProperty]
         private string _keyword;
-        
+
+        [ObservableProperty]
+        private bool _isRadioModuleShown;
+
+        [ObservableProperty]
+        private bool _isContentModuleShown;
+
+        [ObservableProperty]
+        private bool _isLoading;
+
+        [ObservableProperty]
+        private bool _isEmpty;
+
+        [ObservableProperty]
+        private bool _noResult;
+
+        public ICommand RadioResultCommand { get; }
+
+        public ICommand ContentResultCommand { get; }
 
         public IncrementalLoadingObservableCollection<RadioInfoSearch> RadioResult { get; set; }
         public IncrementalLoadingObservableCollection<ContentInfoSearch> ContentResult { get; set; }
@@ -36,6 +57,33 @@ namespace PureRadio.Uwp.ViewModels
             searchProvider.ClearStatus();
             RadioResult = new IncrementalLoadingObservableCollection<RadioInfoSearch>(SearchForRadio);
             ContentResult = new IncrementalLoadingObservableCollection<ContentInfoSearch>(SearchForContent);
+
+            RadioResultCommand = new RelayCommand(SetRadioResult);
+            ContentResultCommand = new RelayCommand(SetContentResult);
+
+            IsActive = true;
+
+            IsRadioModuleShown = true;
+            IsContentModuleShown = false;
+        }
+
+        protected override void OnActivated()
+        {
+            base.OnActivated();
+            searchProvider.ClearStatus();
+            RadioResult.OnStartLoading += StartLoading;
+            RadioResult.OnEndLoading += EndLoading;
+            ContentResult.OnStartLoading += StartLoading;
+            ContentResult.OnEndLoading += EndLoading;
+        }
+
+        protected override void OnDeactivated()
+        {
+            base.OnDeactivated();
+            RadioResult.OnStartLoading -= StartLoading;
+            RadioResult.OnEndLoading -= EndLoading;
+            ContentResult.OnStartLoading -= StartLoading;
+            ContentResult.OnEndLoading -= EndLoading;
         }
 
         private async Task<IEnumerable<RadioInfoSearch>> SearchForRadio(CancellationToken cancelToken)
@@ -50,5 +98,40 @@ namespace PureRadio.Uwp.ViewModels
             return resultSet.Items;
         }
 
+        private void StartLoading()
+        {
+            IsLoading = true;
+        }
+
+        private void EndLoading()
+        {
+            IsLoading = false;
+            if (IsRadioModuleShown)
+            {
+                IsEmpty = RadioResult.Count == 0;
+            }
+            else if (IsContentModuleShown)
+            {
+                IsEmpty = ContentResult.Count == 0;
+            }
+            else
+            {
+                IsEmpty = true;
+            }
+        }
+
+        private void SetRadioResult()
+        {
+            IsRadioModuleShown = true;
+            IsContentModuleShown = false;
+            //searchProvider.ResetRadioStatus();
+        }
+
+        private void SetContentResult()
+        {
+            IsRadioModuleShown = false;
+            IsContentModuleShown = true;
+            //searchProvider.ResetContentStatus();
+        }
     }
 }

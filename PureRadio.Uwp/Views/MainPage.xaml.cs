@@ -38,13 +38,22 @@ namespace PureRadio.Uwp.Views
     public sealed partial class MainPage : Page
     {
         // List of ValueTuple holding the Navigation Tag and the relative Navigation Page
-        private readonly List<(string Tag, Type Page)> _pages = new List<(string Tag, Type Page)>
+        private readonly List<(string Tag, PageIds pageIds, Type Page)> _mainPages = new List<(string Tag, PageIds pageIds, Type Page)>
         {
-            (((int)PageIds.Home).ToString(), typeof(HomePage)),
+            (((int)PageIds.Home).ToString(), PageIds.Home, typeof(HomePage)),
             //(((int)PageIds.Radio).ToString(), typeof(CategoriesPage)),
             //(((int)PageIds.Content).ToString(), typeof(RankPage)),
             //(((int)PageIds.Library).ToString(), typeof(ContentPage)),
-            (((int)PageIds.Settings).ToString(),typeof(SettingsPage))
+            (((int)PageIds.Settings).ToString(), PageIds.Settings, typeof(SettingsPage))
+        };
+
+        private readonly List<(string Tag, PageIds pageIds, Type Page)> _secondaryPages = new List<(string Tag, PageIds pageIds, Type Page)>
+        {
+            (((int)PageIds.Search).ToString(), PageIds.Search, typeof(SearchPage)),
+            //(((int)PageIds.Radio).ToString(), typeof(CategoriesPage)),
+            //(((int)PageIds.Content).ToString(), typeof(RankPage)),
+            //(((int)PageIds.Library).ToString(), typeof(ContentPage)),
+            //(((int)PageIds.Settings).ToString(),typeof(SettingsPage))
         };
 
         private PageIds _currentPageId;
@@ -232,7 +241,7 @@ namespace PureRadio.Uwp.Views
 
         private void On_Navigated(object sender, NavigationEventArgs e)
         {
-            var item = _pages.FirstOrDefault(p => p.Page == e.SourcePageType);
+            var item = _mainPages.FirstOrDefault(p => p.Page == e.SourcePageType);
             
             if (NavView.SelectedItem == null ||
                 (NavView.SelectedItem is muxc.NavigationViewItem navItem && item.Tag != null &&
@@ -241,8 +250,13 @@ namespace PureRadio.Uwp.Views
                 var shouldSelectedItem = NavView.MenuItems.Concat(NavView.FooterMenuItems).OfType<muxc.NavigationViewItem>().Where(
                     n => n.Tag.Equals(item.Tag)
                     ).FirstOrDefault();
-                _currentPageId = (PageIds)Enum.Parse(typeof(PageIds), item.Tag.ToString());
+                _currentPageId = item.pageIds;
                 NavView.SelectedItem = shouldSelectedItem;
+            }
+            else
+            {
+                item = _secondaryPages.FirstOrDefault(p => p.Page == e.SourcePageType);
+                if (item.Tag != null) _currentPageId = item.pageIds;
             }
         }
 

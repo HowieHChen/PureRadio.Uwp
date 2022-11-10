@@ -123,11 +123,17 @@
   <data name="ControlAppTitleSearchBar.PlaceholderText" xml:space="preserve">
     <value>Search radio stations, programs and more</value>
   </data>
+  <data name="LangAudienceCount.Text" xml:space="preserve">
+    <value>listening</value>
+  </data>
   <data name="LangLocalAccountName" xml:space="preserve">
     <value>Local Account</value>
   </data>
   <data name="LangLocalAccountSignature" xml:space="preserve">
     <value>Sign in to your QingTing account to enjoy the full service</value>
+  </data>
+  <data name="LangPlayCount.Text" xml:space="preserve">
+    <value>plays</value>
   </data>
   <data name="LangSearchNoResultTip" xml:space="preserve">
     <value>No results found</value>
@@ -152,6 +158,15 @@
   </data>
   <data name="navSettings.Content" xml:space="preserve">
     <value>Settings</value>
+  </data>
+  <data name="PageSearchNoResult.Text" xml:space="preserve">
+    <value>No results found for you</value>
+  </data>
+  <data name="PageSearchSourceContent.Content" xml:space="preserve">
+    <value>Content</value>
+  </data>
+  <data name="PageSearchSourceRadio.Content" xml:space="preserve">
+    <value>Radio</value>
   </data>
   <data name="PageSearchTitle.Text" xml:space="preserve">
     <value>Search</value>

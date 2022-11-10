@@ -4,27 +4,158 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:animatedVisuals="using:Microsoft.UI.Xaml.Controls.AnimatedVisuals"
     xmlns:animations="using:Microsoft.Toolkit.Uwp.UI.Animations"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:local="using:PureRadio.Uwp.Views.Secondary"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls" 
-    xmlns:model="using:PureRadio.Uwp.Models.Data.Radio"
+    xmlns:modelRadio="using:PureRadio.Uwp.Models.Data.Radio"
+    xmlns:modelContent="using:PureRadio.Uwp.Models.Data.Content"
     xmlns:viewmodels="using:PureRadio.Uwp.ViewModels" 
+    xmlns:convert="using:PureRadio.Uwp.Resources.Converter"
     d:DataContext="{d:DesignInstance Type=viewmodels:SearchViewModel}"
     mc:Ignorable="d"
     Background="Transparent">
-
-    <Grid
-        Padding="36,0,36,0">
+    <Page.Resources>
+        <convert:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <convert:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+        <DataTemplate
+            x:Key="SearchRadioInfoTemplate"
+            x:DataType="modelRadio:RadioInfoSearch">
+            <Grid
+                x:Name="CardCantainer"
+                Style="{StaticResource CardViewContainer}"
+                Height="132"
+                Canvas.ZIndex="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <controls:ImageEx
+                    BorderThickness="0"
+                    BackgroundSizing="InnerBorderEdge"
+                    Grid.Column="0"
+                    Margin="16,0,0,0"
+                    Height="100"
+                    Width="100"
+                    CornerRadius="4"
+                    Source="{x:Bind Cover}"/>
+                <Grid
+                    Grid.Column="1"
+                    Margin="16"
+                    Height="100">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock 
+                        Grid.Row="0"
+                        Text="{x:Bind Title}" 
+                        Style="{StaticResource BaseTextBlockStyle}"
+                        TextTrimming="CharacterEllipsis"
+                        MaxLines="1"/>
+                    <StackPanel
+                        Grid.Row="1" Orientation="Horizontal"
+                        Margin="0,4">
+                        <FontIcon VerticalAlignment="Center" FontSize="14" FontFamily="{StaticResource FluentIcons}" Glyph="&#xE7F6;" />
+                        <TextBlock       
+                            Text="{x:Bind AudienceCount}" 
+                            Margin="4,0"
+                            Style="{StaticResource BodyTextBlockStyle}"
+                            TextTrimming="CharacterEllipsis"
+                            MaxLines="1"/>
+                        <TextBlock
+                            x:Uid="LangAudienceCount"
+                            Text="listening"
+                            Style="{StaticResource BodyTextBlockStyle}"
+                            TextTrimming="CharacterEllipsis"
+                            MaxLines="1"/>
+                    </StackPanel>
+                    <TextBlock
+                        Grid.Row="2"
+                        Text="{x:Bind Description}"
+                        Style="{StaticResource CaptionTextBlockStyle}"
+                        Foreground="{ThemeResource CustomNavigationViewItemForeground}"
+                        TextTrimming="CharacterEllipsis"
+                        MaxLines="3" />
+                </Grid>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate
+            x:Key="SearchContentInfoTemplate"
+            x:DataType="modelContent:ContentInfoSearch">
+            <Grid
+                x:Name="CardCantainer"
+                Style="{StaticResource CardViewContainer}"
+                Height="132"
+                Canvas.ZIndex="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <controls:ImageEx
+                    BorderThickness="0"
+                    BackgroundSizing="InnerBorderEdge"
+                    Grid.Column="0"
+                    Margin="16,0,0,0"
+                    Height="100"
+                    Width="100"
+                    CornerRadius="4"
+                    Source="{x:Bind Cover}"/>
+                <Grid
+                    Grid.Column="1"
+                    Margin="16"
+                    Height="100">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock 
+                        Grid.Row="0"
+                        Text="{x:Bind Title}" 
+                        Style="{StaticResource BaseTextBlockStyle}"
+                        TextTrimming="CharacterEllipsis"
+                        MaxLines="1"/>
+                    <StackPanel
+                        Grid.Row="1" Orientation="Horizontal"
+                        Margin="0,4">
+                        <FontIcon VerticalAlignment="Center" FontSize="14" FontFamily="{StaticResource FluentIcons}" Glyph="&#xEF3B;" />
+                        <TextBlock       
+                            Text="{x:Bind PlayCount}" 
+                            Margin="4,0"
+                            Style="{StaticResource BodyTextBlockStyle}"
+                            TextTrimming="CharacterEllipsis"
+                            MaxLines="1"/>
+                        <TextBlock
+                            x:Uid="LangPlayCount"
+                            Text="listening"
+                            Style="{StaticResource BodyTextBlockStyle}"
+                            TextTrimming="CharacterEllipsis"
+                            MaxLines="1"/>
+                    </StackPanel>
+                    <TextBlock
+                        Grid.Row="2"
+                        Text="{x:Bind Description}"
+                        Style="{StaticResource CaptionTextBlockStyle}"
+                        Foreground="{ThemeResource CustomNavigationViewItemForeground}"
+                        TextTrimming="CharacterEllipsis"
+                        MaxLines="3" />
+                </Grid>
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel 
             Grid.Row="0"
+            Padding="36,0,36,0"
             HorizontalAlignment="Stretch" 
-            VerticalAlignment="Stretch"
-            >
+            VerticalAlignment="Stretch">
             <!-- Search -->
             <StackPanel
                 Orientation="Horizontal"
@@ -42,69 +173,93 @@
                     Style="{StaticResource TitleTextBlockStyle}"
                     Foreground="{ThemeResource AccentPageTitleTextForeground}"
                     Margin="8,0,0,0"
-                    Text="{x:Bind ViewModel.Keyword}" >
+                    Text="{x:Bind ViewModel.Keyword}" 
+                    TextTrimming="CharacterEllipsis">
                     <animations:Implicit.Animations>
                         <animations:OffsetAnimation Duration="0:0:0.2"/>
                     </animations:Implicit.Animations>
                 </TextBlock>
             </StackPanel>
-            
+            <!-- Search Type -->
+            <StackPanel
+                Orientation="Horizontal" Margin="0,16">
+                <ToggleButton
+                    x:Uid="PageSearchSourceRadio"
+                    IsEnabled="{x:Bind ViewModel.IsLoading, Mode=OneWay,Converter={StaticResource InverseBooleanConverter}}"
+                    IsChecked="{x:Bind ViewModel.IsRadioModuleShown, Mode=OneWay}"
+                    Command="{x:Bind ViewModel.RadioResultCommand}"
+                    Style="{StaticResource OutlinedToggleButtonStyle}" 
+                    Content="Radio"/>
+                <ToggleButton
+                    x:Uid="PageSearchSourceContent"
+                    IsEnabled="{x:Bind ViewModel.IsLoading, Mode=OneWay,Converter={StaticResource InverseBooleanConverter}}"
+                    IsChecked="{x:Bind ViewModel.IsContentModuleShown, Mode=OneWay}"
+                    Command="{x:Bind ViewModel.ContentResultCommand}"
+                    Margin="8,0" Style="{StaticResource OutlinedToggleButtonStyle}" 
+                    Content="Content"/>
+            </StackPanel>
         </StackPanel>
-        <GridView
-            Grid.Row="1"
-            Padding="0,0,0,84"
-            IsItemClickEnabled="True"
-            ItemsSource="{x:Bind ViewModel.RadioResult, Mode=TwoWay}"
-            IncrementalLoadingTrigger="Edge"
-            Background="Red"
-            >
-            <GridView.ItemTemplate>
-                <DataTemplate x:DataType="model:RadioInfoSearch">
-                    <Grid
-                        x:Name="CardCantainer"
-                        CornerRadius="8"
-                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                        BorderThickness="1"
-                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                        Height="132"
-                        Width="200"
-                        Canvas.ZIndex="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <Border 
-                            Grid.Column="0" 
-                            Height="100" Width="100" 
-                            CornerRadius="4"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Center">
-                            <Image                                                             
-                                Height="100" Width="100"                            
-                                Source="{x:Bind Cover}"
-                                x:Phase="1"/>
-                        </Border>
-                        <StackPanel 
-                            Grid.Column="1"
-                            Orientation="Vertical"
-                            Margin="0,16,16,16"
-                            Height="100">
-                            <TextBlock 
-                                Text="{x:Bind Title}" 
-                                Style="{StaticResource BaseTextBlockStyle}"
-                                x:Phase="0"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Top"/>
-                            <TextBlock       
-                                Text="{x:Bind AudienceCount}" 
-                                Style="{StaticResource BodyTextBlockStyle}"
-                                x:Phase="0"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Top"/>
-                        </StackPanel>
-                    </Grid>
-                </DataTemplate>
-            </GridView.ItemTemplate>
-        </GridView>
+        <muxc:ProgressBar 
+            Grid.Row="0"
+            VerticalAlignment="Bottom"
+            IsIndeterminate="True"
+            ShowPaused="{x:Bind ViewModel.IsLoading, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}"
+            Visibility="{x:Bind ViewModel.IsLoading, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+        <Grid
+            Grid.Row="1">
+            <!-- Radio Result -->
+            <controls:AdaptiveGridView
+                Visibility="{x:Bind ViewModel.IsRadioModuleShown, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                Padding="32,0,28,84"
+                StretchContentForSingleRow="False"
+                OneRowModeEnabled="False"
+                ItemHeight="140"
+                DesiredWidth="380"
+                SelectionMode="None"
+                IsItemClickEnabled="True"
+                ItemsSource="{x:Bind ViewModel.RadioResult, Mode=OneWay}"
+                ItemTemplate="{StaticResource SearchRadioInfoTemplate}"
+                ItemContainerStyle="{StaticResource CardViewItemContainerStyle}">
+                <animations:Implicit.ShowAnimations>
+                    <animations:OpacityAnimation From="0" To="1" Duration="0:0:0.3"/>
+                    <animations:TranslationAnimation From="0,8" To="0" Duration="0:0:0.3"/>
+                </animations:Implicit.ShowAnimations>
+                <animations:Implicit.HideAnimations>
+                    <animations:OpacityAnimation From="1" To="0" Duration="0:0:0.3"/>
+                    <animations:TranslationAnimation From="0" To="0,8" Duration="0:0:0.3"/>
+                </animations:Implicit.HideAnimations>
+            </controls:AdaptiveGridView>
+            <!-- Content Result -->
+            <controls:AdaptiveGridView
+                Visibility="{x:Bind ViewModel.IsContentModuleShown, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                Padding="32,0,28,84"
+                StretchContentForSingleRow="False"
+                OneRowModeEnabled="False"
+                ItemHeight="140"
+                DesiredWidth="380"
+                SelectionMode="None"
+                IsItemClickEnabled="True"
+                ItemsSource="{x:Bind ViewModel.ContentResult, Mode=OneWay}"
+                ItemTemplate="{StaticResource SearchContentInfoTemplate}"
+                ItemContainerStyle="{StaticResource CardViewItemContainerStyle}">
+                <animations:Implicit.ShowAnimations>
+                    <animations:OpacityAnimation From="0" To="1" Duration="0:0:0.3"/>
+                    <animations:TranslationAnimation From="0,8" To="0" Duration="0:0:0.3"/>
+                </animations:Implicit.ShowAnimations>
+                <animations:Implicit.HideAnimations>
+                    <animations:OpacityAnimation From="1" To="0" Duration="0:0:0.3"/>
+                    <animations:TranslationAnimation From="0" To="0,8" Duration="0:0:0.3"/>
+                </animations:Implicit.HideAnimations>
+            </controls:AdaptiveGridView>
+            <!-- No Result -->
+            <Grid
+                Visibility="{x:Bind ViewModel.IsEmpty, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <TextBlock
+                    x:Uid="PageSearchNoResult"
+                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Text="Empty Here"
+                    Style="{StaticResource SubtitleTextBlockStyle}"/>
+            </Grid>
+        </Grid>
     </Grid>
 </Page>
