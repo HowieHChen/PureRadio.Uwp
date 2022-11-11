@@ -44,6 +44,7 @@
                                 <VisualState x:Name="PointerOver">
                                     <VisualState.Setters>
                                         <Setter Target="CardContainer.(RevealBrush.State)" Value="PointerOver" />
+                                        <Setter Target="ContentPresenter.Foreground" Value="{ThemeResource CustomNavigationViewItemForeground}"/>
                                     </VisualState.Setters>
                                     <Storyboard>
                                         <DoubleAnimation Storyboard.TargetName="TranslateTrans" Storyboard.TargetProperty="Y" To="-2" Duration="0:0:0.1" />
@@ -83,7 +84,6 @@
         <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}" />
         <Setter Property="UseSystemFocusVisuals" Value="{StaticResource UseSystemFocusVisuals}" />
         <Setter Property="FocusVisualMargin" Value="-3" />
-        <Setter Property="CornerRadius" Value="16" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
@@ -92,7 +92,7 @@
                         Background="Transparent"
                         BackgroundSizing="InnerBorderEdge"
                         BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                        BorderThickness="1.4"
+                        BorderThickness="1"
                         Content="{TemplateBinding Content}"
                         ContentTemplate="{TemplateBinding ContentTemplate}"
                         ContentTransitions="{TemplateBinding ContentTransitions}"

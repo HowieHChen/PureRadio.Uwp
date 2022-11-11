@@ -219,6 +219,12 @@ namespace PureRadio.Uwp.Views
                 case PageIds.Search:
                     pageType = typeof(SearchPage);
                     break;
+                case PageIds.RadioDetail:
+                    pageType = typeof(RadioDetailPage);
+                    break;
+                case PageIds.ContentDetail:
+                    pageType = typeof(ContentDetailPage);
+                    break;
             }
             if (pageType != null)
             {
@@ -355,6 +361,52 @@ namespace PureRadio.Uwp.Views
             {
                 ViewModel.Navigate(PageIds.Search, keyword);
                 ViewModel.Keyword = string.Empty;
+            }
+        }
+
+        private void LoginDialog_Opened(ContentDialog sender, ContentDialogOpenedEventArgs args)
+        {
+            revealModeCheckBox.IsChecked = false;
+            usernameBox.Text = string.Empty;
+            passworBox.Password = string.Empty;
+        }
+
+        private void revealModeCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            passworBox.PasswordRevealMode = PasswordRevealMode.Visible;
+        }
+
+        private void revealModeCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            passworBox.PasswordRevealMode = PasswordRevealMode.Hidden;
+        }
+
+        private async void AccountStateButoon_Click(object sender, RoutedEventArgs e)
+        {
+            if(ViewModel.AccountState == AuthorizeState.SignedOut)
+            {
+                LoginDialog.RequestedTheme = App.RootTheme;
+                ContentDialogResult result = await LoginDialog.ShowAsync();
+                if (result == ContentDialogResult.Primary)
+                {
+                    string username = usernameBox.Text;
+                    string password = passworBox.Password;
+                    if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+                    {
+                        LoginDialogTeachingTip.IsOpen = true;
+                    }
+                    else
+                    {
+                        if (!await ViewModel.TrySignIn(username, password)) 
+                            LoginDialogFailureTip.IsOpen = true;
+                        else 
+                            LoginDialogSuccessTip.IsOpen = true;
+                    }
+                }
+            }
+            else
+            {
+                if (await ViewModel.TrySignOut()) LogoutDialogSuccessTip.IsOpen = true;
             }
         }
     }

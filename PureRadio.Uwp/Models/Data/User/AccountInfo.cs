@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Resources;
 
 namespace PureRadio.Uwp.Models.Data.User
 {
@@ -32,13 +33,13 @@ namespace PureRadio.Uwp.Models.Data.User
         }
 
         /// <summary>
-        /// 全空构造(离线账号)
+        /// 部分构造(离线账号)
         /// </summary>
         public AccountInfo()
         {
-            var resourceLoader = Windows.ApplicationModel.Resources.ResourceLoader.GetForCurrentView();
+            var resourceLoader = new ResourceLoader();
             IsOnline = false;
-            PhoneNumber = string.Empty;
+            PhoneNumber = resourceLoader.GetString("LangLocalAccountPhone");
             QingtingId = string.Empty;
             NickName = UserName = resourceLoader.GetString("LangLocalAccountName");
             CreateTime = string.Empty;
@@ -46,7 +47,7 @@ namespace PureRadio.Uwp.Models.Data.User
             Gender = "u";
             Location = string.Empty;
             Signature = resourceLoader.GetString("LangLocalAccountSignature");
-            Avatar = "";
+            Avatar = "ms-appx:///Assets/Image/DefaultAvatar.png";
             IsBlocked = "0";
         }
 

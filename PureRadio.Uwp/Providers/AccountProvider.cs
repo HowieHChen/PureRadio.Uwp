@@ -51,6 +51,15 @@ namespace PureRadio.Uwp.Providers
             }
         }
 
+        public AccountInfo AccountInfo
+        {
+            get => _accountInfo;
+            protected set
+            {
+                _accountInfo = value;
+            }
+        }
+
         public async Task<string> GenerateAuthorizedQueryStringAsync(
             string url, 
             Dictionary<string, string> parameters, 
@@ -141,11 +150,6 @@ namespace PureRadio.Uwp.Providers
                         }
                     }
                 }
-                else
-                {
-                    var result = await TrySignInAsync();
-                    if(result) return _tokenInfo.AccessToken;
-                }
             }
             catch (Exception)
             {
@@ -159,33 +163,33 @@ namespace PureRadio.Uwp.Providers
         /// <inheritdoc/>
         public async Task<bool> TrySignInAsync()
         {
-            if (IsTokenValidAsync() || State != AuthorizeState.SignedOut)
+            if (IsTokenValidAsync() || State == AuthorizeState.SignedIn)
             {
                 return true;
             }
-            State = AuthorizeState.Loading;
             try
             {
-                if (!string.IsNullOrEmpty(_tokenInfo?.RefreshToken) && settings.GetValue<bool>(AppConstants.SettingsKey.AccountOnline))
+                if (_tokenInfo == null && settings.GetValue<bool>(AppConstants.SettingsKey.AccountOnline))
                 {
                     var phoneNumber = settings.GetValue<string>(AppConstants.SettingsKey.AccountPhone);
                     var password = settings.GetValue<string>(AppConstants.SettingsKey.AccountPassword);
                     var parameters = new Dictionary<string, string>
                     {
-                        { Query.QingTingId, phoneNumber },
+                        { Query.UserId, phoneNumber },
                         { Query.Password, password },
                     };
                     var httpProvider = Ioc.Default.GetRequiredService<IHttpProvider>();
-                    var request = await httpProvider.GetRequestMessageAsync(ApiConstants.Account.Login, HttpMethod.Post, parameters, RequestType.Auth, false, false);
+                    var request = await httpProvider.GetRequestMessageAsync(ApiConstants.Account.Login, HttpMethod.Post, parameters, RequestType.Login, false, false);
                     var response = await httpProvider.SendAsync(request);
                     var result = await httpProvider.ParseAsync<SignInResponse>(response);
-                    if (result.ErrorNo != 0)
+                    if (result.ErrorNo == 0)
                     {
                         var solved = accountAdapter.ConvertToAccountInfo(result.Data, phoneNumber);
-                        _accountInfo = solved.Item1;
+                        AccountInfo = solved.Item1;
                         _tokenInfo = solved.Item2;
                         State = AuthorizeState.SignedIn;
                         _lastAuthorizeTime = DateTimeOffset.Now;
+                        return true;
                     }
                 }
             }
@@ -193,19 +197,13 @@ namespace PureRadio.Uwp.Providers
             {
 
             }
-            var token = await GetTokenAsync();
-            if (string.IsNullOrEmpty(token))
-            {
-                await SignOutAsync();
-                return false;
-            }
-            return true;
+            await SignOutAsync();
+            return false;
         }
 
         /// <inheritdoc/>
         public Task SignOutAsync()
         {
-            State = AuthorizeState.Loading;
             settings.SetValue(AppConstants.SettingsKey.AccountOnline, false);
             settings.SetValue(AppConstants.SettingsKey.AccountPhone, string.Empty);
             settings.SetValue(AppConstants.SettingsKey.AccountPassword, string.Empty);
@@ -213,9 +211,9 @@ namespace PureRadio.Uwp.Providers
             {
                 _tokenInfo = null;
             }
-            if (_accountInfo != null && _accountInfo.IsOnline)
+            if (AccountInfo == null || AccountInfo.IsOnline)
             {
-                _accountInfo = new();
+                AccountInfo = new();
             }
             State = AuthorizeState.SignedOut;
             return Task.CompletedTask;
@@ -233,8 +231,6 @@ namespace PureRadio.Uwp.Providers
 
         internal async Task<string> InternalRefreshTokenAsync()
         {
-            State = AuthorizeState.Loading;
-
             var httpProvider = Ioc.Default.GetRequiredService<IHttpProvider>();
             var request = await httpProvider.GetRequestMessageAsync(ApiConstants.Account.RefreshToken, HttpMethod.Post, null, RequestType.Auth, false, false);
             var response = await httpProvider.SendAsync(request);
@@ -246,11 +242,8 @@ namespace PureRadio.Uwp.Providers
                 _lastAuthorizeTime = DateTimeOffset.Now;
                 return _tokenInfo.AccessToken;
             }
-            else
-            {
-                await SignOutAsync();
-                return null;
-            }
+            await SignOutAsync();
+            return null;
         }
 
         internal string GenerateSign(
@@ -281,6 +274,14 @@ namespace PureRadio.Uwp.Providers
             }
             hMACMD5.Clear();
             return stringBuilder.ToString();
+        }
+
+        public async Task<bool> TrySignInAsync(string phone, string password)
+        {
+            settings.SetValue<bool>(AppConstants.SettingsKey.AccountOnline, true);
+            settings.SetValue<string>(AppConstants.SettingsKey.AccountPhone, phone);
+            settings.SetValue<string>(AppConstants.SettingsKey.AccountPassword, password);
+            return await TrySignInAsync();
         }
     }
 }

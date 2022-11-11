@@ -134,7 +134,9 @@
     <Compile Include="Models\Data\Constants\AppConstants.cs" />
     <Compile Include="Models\Data\Constants\ServiceConstants.cs" />
     <Compile Include="Models\Data\Content\ContentInfoSearch.cs" />
+    <Compile Include="Models\Data\Radio\RadioInfoDetail.cs" />
     <Compile Include="Models\Data\Radio\RadioInfoSearch.cs" />
+    <Compile Include="Models\Data\Radio\RadioPlaylistDetail.cs" />
     <Compile Include="Models\Data\Search\SearchSet.cs" />
     <Compile Include="Models\Data\User\AccountInfo.cs" />
     <Compile Include="Models\Enums\AuthorizeState.cs" />
@@ -174,8 +176,11 @@
     <Compile Include="Providers\HttpProvider.cs" />
     <Compile Include="Providers\Interfaces\IAccountProvider.cs" />
     <Compile Include="Providers\Interfaces\IHttpProvider.cs" />
+    <Compile Include="Providers\Interfaces\IRadioProvider.cs" />
     <Compile Include="Providers\Interfaces\ISearchProvider.cs" />
+    <Compile Include="Providers\RadioProvider.cs.cs" />
     <Compile Include="Providers\SearchProvider.cs" />
+    <Compile Include="Resources\Converter\AccountStateToDisplayConverter.cs" />
     <Compile Include="Resources\Converter\BooleanToDisplayConverter.cs" />
     <Compile Include="Resources\Converter\BooleanToVisibilityConverter.cs" />
     <Compile Include="Resources\Converter\InverseBooleanConverter.cs" />
@@ -187,6 +192,7 @@
     <Compile Include="Services\Interfaces\INavigateService.cs" />
     <Compile Include="Services\NavigateService.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\RadioDetailViewModel.cs" />
     <Compile Include="ViewModels\SearchViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="Views\MainPage.xaml.cs">
@@ -206,6 +212,12 @@
     <Compile Include="Services\SettingsService.cs" />
     <Compile Include="Views\Main\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Secondary\ContentDetailPage.xaml.cs">
+      <DependentUpon>ContentDetailPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Secondary\RadioDetailPage.xaml.cs">
+      <DependentUpon>RadioDetailPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Secondary\SearchPage.xaml.cs">
       <DependentUpon>SearchPage.xaml</DependentUpon>
@@ -262,6 +274,66 @@
     <Content Include="Assets\AppIcon\Wide310x150Logo.scale-150.png" />
     <Content Include="Assets\AppIcon\Wide310x150Logo.scale-200.png" />
     <Content Include="Assets\AppIcon\Wide310x150Logo.scale-400.png" />
+    <Content Include="Assets\Image\DefaultAvatar.png" />
+    <Content Include="Assets\Image\DefaultCover.png" />
+    <Content Include="Assets\Image\ProgramCategories\1599_ertong.png" />
+    <Content Include="Assets\Image\ProgramCategories\1737_xiaoyuan.png" />
+    <Content Include="Assets\Image\ProgramCategories\3251_tuokouxiu.png" />
+    <Content Include="Assets\Image\ProgramCategories\3276_xiqu.png" />
+    <Content Include="Assets\Image\ProgramCategories\3385_qiche.png" />
+    <Content Include="Assets\Image\ProgramCategories\3427_erciyuan.png" />
+    <Content Include="Assets\Image\ProgramCategories\3442_guangboju.png" />
+    <Content Include="Assets\Image\ProgramCategories\3496_pingshu.png" />
+    <Content Include="Assets\Image\ProgramCategories\3588_yingshi.png" />
+    <Content Include="Assets\Image\ProgramCategories\3600_pinpaidiantai.png" />
+    <Content Include="Assets\Image\ProgramCategories\3613_wenhua.png" />
+    <Content Include="Assets\Image\ProgramCategories\3631_lianhezhuanqu.png" />
+    <Content Include="Assets\Image\ProgramCategories\3636_chubanjingpin.png" />
+    <Content Include="Assets\Image\ProgramCategories\3637_chaojihuiyuan.png" />
+    <Content Include="Assets\Image\ProgramCategories\3670_shenghuo.png" />
+    <Content Include="Assets\Image\ProgramCategories\3675_muying.png" />
+    <Content Include="Assets\Image\ProgramCategories\521_xiaoshuo.png" />
+    <Content Include="Assets\Image\ProgramCategories\523_yinyue.png" />
+    <Content Include="Assets\Image\ProgramCategories\527_xiangshengxiaopin.png" />
+    <Content Include="Assets\Image\ProgramCategories\529_qinggan.png" />
+    <Content Include="Assets\Image\ProgramCategories\531_lishi.png" />
+    <Content Include="Assets\Image\ProgramCategories\533_caijing.png" />
+    <Content Include="Assets\Image\ProgramCategories\535_keji.png" />
+    <Content Include="Assets\Image\ProgramCategories\537_jiaoyu.png" />
+    <Content Include="Assets\Image\ProgramCategories\543_waiyu.png" />
+    <Content Include="Assets\Image\ProgramCategories\545_toutiao.png" />
+    <Content Include="Assets\Image\ProgramCategories\547_yule.png" />
+    <Content Include="Assets\Image\Provinces\111_anhui.png" />
+    <Content Include="Assets\Image\Provinces\129_fujian.png" />
+    <Content Include="Assets\Image\Provinces\139_jiangxi.png" />
+    <Content Include="Assets\Image\Provinces\151_shandong.png" />
+    <Content Include="Assets\Image\Provinces\169_henan.png" />
+    <Content Include="Assets\Image\Provinces\187_hubei.png" />
+    <Content Include="Assets\Image\Provinces\19_shanxi.png" />
+    <Content Include="Assets\Image\Provinces\202_hunan.png" />
+    <Content Include="Assets\Image\Provinces\217_guangdong.png" />
+    <Content Include="Assets\Image\Provinces\239_guangxi.png" />
+    <Content Include="Assets\Image\Provinces\254_hainan.png" />
+    <Content Include="Assets\Image\Provinces\257_chongqing.png" />
+    <Content Include="Assets\Image\Provinces\259_sichuan.png" />
+    <Content Include="Assets\Image\Provinces\281_guizhou.png" />
+    <Content Include="Assets\Image\Provinces\291_yunnan.png" />
+    <Content Include="Assets\Image\Provinces\308_xizang.png" />
+    <Content Include="Assets\Image\Provinces\316_shaanxi.png" />
+    <Content Include="Assets\Image\Provinces\31_neimenggu.png" />
+    <Content Include="Assets\Image\Provinces\327_gansu.png" />
+    <Content Include="Assets\Image\Provinces\342_qinghai.png" />
+    <Content Include="Assets\Image\Provinces\351_ningxia.png" />
+    <Content Include="Assets\Image\Provinces\357_xinjiang.png" />
+    <Content Include="Assets\Image\Provinces\3_beijing.png" />
+    <Content Include="Assets\Image\Provinces\44_liaoning.png" />
+    <Content Include="Assets\Image\Provinces\59_jilin.png" />
+    <Content Include="Assets\Image\Provinces\5_tianjin.png" />
+    <Content Include="Assets\Image\Provinces\69_heilongjiang.png" />
+    <Content Include="Assets\Image\Provinces\7_hebei.png" />
+    <Content Include="Assets\Image\Provinces\83_shanghai.png" />
+    <Content Include="Assets\Image\Provinces\85_jiangsu.png" />
+    <Content Include="Assets\Image\Provinces\99_zhejiang.png" />
     <Content Include="Assets\SplashScreen\SplashScreen.scale-100.png" />
     <Content Include="Assets\SplashScreen\SplashScreen.scale-125.png" />
     <Content Include="Assets\SplashScreen\SplashScreen.scale-150.png" />
@@ -347,6 +419,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Main\SettingsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Secondary\ContentDetailPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Secondary\RadioDetailPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

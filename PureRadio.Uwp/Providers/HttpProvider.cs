@@ -135,6 +135,14 @@ namespace PureRadio.Uwp.Providers
             {
                 throw exception;
             }
+            catch (HttpRequestException exception)
+            {
+                throw exception;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
             return response;
         }
 
@@ -157,9 +165,8 @@ namespace PureRadio.Uwp.Providers
         public HttpClient HttpClient { get => _httpClient; }
 
         public Task<HttpResponseMessage> SendAsync(HttpRequestMessage request)
-        {
-            return SendAsync(request, CancellationToken.None);
-        }
+            => SendAsync(request, CancellationToken.None);
+        
 
         public async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {

@@ -12,11 +12,6 @@ namespace PureRadio.Uwp.Models.Enums
     public enum AuthorizeState
     {
         /// <summary>
-        /// 正在请求授权，等待授权结果.
-        /// </summary>
-        Loading,
-
-        /// <summary>
         /// 用户已退出.
         /// </summary>
         SignedOut,

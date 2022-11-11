@@ -15,7 +15,7 @@
   <mp:PhoneIdentity PhoneProductId="0d00bd04-a56c-4e92-bb9e-c5acb5dce620" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>PureRadio.Uwp</DisplayName>
+    <DisplayName>ms-resource:AppName</DisplayName>
     <PublisherDisplayName>howie</PublisherDisplayName>
     <Logo>Assets\AppIcon\StoreLogo.png</Logo>
   </Properties>
@@ -33,7 +33,7 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="PureRadio.Uwp.App">
       <uap:VisualElements
-        DisplayName="PureRadio.Uwp"
+        DisplayName="ms-resource:AppName"
         Square150x150Logo="Assets\AppIcon\Square150x150Logo.png"
         Square44x44Logo="Assets\AppIcon\Square44x44Logo.png"
         Description="PureRadio.Uwp"
@@ -47,5 +47,6 @@
   <Capabilities>
     <Capability Name="internetClient" />
     <uap3:Capability Name="backgroundMediaPlayback"/>
+    <uap:Capability Name="musicLibrary"/>
   </Capabilities>
 </Package>

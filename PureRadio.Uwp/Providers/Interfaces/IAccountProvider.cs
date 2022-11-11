@@ -1,4 +1,5 @@
 ﻿using PureRadio.Uwp.Models.Args;
+using PureRadio.Uwp.Models.Data.User;
 using PureRadio.Uwp.Models.Enums;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,11 @@ namespace PureRadio.Uwp.Providers.Interfaces
         /// 当前的授权状态.
         /// </summary>
         AuthorizeState State { get; }
+
+        /// <summary>
+        /// 当前的账号信息.
+        /// </summary>
+        AccountInfo AccountInfo { get; }
 
         /// <summary>
         /// 获取包含授权码的查询字符串.
@@ -51,6 +57,14 @@ namespace PureRadio.Uwp.Providers.Interfaces
         /// </summary>
         /// <returns><see cref="Task"/>.</returns>
         Task<bool> TrySignInAsync();
+
+        /// <summary>
+        /// 用户登录.
+        /// </summary>
+        /// <param name="phone">登陆手机号.</param>
+        /// <param name="password">登陆密码.</param>
+        /// <returns><see cref="Task"/>.</returns>
+        Task<bool> TrySignInAsync(string phone, string password);
 
         /// <summary>
         /// 用户退出.

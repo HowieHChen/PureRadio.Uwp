@@ -14,6 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -24,6 +25,7 @@ namespace PureRadio.Uwp.ViewModels
     {
         private readonly INavigateService navigate;// = Ioc.Default.GetRequiredService<INavigateService>();
         private readonly ISearchProvider searchProvider;
+        private readonly IAccountProvider accountProvider;
         private readonly DispatcherTimer _suggestionTimer;
         private CancellationTokenSource _suggestionCancellationTokenSource;
         private bool _isKeywordChanged;
@@ -42,14 +44,32 @@ namespace PureRadio.Uwp.ViewModels
         }
 
         [ObservableProperty]
-        private List<string> searchSuggest;
+        private AuthorizeState _accountState;
+
+        [ObservableProperty]
+        private List<string> _searchSuggest;
+
+        [ObservableProperty]
+        private string _userPicture = "ms-appx:///Assets/Image/DefaultAvatar.png";
+
+        [ObservableProperty]
+        private string _userName;
+
+        [ObservableProperty]
+        private string _userPhone;
+
+        [ObservableProperty]
+        private string _userDescription;
+
 
         public MainViewModel(
             INavigateService navigate, 
-            ISearchProvider searchProvider)
+            ISearchProvider searchProvider,
+            IAccountProvider accountProvider)
         {
             this.navigate = navigate;
             this.searchProvider = searchProvider;
+            this.accountProvider = accountProvider;
             _suggestionTimer = new DispatcherTimer
             {
                 Interval = TimeSpan.FromMilliseconds(350),
@@ -57,6 +77,21 @@ namespace PureRadio.Uwp.ViewModels
             _suggestionTimer.Tick += OnSuggestionTimerTickAsync;
             var resourceLoader = Windows.ApplicationModel.Resources.ResourceLoader.GetForCurrentView();
             _noResultTip = resourceLoader.GetString("LangSearchNoResultTip");
+            IsActive = true;
+        }
+
+        protected override void OnActivated()
+        {
+            base.OnActivated();
+            AccountState = accountProvider.State;
+            GetAccountInfo();
+            accountProvider.StateChanged += AccountStateChanged;
+        }
+
+        protected override void OnDeactivated()
+        {
+            accountProvider.StateChanged -= AccountStateChanged;
+            base.OnDeactivated();
         }
 
         public void Navigate(PageIds pageId, object parameter = null)
@@ -149,6 +184,41 @@ namespace PureRadio.Uwp.ViewModels
             }
 
             _suggestionCancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(1));
+        }
+
+        public async Task<bool> TrySignIn(string phone, string password)
+        {
+            if (AccountState == AuthorizeState.SignedOut)
+                return await accountProvider.TrySignInAsync(phone, password);
+            else return true;
+        }
+
+        public async Task<bool> TrySignOut()
+        {
+            await accountProvider.SignOutAsync();
+            return true;
+        }
+
+        private void AccountStateChanged(object sender, AuthorizeStateChangedEventArgs e)
+        {
+            if (e.OldState == AuthorizeState.SignedOut && e.NewState == AuthorizeState.SignedIn && AccountState == AuthorizeState.SignedOut)
+            {
+                AccountState = AuthorizeState.SignedIn;
+                GetAccountInfo();
+            }
+            else if (e.OldState == AuthorizeState.SignedIn && e.NewState == AuthorizeState.SignedOut && AccountState == AuthorizeState.SignedIn)
+            {
+                AccountState = AuthorizeState.SignedOut;
+                GetAccountInfo();
+            }
+        }
+
+        private void GetAccountInfo()
+        {
+            UserPicture = accountProvider.AccountInfo.Avatar;
+            UserName = accountProvider.AccountInfo.NickName;
+            UserPhone = accountProvider.AccountInfo.PhoneNumber;
+            UserDescription = accountProvider.AccountInfo.Signature;
         }
     }
 }

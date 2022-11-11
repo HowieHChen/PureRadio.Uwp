@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Toolkit.Uwp.UI.Controls;
 using PureRadio.Uwp.Models.Data.Content;
 using PureRadio.Uwp.Models.Data.Radio;
+using PureRadio.Uwp.Models.Enums;
 using PureRadio.Uwp.Models.Local;
 using PureRadio.Uwp.Providers.Interfaces;
 using PureRadio.Uwp.Services.Interfaces;
@@ -79,11 +80,11 @@ namespace PureRadio.Uwp.ViewModels
 
         protected override void OnDeactivated()
         {
-            base.OnDeactivated();
             RadioResult.OnStartLoading -= StartLoading;
             RadioResult.OnEndLoading -= EndLoading;
             ContentResult.OnStartLoading -= StartLoading;
             ContentResult.OnEndLoading -= EndLoading;
+            base.OnDeactivated();
         }
 
         private async Task<IEnumerable<RadioInfoSearch>> SearchForRadio(CancellationToken cancelToken)
@@ -122,16 +123,28 @@ namespace PureRadio.Uwp.ViewModels
 
         private void SetRadioResult()
         {
+            if (IsContentModuleShown)
+            {
+                IsContentModuleShown = false;
+            }
             IsRadioModuleShown = true;
-            IsContentModuleShown = false;
-            //searchProvider.ResetRadioStatus();
         }
 
         private void SetContentResult()
         {
-            IsRadioModuleShown = false;
+            if (IsRadioModuleShown)
+            {
+                IsRadioModuleShown= false;
+            }
             IsContentModuleShown = true;
-            //searchProvider.ResetContentStatus();
+        }
+
+        public void Navigate(PageIds pageId, object parameter = null)
+        {
+            if (pageId == PageIds.RadioDetail || pageId == PageIds.ContentDetail)
+            {
+                navigate.NavigateToSecondaryView(pageId, parameter);
+            }
         }
     }
 }

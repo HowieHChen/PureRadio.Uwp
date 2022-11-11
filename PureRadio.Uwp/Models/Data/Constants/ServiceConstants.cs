@@ -37,6 +37,7 @@ namespace PureRadio.Uwp.Models.Data.Constants
             public const string DeviceId = "device_id";
             public const string Password = "password";
             public const string AreaCode = "area_code";
+            public const string UserId = "user_id";
         }
 
         public static class Order

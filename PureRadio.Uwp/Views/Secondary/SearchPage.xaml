@@ -186,14 +186,14 @@
                 <ToggleButton
                     x:Uid="PageSearchSourceRadio"
                     IsEnabled="{x:Bind ViewModel.IsLoading, Mode=OneWay,Converter={StaticResource InverseBooleanConverter}}"
-                    IsChecked="{x:Bind ViewModel.IsRadioModuleShown, Mode=OneWay}"
+                    IsChecked="{x:Bind ViewModel.IsRadioModuleShown, Mode=TwoWay}"
                     Command="{x:Bind ViewModel.RadioResultCommand}"
                     Style="{StaticResource OutlinedToggleButtonStyle}" 
                     Content="Radio"/>
                 <ToggleButton
                     x:Uid="PageSearchSourceContent"
                     IsEnabled="{x:Bind ViewModel.IsLoading, Mode=OneWay,Converter={StaticResource InverseBooleanConverter}}"
-                    IsChecked="{x:Bind ViewModel.IsContentModuleShown, Mode=OneWay}"
+                    IsChecked="{x:Bind ViewModel.IsContentModuleShown, Mode=TwoWay}"
                     Command="{x:Bind ViewModel.ContentResultCommand}"
                     Margin="8,0" Style="{StaticResource OutlinedToggleButtonStyle}" 
                     Content="Content"/>
@@ -217,6 +217,7 @@
                 DesiredWidth="380"
                 SelectionMode="None"
                 IsItemClickEnabled="True"
+                ItemClick="RadioGridView_ItemClick"
                 ItemsSource="{x:Bind ViewModel.RadioResult, Mode=OneWay}"
                 ItemTemplate="{StaticResource SearchRadioInfoTemplate}"
                 ItemContainerStyle="{StaticResource CardViewItemContainerStyle}">
@@ -239,6 +240,7 @@
                 DesiredWidth="380"
                 SelectionMode="None"
                 IsItemClickEnabled="True"
+                ItemClick="ContentGridView_ItemClick"
                 ItemsSource="{x:Bind ViewModel.ContentResult, Mode=OneWay}"
                 ItemTemplate="{StaticResource SearchContentInfoTemplate}"
                 ItemContainerStyle="{StaticResource CardViewItemContainerStyle}">

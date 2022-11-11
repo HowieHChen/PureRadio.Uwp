@@ -56,6 +56,16 @@ namespace PureRadio.Uwp.Models.Enums
         Search = 101,
 
         /// <summary>
+        /// 电台详细信息页
+        /// </summary>
+        RadioDetail = 102,
+
+        /// <summary>
+        /// 内容详细信息页
+        /// </summary>
+        ContentDetail = 103,
+
+        /// <summary>
         /// 全屏的播放页
         /// </summary>
         Player = 1000,

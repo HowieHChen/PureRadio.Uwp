@@ -117,17 +117,29 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AppName" xml:space="preserve">
+    <value>纯粹电台</value>
+  </data>
   <data name="AppTitleBarText.Text" xml:space="preserve">
     <value>纯粹电台</value>
   </data>
   <data name="ControlAppTitleSearchBar.PlaceholderText" xml:space="preserve">
     <value>搜索电台、节目等</value>
   </data>
+  <data name="LangAccountSignIn" xml:space="preserve">
+    <value>登录</value>
+  </data>
+  <data name="LangAccountSignOut" xml:space="preserve">
+    <value>注销</value>
+  </data>
   <data name="LangAudienceCount.Text" xml:space="preserve">
     <value>听众</value>
   </data>
   <data name="LangLocalAccountName" xml:space="preserve">
-    <value>本地账号</value>
+    <value>您好</value>
+  </data>
+  <data name="LangLocalAccountPhone" xml:space="preserve">
+    <value>本地账户</value>
   </data>
   <data name="LangLocalAccountSignature" xml:space="preserve">
     <value>登录蜻蜓账号以享受完整服务</value>
@@ -143,6 +155,60 @@
   </data>
   <data name="LangSettingsSwitchOn" xml:space="preserve">
     <value>开</value>
+  </data>
+  <data name="LoginDialogBoxPassword.PlaceholderText" xml:space="preserve">
+    <value>密码</value>
+  </data>
+  <data name="LoginDialogBoxUsername.PlaceholderText" xml:space="preserve">
+    <value>手机号</value>
+  </data>
+  <data name="LoginDialogContainer.CloseButtonText" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="LoginDialogContainer.PrimaryButtonText" xml:space="preserve">
+    <value>登录</value>
+  </data>
+  <data name="LoginDialogFailureTip.CloseButtonContent" xml:space="preserve">
+    <value>好的</value>
+  </data>
+  <data name="LoginDialogFailureTip.Subtitle" xml:space="preserve">
+    <value>您提供的账号和密码似乎有误</value>
+  </data>
+  <data name="LoginDialogFailureTip.Title" xml:space="preserve">
+    <value>登录失败</value>
+  </data>
+  <data name="LoginDialogShowPassword.Content" xml:space="preserve">
+    <value>显示密码</value>
+  </data>
+  <data name="LoginDialogSuccessTip.CloseButtonContent" xml:space="preserve">
+    <value>好的</value>
+  </data>
+  <data name="LoginDialogSuccessTip.Subtitle" xml:space="preserve">
+    <value>已登录您的蜻蜓FM账号</value>
+  </data>
+  <data name="LoginDialogSuccessTip.Title" xml:space="preserve">
+    <value>登录成功</value>
+  </data>
+  <data name="LoginDialogTeachingTip.CloseButtonContent" xml:space="preserve">
+    <value>好的</value>
+  </data>
+  <data name="LoginDialogTeachingTip.Subtitle" xml:space="preserve">
+    <value>请检查您是否完全填写了账号和密码</value>
+  </data>
+  <data name="LoginDialogTeachingTip.Title" xml:space="preserve">
+    <value>信息不完整</value>
+  </data>
+  <data name="LoginDialogTitle.Text" xml:space="preserve">
+    <value>登录</value>
+  </data>
+  <data name="LogoutDialogSuccessTip.CloseButtonContent" xml:space="preserve">
+    <value>好的</value>
+  </data>
+  <data name="LogoutDialogSuccessTip.Subtitle" xml:space="preserve">
+    <value>账号已退出</value>
+  </data>
+  <data name="LogoutDialogSuccessTip.Title" xml:space="preserve">
+    <value>退出成功</value>
   </data>
   <data name="navContent.Content" xml:space="preserve">
     <value>节目</value>

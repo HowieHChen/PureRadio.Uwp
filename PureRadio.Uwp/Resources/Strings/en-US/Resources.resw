@@ -117,16 +117,28 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AppName" xml:space="preserve">
+    <value>Pure Radio</value>
+  </data>
   <data name="AppTitleBarText.Text" xml:space="preserve">
     <value>Pure Radio</value>
   </data>
   <data name="ControlAppTitleSearchBar.PlaceholderText" xml:space="preserve">
     <value>Search radio stations, programs and more</value>
   </data>
+  <data name="LangAccountSignIn" xml:space="preserve">
+    <value>Sign in</value>
+  </data>
+  <data name="LangAccountSignOut" xml:space="preserve">
+    <value>Sign out</value>
+  </data>
   <data name="LangAudienceCount.Text" xml:space="preserve">
     <value>listening</value>
   </data>
   <data name="LangLocalAccountName" xml:space="preserve">
+    <value>Hi there</value>
+  </data>
+  <data name="LangLocalAccountPhone" xml:space="preserve">
     <value>Local Account</value>
   </data>
   <data name="LangLocalAccountSignature" xml:space="preserve">
@@ -143,6 +155,60 @@
   </data>
   <data name="LangSettingsSwitchOn" xml:space="preserve">
     <value>On</value>
+  </data>
+  <data name="LoginDialogBoxPassword.PlaceholderText" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="LoginDialogBoxUsername.PlaceholderText" xml:space="preserve">
+    <value>Phone Number</value>
+  </data>
+  <data name="LoginDialogContainer.CloseButtonText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="LoginDialogContainer.PrimaryButtonText" xml:space="preserve">
+    <value>Sign in</value>
+  </data>
+  <data name="LoginDialogFailureTip.CloseButtonContent" xml:space="preserve">
+    <value>Got it</value>
+  </data>
+  <data name="LoginDialogFailureTip.Subtitle" xml:space="preserve">
+    <value>The username and password you provided appear to be incorrect</value>
+  </data>
+  <data name="LoginDialogFailureTip.Title" xml:space="preserve">
+    <value>Sign in failed</value>
+  </data>
+  <data name="LoginDialogShowPassword.Content" xml:space="preserve">
+    <value>Show password</value>
+  </data>
+  <data name="LoginDialogSuccessTip.CloseButtonContent" xml:space="preserve">
+    <value>Got it</value>
+  </data>
+  <data name="LoginDialogSuccessTip.Subtitle" xml:space="preserve">
+    <value>Connected to your Qingting FM account</value>
+  </data>
+  <data name="LoginDialogSuccessTip.Title" xml:space="preserve">
+    <value>Sign in successful</value>
+  </data>
+  <data name="LoginDialogTeachingTip.CloseButtonContent" xml:space="preserve">
+    <value>Got it</value>
+  </data>
+  <data name="LoginDialogTeachingTip.Subtitle" xml:space="preserve">
+    <value>Please check that you have filled in the account number and password completely</value>
+  </data>
+  <data name="LoginDialogTeachingTip.Title" xml:space="preserve">
+    <value>Incomplete information</value>
+  </data>
+  <data name="LoginDialogTitle.Text" xml:space="preserve">
+    <value>Sign in</value>
+  </data>
+  <data name="LogoutDialogSuccessTip.CloseButtonContent" xml:space="preserve">
+    <value>Got it</value>
+  </data>
+  <data name="LogoutDialogSuccessTip.Subtitle" xml:space="preserve">
+    <value>Disconnected from your Qingting FM account</value>
+  </data>
+  <data name="LogoutDialogSuccessTip.Title" xml:space="preserve">
+    <value>Sign out successful</value>
   </data>
   <data name="navContent.Content" xml:space="preserve">
     <value>Content</value>

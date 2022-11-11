@@ -15,7 +15,6 @@ namespace PureRadio.Uwp.Models.Local
     public class IncrementalLoadingObservableCollection<T> : ObservableCollection<T>, ISupportIncrementalLoading
     {
         private readonly Func<CancellationToken, Task<IEnumerable<T>>> _provideMoreItems;
-        private readonly SemaphoreSlim _mutex = new SemaphoreSlim(1);
         public Action OnStartLoading { get; set; }
         public Action OnEndLoading { get; set; }
         public Action<Exception> OnError { get; set; }

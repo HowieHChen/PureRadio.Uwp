@@ -8,15 +8,17 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls" 
+    xmlns:convert="using:PureRadio.Uwp.Resources.Converter"
     xmlns:viewmodels="using:PureRadio.Uwp.ViewModels" 
     d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
     mc:Ignorable="d"
     muxc:BackdropMaterial.ApplyToRootOrPageBackground="True">
     <!--muxc:BackdropMaterial.ApplyToRootOrPageBackground="True"-->
     <Page.Resources>
+        <convert:AccountStateToDisplayConverter x:Key="AccountStateToDisplayConverter"/>
         <Flyout x:Key="UserInfoFlyout" Placement="BottomEdgeAlignedRight" 
                 FlyoutPresenterStyle="{StaticResource UserInfoFlyoutStyle}">
-            <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Vertical" MinWidth="240">
                 <Grid HorizontalAlignment="Stretch">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -24,31 +26,42 @@
                     </Grid.ColumnDefinitions>
                     <muxc:PersonPicture 
                         Grid.Column="0"
-                        VerticalAlignment="Center" Width="48" Height="48"
-                        ProfilePicture="https://docs.microsoft.com/windows/uwp/contacts-and-calendar/images/shoulder-tap-static-payload.png"/>
+                        Margin="4,4,0,0"
+                        VerticalAlignment="Top" Width="48" Height="48"
+                        ProfilePicture="{x:Bind ViewModel.UserPicture, Mode=OneWay}"/>
                     <StackPanel
                         Grid.Column="1"
                         Orientation="Vertical"
-                        VerticalAlignment="Center"
+                        Margin="4,4"
+                        VerticalAlignment="Top"
                         HorizontalAlignment="Left">
                         <TextBlock 
-                            Text="User Name"
+                            Text="{x:Bind ViewModel.UserName, Mode=OneWay}"
+                            Margin="12,0,0,0"
                             Style="{StaticResource BodyTextBlockStyle}"/>
                         <TextBlock
-                            Text="Phone Number"
+                            Text="{x:Bind ViewModel.UserPhone, Mode=OneWay}"
+                            Margin="12,0,0,0"
+                            Foreground="{ThemeResource CustomNavigationViewItemForeground}"
                             Style="{StaticResource CaptionTextBlockStyle}"/>
                         <HyperlinkButton
-                            x:Name="AccountStateButoon">
-                            <TextBlock Text="SignIn"/>
+                            x:Name="AccountStateButoon"
+                            Click="AccountStateButoon_Click">
+                            <TextBlock 
+                                Text="{x:Bind ViewModel.AccountState, Mode=OneWay, Converter={StaticResource AccountStateToDisplayConverter}}"
+                                Style="{StaticResource CaptionTextBlockStyle}"/>
                         </HyperlinkButton>
                     </StackPanel>
                 </Grid>
                 <TextBlock 
-                    Text="Your own personal introduction"
-                    Style="{StaticResource BodyTextBlockStyle}"/>
+                    Text="{x:Bind ViewModel.UserDescription, Mode=OneWay}"
+                    Margin="4,0,4,4"
+                    Style="{StaticResource BodyTextBlockStyle}"
+                    Foreground="{ThemeResource CustomNavigationViewItemForeground}"/>
             </StackPanel>
         </Flyout>
     </Page.Resources>
+    
     <Grid>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
@@ -76,6 +89,69 @@
             <RowDefinition Height="48"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
+        <ContentDialog
+            Grid.Row="1"
+            x:Name="LoginDialog"
+            x:Uid="LoginDialogContainer"
+            IsPrimaryButtonEnabled="True"
+            PrimaryButtonText="Login"             
+            CloseButtonText="Cancel"
+            DefaultButton="Primary"
+            Opened="LoginDialog_Opened"
+            Canvas.ZIndex="128">
+            <StackPanel                 
+                Orientation="Vertical" HorizontalAlignment="Stretch" MinWidth="300">
+                <TextBlock 
+                    x:Uid="LoginDialogTitle"
+                    Text="Login" Style="{StaticResource TitleTextBlockStyle}"/>
+                <TextBox 
+                    x:Uid="LoginDialogBoxUsername"
+                    x:Name="usernameBox"
+                    Margin="0,16,0,0"
+                    PlaceholderText="Phone Number" />
+                <PasswordBox 
+                    x:Uid="LoginDialogBoxPassword"
+                    x:Name="passworBox" Margin="0,8,0,0"
+                    PlaceholderText="Password"
+                    PasswordRevealMode="Hidden"/>
+                <CheckBox 
+                    x:Uid="LoginDialogShowPassword"
+                    x:Name="revealModeCheckBox" 
+                    Margin="0,4,0,0"
+                    Content="Show password" IsChecked="False"
+                    Checked="revealModeCheckBox_Checked"
+                    Unchecked="revealModeCheckBox_Unchecked"/>
+            </StackPanel>
+        </ContentDialog>
+        <muxc:TeachingTip 
+            Grid.Row="1"
+            x:Name="LoginDialogTeachingTip"
+            x:Uid="LoginDialogTeachingTip"
+	        PreferredPlacement="Auto"
+	        PlacementMargin="20">
+        </muxc:TeachingTip>
+        <muxc:TeachingTip 
+            Grid.Row="1"
+            x:Name="LoginDialogFailureTip"
+            x:Uid="LoginDialogFailureTip"	      
+	        PreferredPlacement="Auto"
+	        PlacementMargin="20">
+        </muxc:TeachingTip>
+        <muxc:TeachingTip 
+            Grid.Row="1"
+            x:Name="LoginDialogSuccessTip"
+            x:Uid="LoginDialogSuccessTip"	      
+	        PreferredPlacement="Auto"
+	        PlacementMargin="20">
+        </muxc:TeachingTip>
+        <muxc:TeachingTip 
+            Grid.Row="1"
+            x:Name="LogoutDialogSuccessTip"
+            x:Uid="LogoutDialogSuccessTip"	      
+	        PreferredPlacement="Auto"
+	        PlacementMargin="20">
+        </muxc:TeachingTip>
+        
         <Rectangle
             x:Name="TitleBarHost"
             Grid.Row="0"
@@ -199,7 +275,7 @@
                 Margin="6,0"
                 Flyout="{StaticResource UserInfoFlyout}">
                 <muxc:PersonPicture
-                    ProfilePicture="https://docs.microsoft.com/windows/uwp/contacts-and-calendar/images/shoulder-tap-static-payload.png"
+                    ProfilePicture="{x:Bind ViewModel.UserPicture, Mode=OneWay}"
                     Width="28"
                     Height="28"/>
             </Button>

@@ -1,4 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.DependencyInjection;
+using PureRadio.Uwp.Models.Data.Content;
+using PureRadio.Uwp.Models.Data.Radio;
+using PureRadio.Uwp.Models.Enums;
 using PureRadio.Uwp.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -38,6 +41,18 @@ namespace PureRadio.Uwp.Views.Secondary
         {
             base.OnNavigatedTo(e);
             ViewModel.Keyword = (string)e.Parameter ?? string.Empty;
+        }
+
+        private void RadioGridView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            if (e.ClickedItem != null && e.ClickedItem is RadioInfoSearch radioInfo)
+                ViewModel.Navigate(PageIds.RadioDetail, radioInfo.RadioId);
+        }
+
+        private void ContentGridView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            if (e.ClickedItem != null && e.ClickedItem is ContentInfoSearch contentInfo)
+                ViewModel.Navigate(PageIds.RadioDetail, contentInfo.ContentId);
         }
     }
 }
