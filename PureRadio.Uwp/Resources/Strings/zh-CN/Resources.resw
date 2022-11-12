@@ -135,6 +135,12 @@
   <data name="LangAudienceCount.Text" xml:space="preserve">
     <value>听众</value>
   </data>
+  <data name="LangIsFreeFalse.Text" xml:space="preserve">
+    <value>付费内容</value>
+  </data>
+  <data name="LangLiveProgramUnknown" xml:space="preserve">
+    <value>无</value>
+  </data>
   <data name="LangLocalAccountName" xml:space="preserve">
     <value>您好</value>
   </data>
@@ -230,6 +236,12 @@
   </data>
   <data name="navSettings.Content" xml:space="preserve">
     <value>设置</value>
+  </data>
+  <data name="PageContentDetailPodcaster.Text" xml:space="preserve">
+    <value>主播:</value>
+  </data>
+  <data name="PageContentDetailUpdateTime.Text" xml:space="preserve">
+    <value>更新时间:</value>
   </data>
   <data name="PageRadioDetailNavBYDAY.Content" xml:space="preserve">
     <value>前天</value>

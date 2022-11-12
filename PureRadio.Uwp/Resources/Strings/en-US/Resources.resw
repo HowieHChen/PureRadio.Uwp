@@ -135,6 +135,12 @@
   <data name="LangAudienceCount.Text" xml:space="preserve">
     <value>listening</value>
   </data>
+  <data name="LangIsFreeFalse.Text" xml:space="preserve">
+    <value>Paid content</value>
+  </data>
+  <data name="LangLiveProgramUnknown" xml:space="preserve">
+    <value>None</value>
+  </data>
   <data name="LangLocalAccountName" xml:space="preserve">
     <value>Hi there</value>
   </data>
@@ -230,6 +236,12 @@
   </data>
   <data name="navSettings.Content" xml:space="preserve">
     <value>Settings</value>
+  </data>
+  <data name="PageContentDetailPodcaster.Text" xml:space="preserve">
+    <value>Podcasters:</value>
+  </data>
+  <data name="PageContentDetailUpdateTime.Text" xml:space="preserve">
+    <value>Last update: </value>
   </data>
   <data name="PageRadioDetailNavBYDAY.Content" xml:space="preserve">
     <value>Two days ago</value>

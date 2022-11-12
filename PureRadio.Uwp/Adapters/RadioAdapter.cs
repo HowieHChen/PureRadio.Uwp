@@ -15,9 +15,10 @@ namespace PureRadio.Uwp.Adapters
     {
         public RadioInfoDetail ConvertToRadioInfoDetail(RadioDetailItem item)
         {
-            string nowPlaying = item.Nowplaying?.Title ?? string.Empty;
+            var resourceLoader = new ResourceLoader();
+            string nowPlaying = item.Nowplaying?.Title ?? resourceLoader.GetString("LangLiveProgramUnknown");
             TimeSpan timeSpan;
-            if (DateTime.TryParse(item.Nowplaying.EndTime, out DateTime updateTime))
+            if (item.Nowplaying != null && DateTime.TryParse(item.Nowplaying.EndTime, out DateTime updateTime))
                 timeSpan = updateTime - DateTime.Now;
             else
                 timeSpan = TimeSpan.Zero;

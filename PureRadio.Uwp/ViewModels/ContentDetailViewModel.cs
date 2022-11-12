@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Uwp.UI;
+using PureRadio.Uwp.Models.Data.Content;
+using PureRadio.Uwp.Models.QingTing.Content;
 using PureRadio.Uwp.Providers.Interfaces;
 using PureRadio.Uwp.Services.Interfaces;
 using System;
@@ -30,9 +32,11 @@ namespace PureRadio.Uwp.ViewModels
         }
 
         [ObservableProperty]
+        private BitmapImage _cover;
+        [ObservableProperty]
         private string _title;
         [ObservableProperty]
-        private BitmapImage _cover;
+        private string _podcasters;
         [ObservableProperty]
         private string _description;
         [ObservableProperty]
@@ -40,7 +44,10 @@ namespace PureRadio.Uwp.ViewModels
         [ObservableProperty]
         private float _rating;
         [ObservableProperty]
-        private string _topCategoryTitle;
+        private List<AttributesItem> _attributes;
+
+        [ObservableProperty]
+        private List<ContentPlaylistDetail> _contentPlaylists;
 
         [ObservableProperty]
         private bool _isInfoLoading;
@@ -77,11 +84,13 @@ namespace PureRadio.Uwp.ViewModels
                 var result = await contentProvider.GetContentDetailInfo(ContentId, CancellationToken.None);
                 if (result != null) 
                 {
-                    Title = result.Title;
                     Cover = await ImageCache.Instance.GetFromCacheAsync(result.Cover);
-                    Description = result.Description;
+                    Title = result.Title;
+                    Podcasters = result.Podcasters;
                     PlayCount = result.PlayCount;
                     Rating = result.Rating;
+                    Description = result.Description;
+                    Attributes = result.Attributes;
                     _version = result.Version;
                 }
                 IsInfoLoading = false;
@@ -100,7 +109,7 @@ namespace PureRadio.Uwp.ViewModels
                 var result = await contentProvider.GetContentProgramListFull(ContentId, _version, CancellationToken.None);
                 if (result != null)
                 {
-
+                    ContentPlaylists = result;
                 }
                 IsPlaylistLoading = false;
             }

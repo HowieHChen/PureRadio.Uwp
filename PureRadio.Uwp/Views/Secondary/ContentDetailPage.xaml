@@ -5,10 +5,258 @@
     xmlns:local="using:PureRadio.Uwp.Views.Secondary"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls" 
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls" 
+    xmlns:animatedVisuals="using:Microsoft.UI.Xaml.Controls.AnimatedVisuals"
+    xmlns:animations="using:Microsoft.Toolkit.Uwp.UI.Animations"
+    xmlns:convert="using:PureRadio.Uwp.Resources.Converter" 
+    xmlns:viewmodels="using:PureRadio.Uwp.ViewModels" xmlns:datamodel="using:PureRadio.Uwp.Models.Data.Content" xmlns:qingting="using:PureRadio.Uwp.Models.QingTing.Content"
+    d:DataContext="{d:DesignInstance Type=viewmodels:ContentDetailViewModel}"
     mc:Ignorable="d"
     Background="Transparent">
 
+    <Page.Resources>
+        <ResourceDictionary>
+            <convert:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            <convert:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
+        </ResourceDictionary>
+    </Page.Resources>
+    
     <Grid>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="LargeLayout">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1008" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="MiddleLayout">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="800" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="SmallLayout">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="CoverRow.Height" Value="300" />
+                        <Setter Target="CoverColumn.Width" Value="*" />
+                        <Setter Target="InfoColuumn.Width" Value="0" />
+                        <Setter Target="ButtonColuumn.Width" Value="0" />
+                        <Setter Target="Cover.HorizontalAlignment" Value="Center" />
+                        <Setter Target="Cover.VerticalAlignment" Value="Center" />
+                        <Setter Target="Cover.Margin" Value="0" />
+                        <Setter Target="ButtonPannel.(Grid.Row)" Value="1" />
+                        <Setter Target="ButtonPannel.(Grid.Column)" Value="0" />
+                        <Setter Target="ButtonPannel.Margin" Value="0" />
+                        <Setter Target="TextInfoPannel.(Grid.Row)" Value="2" />
+                        <Setter Target="TextInfoPannel.(Grid.Column)" Value="0" />
+                        <Setter Target="TextInfoPannel.Margin" Value="20" />
+                        <Setter Target="ContentTitle.HorizontalAlignment" Value="Center" />
+                        <Setter Target="ContentPodcasters.HorizontalAlignment" Value="Center" />
+                        <Setter Target="ContentPlaycount.HorizontalAlignment" Value="Center" />
+                        <Setter Target="Rating.HorizontalAlignment" Value="Center" />
+                        <Setter Target="Description.HorizontalAlignment" Value="Center" />
+                        <Setter Target="ContentTag.HorizontalAlignment" Value="Center" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <ScrollViewer
+            x:Name="contentSV"
+            VerticalContentAlignment="Top">
+            <StackPanel Margin="0,0,0,100">
+                <Grid
+                    x:Name="HeaderPanel"
+                    CornerRadius="8"
+                    Margin="0,0,8,0"
+                    BorderBrush="{ThemeResource NavigationViewContentGridBorderBrush}"
+                    BorderThickness="1"
+                    Background="{ThemeResource LayerFillColorDefaultBrush}"
+                    Height="auto">
+                    <Grid.RowDefinitions>
+                        <RowDefinition x:Name="CoverRow" Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition x:Name="CoverColumn" Width="auto"/>
+                        <ColumnDefinition x:Name="InfoColuumn" Width="*"/>
+                        <ColumnDefinition x:Name="ButtonColuumn" Width="auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <controls:ImageEx
+                        x:Name="Cover"
+                        Grid.Row="0" Grid.Column="0"
+                        Height="200" Width="200"
+                        Margin="20"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        CornerRadius="4"
+                        Source="{x:Bind ViewModel.Cover, Mode=OneWay}">
+                        <animations:Implicit.Animations>
+                            <animations:OffsetAnimation Duration="0:0:0.2"/>
+                        </animations:Implicit.Animations>
+                    </controls:ImageEx>
+                    <Grid
+                        x:Name="TextInfoPannel"
+                        Grid.Row="0" Grid.Column="1"
+                        Margin="0,20,20,20">
+                        <muxc:ProgressRing
+                            Visibility="{x:Bind ViewModel.IsInfoLoading, Mode=OneWay,Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        <StackPanel Orientation="Vertical" 
+                                    Visibility="{x:Bind ViewModel.IsInfoLoading, Mode=OneWay,Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                            <TextBlock 
+                                x:Name="ContentTitle" 
+                                HorizontalAlignment="Left"
+                                TextTrimming="CharacterEllipsis"
+                                MaxLines="1"
+                                Text="{x:Bind ViewModel.Title, Mode=OneWay}" Style="{StaticResource TitleTextBlockStyle}"/>
+                            <StackPanel 
+                                x:Name="ContentPodcasters" 
+                                HorizontalAlignment="Left"
+                                Orientation="Horizontal"
+                                Margin="0,4">
+                                <TextBlock Text="Podcasters: " x:Uid="PageContentDetailPodcaster" Style="{StaticResource SubtitleTextBlockStyle}"/>
+                                <TextBlock Margin="2,0" Text="{x:Bind ViewModel.Podcasters, Mode=OneWay}" MaxLines="1" TextTrimming="CharacterEllipsis" Style="{StaticResource SubtitleTextBlockStyle}"/>
+                            </StackPanel>
+                            <StackPanel
+                                x:Name="ContentPlaycount"
+                                HorizontalAlignment="Left"
+                                Orientation="Horizontal">
+                                <FontIcon VerticalAlignment="Center" FontSize="14" FontFamily="{StaticResource FluentIcons}" Glyph="&#xEF3B;" />
+                                <TextBlock Margin="4,0" Text="{x:Bind ViewModel.PlayCount, Mode=OneWay}" Style="{StaticResource BodyTextBlockStyle}"/>
+                                <TextBlock x:Uid="LangPlayCount" Text="plays" Style="{StaticResource BodyTextBlockStyle}"/>
+                            </StackPanel>
+                            <muxc:RatingControl 
+                                x:Name="Rating" 
+                                HorizontalAlignment="Left"
+                                IsReadOnly="True"
+                                Value="{x:Bind ViewModel.Rating, Mode=OneWay}"/>
+                            <TextBlock 
+                                x:Name="Description" 
+                                HorizontalAlignment="Left"
+                                MaxLines="4"
+                                TextTrimming="CharacterEllipsis" Margin="0,12" 
+                                Text="{x:Bind ViewModel.Description, Mode=OneWay}" Style="{StaticResource BodyTextBlockStyle}"/>
+                            <GridView
+                                x:Name="ContentTag"
+                                HorizontalAlignment="Left"
+                                Margin="0"
+                                Padding="0,2,0,0"
+                                ItemsSource="{x:Bind ViewModel.Attributes, Mode=OneWay}"
+                                ItemContainerStyle="{StaticResource AttributesItemContainerStyle}">
+                                <GridView.ItemTemplate>
+                                    <DataTemplate x:Name="AttributeTemplate" x:DataType="qingting:AttributesItem">
+                                        <Grid Style="{StaticResource AttributesContainer}">
+                                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{x:Bind Name, Mode=OneWay}" Style="{StaticResource CaptionTextBlockStyle}"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </GridView.ItemTemplate>
+                                <animations:Implicit.Animations>
+                                    <animations:OffsetAnimation Duration="0:0:0.2"/>
+                                </animations:Implicit.Animations>
+                            </GridView>
+                        </StackPanel>
+                        <animations:Implicit.Animations>
+                            <animations:OffsetAnimation Duration="0:0:0.2"/>
+                        </animations:Implicit.Animations>
+                    </Grid>
+                    <Grid
+                        x:Name="ButtonPannel"
+                        Grid.Row="0" Grid.Column="2"
+                        Margin="0,20,20,20">
+                        <StackPanel x:Name="ButtonGroup" Width="160">
+                            <Button HorizontalAlignment="Stretch" Style="{StaticResource AccentButtonStyle}" >
+                                <StackPanel Orientation="Horizontal">
+                                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xF5B0;"/>
+                                    <TextBlock x:Uid="DetailPagePlayButton" Margin="12,0" Text="Play"/>
+                                </StackPanel>
+                            </Button>
+                            <Button HorizontalAlignment="Stretch" Margin="0,8">
+                                <StackPanel Orientation="Horizontal">
+                                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xF5B0;"/>
+                                    <TextBlock Margin="12,0" Text="Fav"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                        <animations:Implicit.Animations>
+                            <animations:OffsetAnimation Duration="0:0:0.3"/>
+                        </animations:Implicit.Animations>
+                    </Grid>
+                    <animations:Implicit.Animations>
+                        <animations:SizeAnimation Duration="0:0:0.3"/>
+                    </animations:Implicit.Animations>
+                </Grid>
+                <Grid
+                    x:Name="PlayListPanel"
+                    Margin="0,8,8,8"
+                    CornerRadius="8"
+                    BorderBrush="{ThemeResource NavigationViewContentGridBorderBrush}"
+                    BorderThickness="1"
+                    Background="{ThemeResource LayerFillColorDefaultBrush}">
+                    <Border
+                        HorizontalAlignment="Stretch"
+                        MinHeight="300"
+                        Visibility="{x:Bind ViewModel.IsPlaylistLoading,Mode=OneWay,Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <muxc:ProgressRing/>
+                    </Border>
+                    <ListView 
+                        x:Name="PlayListView" 
+                        ItemsSource="{x:Bind ViewModel.ContentPlaylists, Mode=TwoWay}"
+                        IsItemClickEnabled="True"
+                        SelectionMode="None"
+                        ItemClick="PlayListView_ItemClick">
+                        <ListView.Transitions>
+                            <TransitionCollection>
+                                <EntranceThemeTransition/>
+                            </TransitionCollection>
+                        </ListView.Transitions>
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:Name="RadioPlaylistTemplate" x:DataType="datamodel:ContentPlaylistDetail">
+                                <Grid VerticalAlignment="Center" Height="60" Margin="8,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0"  VerticalAlignment="Center">
+                                        <TextBlock TextTrimming="CharacterEllipsis" MaxLines="1" Text="{x:Bind Title}" Style="{StaticResource BodyTextBlockStyle}"/>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock x:Uid="PageContentDetailUpdateTime" Text="Last update:" TextTrimming="CharacterEllipsis" MaxLines="1"
+                                                 Foreground="{ThemeResource CustomNavigationViewItemForeground}"
+                                                Style="{StaticResource CaptionTextBlockStyle}" />
+                                            <TextBlock Margin="2,0,12,0" Text="{x:Bind UpdateTime}" 
+                                                Foreground="{ThemeResource CustomNavigationViewItemForeground}"
+                                                Style="{StaticResource CaptionTextBlockStyle}"/>
+                                            <TextBlock 
+                                                x:Uid="LangIsFreeFalse" Text="Paid content"
+                                                Visibility="{x:Bind IsFree, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
+                                                Foreground="{ThemeResource CustomNavigationViewItemForeground}"
+                                                Style="{StaticResource CaptionTextBlockStyle}"/>
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <TextBlock Grid.Column="1" Margin="2,0"  VerticalAlignment="Center" Text="{x:Bind PlayCount}" Style="{StaticResource BodyTextBlockStyle}"/>
+                                    <TextBlock x:Uid="LangPlayCount" Grid.Column="2" VerticalAlignment="Center" Text="plays" Style="{StaticResource BodyTextBlockStyle}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <animations:Implicit.Animations>
+                        <animations:OffsetAnimation Duration="0:0:0.3"/>
+                    </animations:Implicit.Animations>
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
 
     </Grid>
 </Page>

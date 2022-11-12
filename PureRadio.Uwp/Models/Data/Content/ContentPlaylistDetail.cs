@@ -11,7 +11,7 @@ namespace PureRadio.Uwp.Models.Data.Content
     {
         public ContentPlaylistDetail
             (string version, int programId, string title, int duration, string updateTime, 
-            int sequence, string isFree, string cover, int contentType, string playCount)
+            int sequence, bool isFree, string cover, int contentType, string playCount)
         {
             Version = version;
             ProgramId = programId;
@@ -53,7 +53,7 @@ namespace PureRadio.Uwp.Models.Data.Content
         /// <summary>
         /// 是否免费
         /// </summary>
-        public string IsFree { get; set; }
+        public bool IsFree { get; set; }
         /// <summary>
         /// 节目封面
         /// </summary>

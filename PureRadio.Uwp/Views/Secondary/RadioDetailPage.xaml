@@ -120,7 +120,7 @@
                                 Text="{x:Bind ViewModel.Title, Mode=OneWay}" Style="{StaticResource TitleTextBlockStyle}"/>
                             <StackPanel 
                                 x:Name="RadioNowPlaying" 
-                                HorizontalAlignment="Left"
+                                HorizontalAlignment="Stretch"
                                 Orientation="Horizontal"
                                 Margin="0,4">
                                 <TextBlock Text="Live: " x:Uid="LangNowPlaying" Style="{StaticResource SubtitleTextBlockStyle}"/>

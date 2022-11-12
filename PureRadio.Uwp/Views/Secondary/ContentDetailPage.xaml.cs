@@ -39,5 +39,10 @@ namespace PureRadio.Uwp.Views.Secondary
 
             ViewModel.ContentId = (int)e.Parameter;
         }
+
+        private void PlayListView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+
+        }
     }
 }

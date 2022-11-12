@@ -39,7 +39,7 @@ namespace PureRadio.Uwp.Models.QingTing.Content
         /// 是否免费
         /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore, PropertyName = "isfree", Required = Required.Default)]
-        public string IsFree { get; set; }
+        public bool IsFree { get; set; }
         /// <summary>
         /// 节目封面
         /// </summary>
