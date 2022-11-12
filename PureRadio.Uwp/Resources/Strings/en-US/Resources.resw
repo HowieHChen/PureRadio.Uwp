@@ -144,8 +144,14 @@
   <data name="LangLocalAccountSignature" xml:space="preserve">
     <value>Sign in to your QingTing account to enjoy the full service</value>
   </data>
+  <data name="LangNowPlaying.Text" xml:space="preserve">
+    <value>Live: </value>
+  </data>
   <data name="LangPlayCount.Text" xml:space="preserve">
     <value>plays</value>
+  </data>
+  <data name="LangPodcasterUnknown" xml:space="preserve">
+    <value>Unknown</value>
   </data>
   <data name="LangSearchNoResultTip" xml:space="preserve">
     <value>No results found</value>
@@ -224,6 +230,21 @@
   </data>
   <data name="navSettings.Content" xml:space="preserve">
     <value>Settings</value>
+  </data>
+  <data name="PageRadioDetailNavBYDAY.Content" xml:space="preserve">
+    <value>Two days ago</value>
+  </data>
+  <data name="PageRadioDetailNavTMR.Content" xml:space="preserve">
+    <value>Tomorrow</value>
+  </data>
+  <data name="PageRadioDetailNavTODAY.Content" xml:space="preserve">
+    <value>Today</value>
+  </data>
+  <data name="PageRadioDetailNavYDAY.Content" xml:space="preserve">
+    <value>Yesterday</value>
+  </data>
+  <data name="PageRadioDetailPodcaster.Text" xml:space="preserve">
+    <value>Podcasters: </value>
   </data>
   <data name="PageSearchNoResult.Text" xml:space="preserve">
     <value>No results found for you</value>

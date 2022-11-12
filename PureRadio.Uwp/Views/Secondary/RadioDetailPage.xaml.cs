@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.DependencyInjection;
+using PureRadio.Uwp.Models.Enums;
 using PureRadio.Uwp.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -38,6 +39,44 @@ namespace PureRadio.Uwp.Views.Secondary
             base.OnNavigatedTo(e);
 
             ViewModel.RadioId = (int)e.Parameter;
+        }
+
+        private void PlayListView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+
+        }
+
+        private void NavList_Loaded(object sender, RoutedEventArgs e)
+        {
+            // NavView doesn't load any page by default, so load home page.
+            NavList.SelectedItem = NavList.MenuItems[2];
+            // If navigation occurs on SelectionChanged, this isn't needed.
+            // Because we use ItemInvoked to navigate, we need to call Navigate
+            // here to load the home page.
+            NavView_Navigate("TODAY");
+        }
+
+        private void NavView_Navigate(string navItemTag)
+        {
+            PlaylistDay target = navItemTag switch
+            {
+                "BYDAY" => PlaylistDay.BeforeYesterday,
+                "YDAY" => PlaylistDay.Yesterday,
+                "TMR" => PlaylistDay.Tomorrow,
+                _ => PlaylistDay.Today,
+            };
+            ViewModel.SwitchPlaylistSource(target);
+        }
+
+        private void NavList_ItemInvoked(
+            Microsoft.UI.Xaml.Controls.NavigationView sender,
+            Microsoft.UI.Xaml.Controls.NavigationViewItemInvokedEventArgs args)
+        {
+            if (args.InvokedItemContainer != null)
+            {
+                var navItemTag = args.InvokedItemContainer.Tag.ToString();
+                NavView_Navigate(navItemTag);
+            }
         }
     }
 }

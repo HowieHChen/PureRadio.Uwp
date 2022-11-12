@@ -16,7 +16,7 @@ namespace PureRadio.Uwp.Models.Data.Radio
         {
             RadioId = radioId;
             Title = title;
-            Cover = cover;
+            Cover = new Uri(cover);
             Description = description;
             AudienceCount = audienceCount;
         }
@@ -32,7 +32,7 @@ namespace PureRadio.Uwp.Models.Data.Radio
         /// <summary>
         /// 电台封面图片(URL)
         /// </summary>
-        public string Cover { get; set; }
+        public Uri Cover { get; set; }
         /// <summary>
         /// 电台简介
         /// </summary>

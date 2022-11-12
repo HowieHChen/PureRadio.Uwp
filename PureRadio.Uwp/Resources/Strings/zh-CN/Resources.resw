@@ -144,8 +144,14 @@
   <data name="LangLocalAccountSignature" xml:space="preserve">
     <value>登录蜻蜓账号以享受完整服务</value>
   </data>
+  <data name="LangNowPlaying.Text" xml:space="preserve">
+    <value>正在直播: </value>
+  </data>
   <data name="LangPlayCount.Text" xml:space="preserve">
     <value>次播放</value>
+  </data>
+  <data name="LangPodcasterUnknown" xml:space="preserve">
+    <value>未知</value>
   </data>
   <data name="LangSearchNoResultTip" xml:space="preserve">
     <value>没有找到结果</value>
@@ -224,6 +230,21 @@
   </data>
   <data name="navSettings.Content" xml:space="preserve">
     <value>设置</value>
+  </data>
+  <data name="PageRadioDetailNavBYDAY.Content" xml:space="preserve">
+    <value>前天</value>
+  </data>
+  <data name="PageRadioDetailNavTMR.Content" xml:space="preserve">
+    <value>明天</value>
+  </data>
+  <data name="PageRadioDetailNavTODAY.Content" xml:space="preserve">
+    <value>今天</value>
+  </data>
+  <data name="PageRadioDetailNavYDAY.Content" xml:space="preserve">
+    <value>昨天</value>
+  </data>
+  <data name="PageRadioDetailPodcaster.Text" xml:space="preserve">
+    <value>主播: </value>
   </data>
   <data name="PageSearchNoResult.Text" xml:space="preserve">
     <value>没有找到您要的结果</value>

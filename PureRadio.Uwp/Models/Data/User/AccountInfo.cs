@@ -28,7 +28,7 @@ namespace PureRadio.Uwp.Models.Data.User
             Gender = gender;
             Location = location;
             Signature = signature;
-            Avatar = avatar;
+            Avatar = new Uri(avatar);
             IsBlocked = isBlocked;
         }
 
@@ -47,7 +47,7 @@ namespace PureRadio.Uwp.Models.Data.User
             Gender = "u";
             Location = string.Empty;
             Signature = resourceLoader.GetString("LangLocalAccountSignature");
-            Avatar = "ms-appx:///Assets/Image/DefaultAvatar.png";
+            Avatar = new Uri("ms-appx:///Assets/Image/DefaultAvatar.png");
             IsBlocked = "0";
         }
 
@@ -94,7 +94,7 @@ namespace PureRadio.Uwp.Models.Data.User
         /// <summary>
         /// 头像
         /// </summary>
-        public string Avatar { get; set; }
+        public Uri Avatar { get; set; }
         /// <summary>
         /// 帐号状态(是否被封禁)
         /// </summary>

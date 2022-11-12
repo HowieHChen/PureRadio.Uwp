@@ -25,6 +25,10 @@ namespace PureRadio.Uwp.Models.Data.Constants
             public const string TimeStamp = "ts";
             public const string Time = "t";
             public const string Sign = "sign";
+            public const string CurPage = "curpage";
+            public const string PageSize = "pagesize";
+            public const string Order = "order";
+
         }
 
         public static class Query

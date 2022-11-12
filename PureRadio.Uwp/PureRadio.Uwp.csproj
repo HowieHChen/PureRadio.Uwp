@@ -133,7 +133,9 @@
     <Compile Include="Models\Data\Constants\ApiConstants.cs" />
     <Compile Include="Models\Data\Constants\AppConstants.cs" />
     <Compile Include="Models\Data\Constants\ServiceConstants.cs" />
+    <Compile Include="Models\Data\Content\ContentInfoDetail.cs" />
     <Compile Include="Models\Data\Content\ContentInfoSearch.cs" />
+    <Compile Include="Models\Data\Content\ContentPlaylistDetail.cs" />
     <Compile Include="Models\Data\Radio\RadioInfoDetail.cs" />
     <Compile Include="Models\Data\Radio\RadioInfoSearch.cs" />
     <Compile Include="Models\Data\Radio\RadioPlaylistDetail.cs" />
@@ -142,6 +144,7 @@
     <Compile Include="Models\Enums\AuthorizeState.cs" />
     <Compile Include="Models\Enums\NavigationType.cs" />
     <Compile Include="Models\Enums\PageIds.cs" />
+    <Compile Include="Models\Enums\PlaylistDay.cs" />
     <Compile Include="Models\Enums\RequestType.cs" />
     <Compile Include="Models\Local\IncrementalLoadingObservableCollection.cs" />
     <Compile Include="Models\Local\PlaySnapshot.cs" />
@@ -173,8 +176,10 @@
     <Compile Include="Models\QingTing\User\TokenInfo.cs" />
     <Compile Include="Models\QingTing\User\TokenInfoResponse.cs" />
     <Compile Include="Providers\AccountProvider.cs" />
+    <Compile Include="Providers\ContentProvider.cs" />
     <Compile Include="Providers\HttpProvider.cs" />
     <Compile Include="Providers\Interfaces\IAccountProvider.cs" />
+    <Compile Include="Providers\Interfaces\IContentProvider.cs" />
     <Compile Include="Providers\Interfaces\IHttpProvider.cs" />
     <Compile Include="Providers\Interfaces\IRadioProvider.cs" />
     <Compile Include="Providers\Interfaces\ISearchProvider.cs" />
@@ -191,6 +196,7 @@
     <Compile Include="Resources\Converter\ThemeToIndexConverter.cs" />
     <Compile Include="Services\Interfaces\INavigateService.cs" />
     <Compile Include="Services\NavigateService.cs" />
+    <Compile Include="ViewModels\ContentDetailViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\RadioDetailViewModel.cs" />
     <Compile Include="ViewModels\SearchViewModel.cs" />

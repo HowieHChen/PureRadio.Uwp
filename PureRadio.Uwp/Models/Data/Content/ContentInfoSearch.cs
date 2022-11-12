@@ -17,7 +17,7 @@ namespace PureRadio.Uwp.Models.Data.Content
             ContentId = contentId;
             Title = title;
             Podcaster = podcaster;
-            Cover = cover;
+            Cover = new Uri(cover);
             Description = description;
             PlayCount = playCount;
         }
@@ -37,7 +37,7 @@ namespace PureRadio.Uwp.Models.Data.Content
         /// <summary>
         /// 专辑封面图片(URL)
         /// </summary>
-        public string Cover { get; set; }
+        public Uri Cover { get; set; }
         /// <summary>
         /// 专辑简介
         /// </summary>

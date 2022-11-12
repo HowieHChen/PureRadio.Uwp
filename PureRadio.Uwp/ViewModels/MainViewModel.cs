@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Toolkit.Uwp.UI;
 using PureRadio.Uwp.Models.Args;
 using PureRadio.Uwp.Models.Enums;
 using PureRadio.Uwp.Models.Local;
@@ -18,6 +19,7 @@ using System.Windows.Input;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace PureRadio.Uwp.ViewModels
 {
@@ -50,7 +52,7 @@ namespace PureRadio.Uwp.ViewModels
         private List<string> _searchSuggest;
 
         [ObservableProperty]
-        private string _userPicture = "ms-appx:///Assets/Image/DefaultAvatar.png";
+        private BitmapImage _userPicture;
 
         [ObservableProperty]
         private string _userName;
@@ -77,6 +79,7 @@ namespace PureRadio.Uwp.ViewModels
             _suggestionTimer.Tick += OnSuggestionTimerTickAsync;
             var resourceLoader = Windows.ApplicationModel.Resources.ResourceLoader.GetForCurrentView();
             _noResultTip = resourceLoader.GetString("LangSearchNoResultTip");
+            UserPicture = new BitmapImage(new Uri("ms-appx:///Assets/Image/DefaultAvatar.png"));
             IsActive = true;
         }
 
@@ -213,9 +216,9 @@ namespace PureRadio.Uwp.ViewModels
             }
         }
 
-        private void GetAccountInfo()
+        private async void GetAccountInfo()
         {
-            UserPicture = accountProvider.AccountInfo.Avatar;
+            UserPicture = await ImageCache.Instance.GetFromCacheAsync(accountProvider.AccountInfo.Avatar);
             UserName = accountProvider.AccountInfo.NickName;
             UserPhone = accountProvider.AccountInfo.PhoneNumber;
             UserDescription = accountProvider.AccountInfo.Signature;

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Resources;
 
 namespace PureRadio.Uwp.Adapters
 {
@@ -28,7 +29,8 @@ namespace PureRadio.Uwp.Adapters
 
         public RadioPlaylistDetail ConvertToRadioPlaylistItem(RadioPlaylistItem item)
         {
-            string boardcasters = string.Empty;
+            var resourceLoader = new ResourceLoader();
+            string boardcasters = resourceLoader.GetString("LangPodcasterUnknown");
             if (item.Broadcasters != null && item.Broadcasters.Count > 0)
             {
                 var boardcasterList = item.Broadcasters?.Select(p => $"{p.UserName}").ToList();

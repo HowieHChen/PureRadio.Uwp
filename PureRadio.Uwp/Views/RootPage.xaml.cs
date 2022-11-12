@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.DependencyInjection;
+using Microsoft.Toolkit.Uwp.UI;
 using PureRadio.Uwp.Models.Data.Constants;
 using PureRadio.Uwp.Models.Enums;
 using PureRadio.Uwp.Models.QingTing.Network;
@@ -142,7 +143,11 @@ namespace PureRadio.Uwp.Views
             {
                 
             }
-            
+
+            ImageCache.Instance.CacheDuration = TimeSpan.FromHours(24);
+            ImageCache.Instance.MaxMemoryCacheCount = 100;
+
+
             await Ioc.Default.GetRequiredService<IAccountProvider>().TrySignInAsync();
             DismissExtendedSplash();
         }

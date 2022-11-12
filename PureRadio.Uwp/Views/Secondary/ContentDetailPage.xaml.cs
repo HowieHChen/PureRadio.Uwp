@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.DependencyInjection;
+using PureRadio.Uwp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -22,14 +24,20 @@ namespace PureRadio.Uwp.Views.Secondary
     /// </summary>
     public sealed partial class ContentDetailPage : Page
     {
+        public ContentDetailViewModel ViewModel => (ContentDetailViewModel)DataContext;
+
         public ContentDetailPage()
         {
             this.InitializeComponent();
+
+            DataContext = Ioc.Default.GetRequiredService<ContentDetailViewModel>();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
+
+            ViewModel.ContentId = (int)e.Parameter;
         }
     }
 }

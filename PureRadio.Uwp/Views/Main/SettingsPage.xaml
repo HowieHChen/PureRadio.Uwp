@@ -23,7 +23,11 @@
             <convert:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
         </ResourceDictionary>
     </Page.Resources>
-    <Grid>
+    <Grid 
+        CornerRadius="8,0,0,0"
+        Background="{ThemeResource LayerFillColorDefaultBrush}"
+        BorderThickness="1,1,0,0"
+        BorderBrush="{ThemeResource NavigationViewContentGridBorderBrush}">
         <ScrollViewer
             x:Name="contentSV"
             Padding="36,0,36,0"

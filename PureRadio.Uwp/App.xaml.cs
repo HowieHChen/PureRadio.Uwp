@@ -155,11 +155,13 @@ namespace PureRadio.Uwp
                         .AddSingleton<IHttpProvider, HttpProvider>()
                         .AddSingleton<ISearchProvider, SearchProvider>()
                         .AddSingleton<IRadioProvider, RadioProvider>()
+                        .AddSingleton<IContentProvider, ContentProvider>()
                         // Viewmodels
                         .AddTransient<MainViewModel>()
                         .AddTransient<SettingsViewModel>()
                         .AddTransient<SearchViewModel>()
                         .AddTransient<RadioDetailViewModel>()
+                        .AddTransient<ContentDetailViewModel>()
                         // Build
                         .BuildServiceProvider());
             }

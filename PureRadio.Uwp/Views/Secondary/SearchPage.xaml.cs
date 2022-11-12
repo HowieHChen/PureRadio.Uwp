@@ -52,7 +52,7 @@ namespace PureRadio.Uwp.Views.Secondary
         private void ContentGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
             if (e.ClickedItem != null && e.ClickedItem is ContentInfoSearch contentInfo)
-                ViewModel.Navigate(PageIds.RadioDetail, contentInfo.ContentId);
+                ViewModel.Navigate(PageIds.ContentDetail, contentInfo.ContentId);
         }
     }
 }
