@@ -113,11 +113,11 @@ namespace PureRadio.Uwp.Models.Data.Constants
             /// <summary>
             /// 电台播放(直播)
             /// </summary>
-            public const string Live = "http://ls.qingting.fm/live/";
+            public const string Live = "http://ls.qingting.fm/live/{0}/64k.m3u8";
             /// <summary>
-            /// 电台播放(回放)
+            /// 电台播放(回放) https://lcache.qtfm.cn/cache/{年月日:20220531}/{广播电台id}/{广播电台id}_{年月日}_{开始时间}_{结束时间}_24_0.aac
             /// </summary>
-            public const string OnDemand = "https://lcache.qtfm.cn/cache/";
+            public const string OnDemand = "https://lcache.qtfm.cn/cache/{0}/{1}/{2}_{3}_{4}_{5}_24_0.aac";
         }
 
         /// <summary>
@@ -136,7 +136,7 @@ namespace PureRadio.Uwp.Models.Data.Constants
             /// <summary>
             /// 专辑播放
             /// </summary>
-            public const string Play = "https://audio.qtfm.cn/audiostream/redirect/";
+            public const string Play = "https://audio.qtfm.cn/audiostream/redirect/{0}/{1}";
         }
 
         /// <summary>

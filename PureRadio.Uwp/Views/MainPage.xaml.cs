@@ -59,6 +59,7 @@ namespace PureRadio.Uwp.Views
         private PageIds _currentPageId;
 
         public MainViewModel ViewModel => (MainViewModel)DataContext;
+        public readonly NativePlayerViewModel PlayerViewModel;
 
         public MainPage()
         {
@@ -68,6 +69,7 @@ namespace PureRadio.Uwp.Views
             Unloaded += MainPage_Unloaded;
 
             DataContext = Ioc.Default.GetRequiredService<MainViewModel>();
+            PlayerViewModel = Ioc.Default.GetRequiredService<NativePlayerViewModel>();
 
             CoreApplicationViewTitleBar coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
 
@@ -81,6 +83,8 @@ namespace PureRadio.Uwp.Views
             // Register a handler for when the window activation changes.
             Window.Current.CoreWindow.Activated += CoreWindow_Activated;
 
+            MediaPosition.AddHandler(PointerReleasedEvent, new PointerEventHandler(MediaPositionLive_PointerReleased), true);
+            VolumeControl.AddHandler(PointerReleasedEvent, new PointerEventHandler(VolumeControl_PointerReleased), true);
         }
 
         private void MainPage_Unloaded(object sender, RoutedEventArgs e)
@@ -312,17 +316,17 @@ namespace PureRadio.Uwp.Views
 
         private void PlayerContainer_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
-
+            DynamicBackground.Visibility = Visibility.Visible;
         }
 
         private void PlayerContainer_PointerExited(object sender, PointerRoutedEventArgs e)
         {
-
+            DynamicBackground.Visibility = Visibility.Collapsed;
         }
 
         private void PlayerContainer_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
-
+            ViewModel.Navigate(PageIds.Player);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -408,6 +412,46 @@ namespace PureRadio.Uwp.Views
             {
                 if (await ViewModel.TrySignOut()) LogoutDialogSuccessTip.IsOpen = true;
             }
+        }
+
+        private void MediaPositionLive_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            PlayerViewModel.SetPosition((int)(sender as Slider).Value);
+        }
+
+        private void MediaPositionLive_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            PlayerViewModel.IsMoveMediaPosition = true;
+        }
+
+        private void MediaPositionLive_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            PlayerViewModel.IsMoveMediaPosition = false;
+        }
+
+        private void MediaPositionLive_PointerReleased(object sender, PointerRoutedEventArgs e)
+        {
+            PlayerViewModel.SetPosition((int)(sender as Slider).Value);
+        }
+
+        private void VolumeControl_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            PlayerViewModel.SetVolume((sender as Slider).Value);
+        }
+
+        private void VolumeControl_PointerReleased(object sender, PointerRoutedEventArgs e)
+        {
+            PlayerViewModel.SetVolume((sender as Slider).Value);
+        }
+
+        private void VolumeControl_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            PlayerViewModel.IsMoveVolume = true;
+        }
+
+        private void VolumeControl_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            PlayerViewModel.IsMoveVolume = false;
         }
     }
 }

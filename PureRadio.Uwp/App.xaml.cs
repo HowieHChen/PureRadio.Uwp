@@ -122,7 +122,7 @@ namespace PureRadio.Uwp
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
             Frame rootFrame = Window.Current.Content as Frame;
-
+            
             // 不要在窗口已包含内容时重复应用程序初始化，
             // 只需确保窗口处于活动状态
             if (rootFrame == null)
@@ -139,17 +139,20 @@ namespace PureRadio.Uwp
 
                 // 将框架放在当前窗口中
                 Window.Current.Content = rootFrame;
-                
+
+                if (e.PreviousExecutionState != ApplicationExecutionState.Running)
                 Ioc.Default.ConfigureServices(
                         new ServiceCollection()
                         // Services
                         .AddSingleton<ISettingsService, SettingsService>()
                         .AddSingleton<INavigateService, NavigateService>()
+                        .AddSingleton<IPlaybackService, PlaybackService>()
                         // Adapters
                         .AddSingleton<IAccountAdapter, AccountAdapter>()
                         .AddSingleton<IContentAdapter, ContentAdapter>()
                         .AddSingleton<IRadioAdapter, RadioAdapter>()
                         .AddSingleton<ISearchAdapter, SearchAdapter>()
+                        .AddSingleton<IPlayerAdapter, PlayerAdapter>()
                         // Providers
                         .AddSingleton<IAccountProvider, AccountProvider>()
                         .AddSingleton<IHttpProvider, HttpProvider>()
@@ -162,6 +165,7 @@ namespace PureRadio.Uwp
                         .AddTransient<SearchViewModel>()
                         .AddTransient<RadioDetailViewModel>()
                         .AddTransient<ContentDetailViewModel>()
+                        .AddTransient<NativePlayerViewModel>()
                         // Build
                         .BuildServiceProvider());
             }

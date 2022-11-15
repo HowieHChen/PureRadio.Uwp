@@ -1,7 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Uwp.UI;
+using PureRadio.Uwp.Adapters.Interfaces;
 using PureRadio.Uwp.Models.Data.Radio;
 using PureRadio.Uwp.Models.Enums;
+using PureRadio.Uwp.Models.Local;
 using PureRadio.Uwp.Providers.Interfaces;
 using PureRadio.Uwp.Services.Interfaces;
 using System;
@@ -12,6 +14,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.ApplicationModel.Core;
+using Windows.Media.Editing;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media.Imaging;
 
@@ -20,9 +25,13 @@ namespace PureRadio.Uwp.ViewModels
     public sealed partial class RadioDetailViewModel : ObservableRecipient
     {
         private readonly INavigateService navigate;
+        private readonly IPlaybackService playbackService;
         private readonly IRadioProvider radioProvider;
+        private readonly IPlayerAdapter playerAdapter;
         private readonly DispatcherTimer _refreshTimer;
         private PlaylistDay currentSource;
+        private PlayItemSnapshot itemSnapshot;
+        private RadioInfoDetail radioDetail;
 
         private int _radioId;
         public int RadioId
@@ -56,6 +65,9 @@ namespace PureRadio.Uwp.ViewModels
         private bool _isPlaylistLoading;
 
         [ObservableProperty]
+        private bool _isShowErrorTips;
+
+        [ObservableProperty]
         private List<RadioPlaylistDetail> _radioPlaylist;
 
         private List<RadioPlaylistDetail> PlaylistsBYDay;
@@ -65,10 +77,14 @@ namespace PureRadio.Uwp.ViewModels
 
         public RadioDetailViewModel(
             INavigateService navigate, 
-            IRadioProvider radioProvider)
+            IRadioProvider radioProvider,
+            IPlaybackService playbackService,
+            IPlayerAdapter playerAdapter)
         {
             this.navigate = navigate;
+            this.playbackService = playbackService;
             this.radioProvider = radioProvider;
+            this.playerAdapter = playerAdapter;
             IsActive = true;
             _refreshTimer = new DispatcherTimer
             {
@@ -114,6 +130,8 @@ namespace PureRadio.Uwp.ViewModels
                     if (_refreshTimer.IsEnabled)
                         _refreshTimer.Stop();
                 }
+                itemSnapshot = playerAdapter.ConvertToPlayItemSnapshot(result);
+                radioDetail = result;
                 IsInfoLoading = false;
             }
         }
@@ -155,10 +173,52 @@ namespace PureRadio.Uwp.ViewModels
             currentSource = target;
         }
 
-        private void OnRefreshTimerTick(object sender, object e)
+        private async void OnRefreshTimerTick(object sender, object e)
         {
-            _refreshTimer.Stop();
-            GetRadioDetail();
+            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                _refreshTimer.Interval = TimeSpan.MaxValue;
+                _refreshTimer.Stop();
+                GetRadioDetail();
+                if (DateTime.Now.Hour == 0 && DateTime.Now.Second < 2) GetRadioPlaylist();
+            });           
+        }
+
+        public void PlayRadioLive()
+        {
+            if(itemSnapshot.Duration != 0)
+            {
+                playbackService.PlayRadioLive(RadioId, itemSnapshot);
+            }
+        }
+
+        public void PlayRadioDemand(int index)
+        {
+            if (RadioId != 0 && index >= 0 && index < RadioPlaylist.Count())
+                switch (currentSource)
+                {
+                    case PlaylistDay.Tomorrow:
+                        IsShowErrorTips = true;
+                        break;
+                    case PlaylistDay.Today:
+                        if (DateTime.TryParse(RadioPlaylist[index].EndTime, out DateTime _endDateTime))
+                        {
+                            if(DateTime.Now > _endDateTime)
+                            {
+                                var playList = playerAdapter.ConvertToPlayItemSnapshotList(radioDetail, RadioPlaylist);
+                                playbackService.PlayRadioDemand(RadioId, index, playList);
+                            }
+                            else
+                            {
+                                IsShowErrorTips = true;
+                            }
+                        }
+                        break;
+                    default:
+                        var snapshotList = playerAdapter.ConvertToPlayItemSnapshotList(radioDetail, RadioPlaylist);
+                        playbackService.PlayRadioDemand(RadioId, index, snapshotList);
+                        break;
+                }            
         }
 
     }

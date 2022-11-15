@@ -1,4 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.DependencyInjection;
+using PureRadio.Uwp.Models.Data.Content;
+using PureRadio.Uwp.Models.Data.Radio;
 using PureRadio.Uwp.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -42,7 +44,13 @@ namespace PureRadio.Uwp.Views.Secondary
 
         private void PlayListView_ItemClick(object sender, ItemClickEventArgs e)
         {
+            var item = e.ClickedItem as ContentPlaylistDetail;
+            ViewModel.PlayContent(item.ProgramId);
+        }
 
+        private void ButtonPlay_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel.PlayContent();
         }
     }
 }

@@ -114,5 +114,43 @@ namespace PureRadio.Uwp.Providers
                 return items;
             }
         }
+
+        public async Task<List<RadioPlaylistDetail>> GetRadioPlaylistDetail(int radioId, PlaylistDay day, CancellationToken cancellationToken)
+        {
+            string url = ApiConstants.Radio.Detail + radioId.ToString() + "/playbills";
+            int offset = day switch
+            {
+                PlaylistDay.BeforeYesterday => -2,
+                PlaylistDay.Yesterday => -1,
+                PlaylistDay.Tomorrow => 1,
+                _ => 0,
+            };
+            int pDay = (int)DateTime.Today.AddDays(offset).DayOfWeek + 1;
+            Dictionary<string, string> parameters = new()
+            {
+                {"day", pDay.ToString()},
+            };
+            var request = await _httpProvider.GetRequestMessageAsync(url, HttpMethod.Get, parameters);
+            var response = await _httpProvider.SendAsync(request, cancellationToken);
+            var result = await _httpProvider.ParseAsync<RadioPlaylistResponse>(response);
+            if (cancellationToken.IsCancellationRequested || result.Data == null)
+                return null;
+            else
+            {
+                DayOfWeek targetDay = DateTime.Today.AddDays(offset).DayOfWeek;
+                List<RadioPlaylistDetail> items = targetDay switch
+                {
+                    DayOfWeek.Sunday => result.Data.Sunday.Select(p => _radioAdapter.ConvertToRadioPlaylistItem(p)).ToList(),
+                    DayOfWeek.Monday => result.Data.Monday.Select(p => _radioAdapter.ConvertToRadioPlaylistItem(p)).ToList(),
+                    DayOfWeek.Tuesday => result.Data.Tuesday.Select(p => _radioAdapter.ConvertToRadioPlaylistItem(p)).ToList(),
+                    DayOfWeek.Wednesday => result.Data.Wednesday.Select(p => _radioAdapter.ConvertToRadioPlaylistItem(p)).ToList(),
+                    DayOfWeek.Thursday => result.Data.Thursday.Select(p => _radioAdapter.ConvertToRadioPlaylistItem(p)).ToList(),
+                    DayOfWeek.Friday => result.Data.Friday.Select(p => _radioAdapter.ConvertToRadioPlaylistItem(p)).ToList(),
+                    DayOfWeek.Saturday => result.Data.Saturday.Select(p => _radioAdapter.ConvertToRadioPlaylistItem(p)).ToList(),
+                    _ => new(),
+                };
+                return items;
+            }
+        }
     }
 }

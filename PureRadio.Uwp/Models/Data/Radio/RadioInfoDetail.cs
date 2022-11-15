@@ -13,7 +13,8 @@ namespace PureRadio.Uwp.Models.Data.Radio
         public RadioInfoDetail(
             int radioId, string title, string cover, string description, 
             string audienceCount, string nowplaying, int topCategoryId, 
-            string topCategoryTitle, int regionId, int cityId, TimeSpan updateTime)
+            string topCategoryTitle, int regionId, int cityId, TimeSpan updateTime,
+            string startTime, string endTime)
         {
             RadioId = radioId;
             Title = title;
@@ -26,6 +27,8 @@ namespace PureRadio.Uwp.Models.Data.Radio
             RegionId = regionId;
             CityId = cityId;
             UpdateTime = updateTime;
+            StartTIme = startTime;
+            EndTime = endTime;
         }
 
 
@@ -73,5 +76,13 @@ namespace PureRadio.Uwp.Models.Data.Radio
         /// 需更新时间
         /// </summary>
         public TimeSpan UpdateTime { get; set; }
+        /// <summary>
+        /// 当前节目开始时间
+        /// </summary>
+        public string StartTIme { get; set; }
+        /// <summary>
+        /// 当前节目结束时间
+        /// </summary>
+        public string EndTime { get; set; }
     }
 }

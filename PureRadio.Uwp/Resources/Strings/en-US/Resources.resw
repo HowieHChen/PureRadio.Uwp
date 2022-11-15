@@ -138,6 +138,9 @@
   <data name="LangIsFreeFalse.Text" xml:space="preserve">
     <value>Paid content</value>
   </data>
+  <data name="LangLiveNow" xml:space="preserve">
+    <value>Live</value>
+  </data>
   <data name="LangLiveProgramUnknown" xml:space="preserve">
     <value>None</value>
   </data>
@@ -242,6 +245,15 @@
   </data>
   <data name="PageContentDetailUpdateTime.Text" xml:space="preserve">
     <value>Last update: </value>
+  </data>
+  <data name="PageDetailCantPlayTip.CloseButtonContent" xml:space="preserve">
+    <value>Got it!</value>
+  </data>
+  <data name="PageDetailCantPlayTip.Subtitle" xml:space="preserve">
+    <value>The program has not yet aired.</value>
+  </data>
+  <data name="PageDetailCantPlayTip.Title" xml:space="preserve">
+    <value>Temporarily unavailable</value>
   </data>
   <data name="PageRadioDetailNavBYDAY.Content" xml:space="preserve">
     <value>Two days ago</value>

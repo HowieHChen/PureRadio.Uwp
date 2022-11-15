@@ -121,8 +121,10 @@
     <Compile Include="Adapters\AccountAdapter.cs" />
     <Compile Include="Adapters\Interfaces\IAccountAdapter.cs" />
     <Compile Include="Adapters\Interfaces\IContentAdapter.cs" />
+    <Compile Include="Adapters\Interfaces\IPlayerAdapter.cs" />
     <Compile Include="Adapters\Interfaces\IRadioAdapter.cs" />
     <Compile Include="Adapters\Interfaces\ISearchAdapter.cs" />
+    <Compile Include="Adapters\PlayerAdapter.cs" />
     <Compile Include="Adapters\RadioAdapter.cs" />
     <Compile Include="Adapters\SearchAdapter.cs" />
     <Compile Include="App.xaml.cs">
@@ -130,6 +132,8 @@
     </Compile>
     <Compile Include="Models\Args\AppNavigationEventArgs.cs" />
     <Compile Include="Models\Args\AuthorizeStateChangedEventArgs.cs" />
+    <Compile Include="Models\Args\PlayerItemChangedEventArgs.cs" />
+    <Compile Include="Models\Args\PlayerStateChangedEventArgs.cs" />
     <Compile Include="Models\Data\Constants\ApiConstants.cs" />
     <Compile Include="Models\Data\Constants\AppConstants.cs" />
     <Compile Include="Models\Data\Constants\ServiceConstants.cs" />
@@ -142,12 +146,14 @@
     <Compile Include="Models\Data\Search\SearchSet.cs" />
     <Compile Include="Models\Data\User\AccountInfo.cs" />
     <Compile Include="Models\Enums\AuthorizeState.cs" />
+    <Compile Include="Models\Enums\MediaPlayType.cs" />
     <Compile Include="Models\Enums\NavigationType.cs" />
     <Compile Include="Models\Enums\PageIds.cs" />
     <Compile Include="Models\Enums\PlaylistDay.cs" />
     <Compile Include="Models\Enums\RequestType.cs" />
     <Compile Include="Models\Local\IncrementalLoadingObservableCollection.cs" />
-    <Compile Include="Models\Local\PlaySnapshot.cs" />
+    <Compile Include="Models\Local\PlayItemSnapshot.cs" />
+    <Compile Include="Models\Local\PlayStateSnapshot.cs" />
     <Compile Include="Models\QingTing\Content\ContentDetailItem.cs" />
     <Compile Include="Models\QingTing\Content\ContentDetailResponse.cs" />
     <Compile Include="Models\QingTing\Content\ContentProgramListItem.cs" />
@@ -192,12 +198,19 @@
     <Compile Include="Resources\Converter\InverseBooleanToVisibilityConverter.cs" />
     <Compile Include="Resources\Converter\LanguageToDisplayConverter.cs" />
     <Compile Include="Resources\Converter\LanguageToIndexConverter.cs" />
+    <Compile Include="Resources\Converter\MediaPlaybackStateToIconConverter.cs" />
+    <Compile Include="Resources\Converter\MediaPositionToDisplayConverter.cs" />
+    <Compile Include="Resources\Converter\MutedStateToIconConverter.cs" />
+    <Compile Include="Resources\Converter\PlayingStateToIconConverter.cs" />
     <Compile Include="Resources\Converter\ThemeToDisplayConverter.cs" />
     <Compile Include="Resources\Converter\ThemeToIndexConverter.cs" />
     <Compile Include="Services\Interfaces\INavigateService.cs" />
+    <Compile Include="Services\Interfaces\IPlaybackService.cs" />
     <Compile Include="Services\NavigateService.cs" />
+    <Compile Include="Services\PlaybackService.cs" />
     <Compile Include="ViewModels\ContentDetailViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\NativePlayerViewModel.cs" />
     <Compile Include="ViewModels\RadioDetailViewModel.cs" />
     <Compile Include="ViewModels\SearchViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />

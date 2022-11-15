@@ -28,11 +28,11 @@ namespace PureRadio.Uwp.Adapters
                 item.Description, item.ProgramCount, item.PlayCount, (float)item.Rating / 2, 
                 podcasters, item.CategoryId, item.ContentType, attributes);
         }
-            
+
 
         public ContentPlaylistDetail ConvertToContentPlaylistItem(ContentProgramListItem item, string version)
             => new ContentPlaylistDetail(
-                version, item.ProgramId, item.Title, item.Duration, item.UpdateTime, 
-                item.Sequence, item.IsFree, item.Cover, item.ContentType, item.PlayCount);
+                version, item.ProgramId, item.Title, item.Duration, item.UpdateTime,
+                item.Sequence, item.IsFree, new Uri(item.Cover), item.ContentType, item.PlayCount);
     }
 }

@@ -68,6 +68,18 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
+        <muxc:TeachingTip 
+            x:Name="CantPlayTip"
+            x:Uid="PageDetailCantPlayTip"
+            Title="Temporarily unavailable"
+            Subtitle="The program has not yet aired."
+            IsOpen="{x:Bind ViewModel.IsShowErrorTips, Mode=TwoWay}"
+            IsLightDismissEnabled="True"
+            CloseButtonContent="Got it!"
+	        PreferredPlacement="Auto"
+	        PlacementMargin="20">
+        </muxc:TeachingTip>
+        
         <ScrollViewer
             x:Name="contentSV"
             VerticalContentAlignment="Top">
@@ -156,7 +168,9 @@
                         Grid.Row="0" Grid.Column="2"
                         Margin="0,20,20,20">
                         <StackPanel x:Name="ButtonGroup" Width="160">
-                            <Button HorizontalAlignment="Stretch" Style="{StaticResource AccentButtonStyle}" >
+                            <Button 
+                                Click="{x:Bind ViewModel.PlayRadioLive}"
+                                HorizontalAlignment="Stretch" Style="{StaticResource AccentButtonStyle}" >
                                 <StackPanel Orientation="Horizontal">
                                     <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xF5B0;"/>
                                     <TextBlock x:Uid="DetailPagePlayButton" Margin="12,0" Text="Play"/>

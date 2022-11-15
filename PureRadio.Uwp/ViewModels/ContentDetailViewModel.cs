@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Uwp.UI;
+using PureRadio.Uwp.Adapters.Interfaces;
 using PureRadio.Uwp.Models.Data.Content;
 using PureRadio.Uwp.Models.QingTing.Content;
 using PureRadio.Uwp.Providers.Interfaces;
@@ -16,11 +17,14 @@ namespace PureRadio.Uwp.ViewModels
 {
     public sealed partial class ContentDetailViewModel : ObservableRecipient
     {
+        private readonly IPlaybackService playbackService;
         private readonly INavigateService navigate;
         private readonly IContentProvider contentProvider;
+        private readonly IPlayerAdapter playerAdapter;
 
         private string _version;
         private int _contentId;
+        private ContentInfoDetail _contentDetail;
         public int ContentId
         {
             get => _contentId;
@@ -57,11 +61,15 @@ namespace PureRadio.Uwp.ViewModels
 
 
         public ContentDetailViewModel(
+            IPlaybackService playbackService,
             INavigateService navigate, 
-            IContentProvider contentProvider)
+            IContentProvider contentProvider,
+            IPlayerAdapter playerAdapter)
         {
+            this.playbackService = playbackService;
             this.navigate = navigate;
             this.contentProvider = contentProvider;
+            this.playerAdapter = playerAdapter;
             IsActive = true;
         }
 
@@ -92,6 +100,7 @@ namespace PureRadio.Uwp.ViewModels
                     Description = result.Description;
                     Attributes = result.Attributes;
                     _version = result.Version;
+                    _contentDetail = result;
                 }
                 IsInfoLoading = false;
                 if (!string.IsNullOrEmpty(_version))
@@ -112,6 +121,17 @@ namespace PureRadio.Uwp.ViewModels
                     ContentPlaylists = result;
                 }
                 IsPlaylistLoading = false;
+            }
+        }
+
+        public void PlayContent(int programId = 0)
+        {
+            if (ContentId != 0)
+            {
+                if (programId == 0) programId = ContentPlaylists[0].ProgramId;
+                //var playlist = playerAdapter.ConvertToPlayItemSnapshotList(_contentDetail, ContentPlaylists);
+                //playbackService.PlayContent(ContentId, programId, playlist);
+                playbackService.PlayContent(ContentId, programId, _version);
             }
         }
     }

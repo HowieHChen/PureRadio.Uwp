@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.DependencyInjection;
+using PureRadio.Uwp.Models.Data.Radio;
 using PureRadio.Uwp.Models.Enums;
 using PureRadio.Uwp.ViewModels;
 using System;
@@ -43,7 +44,10 @@ namespace PureRadio.Uwp.Views.Secondary
 
         private void PlayListView_ItemClick(object sender, ItemClickEventArgs e)
         {
-
+            var item = e.ClickedItem as RadioPlaylistDetail;
+            var list = sender as ListView;
+            int index = list.Items.IndexOf(item);
+            ViewModel.PlayRadioDemand(index);
         }
 
         private void NavList_Loaded(object sender, RoutedEventArgs e)

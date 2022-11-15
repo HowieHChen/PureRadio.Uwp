@@ -175,7 +175,9 @@
                         Grid.Row="0" Grid.Column="2"
                         Margin="0,20,20,20">
                         <StackPanel x:Name="ButtonGroup" Width="160">
-                            <Button HorizontalAlignment="Stretch" Style="{StaticResource AccentButtonStyle}" >
+                            <Button 
+                                Click="ButtonPlay_Click"
+                                HorizontalAlignment="Stretch" Style="{StaticResource AccentButtonStyle}" >
                                 <StackPanel Orientation="Horizontal">
                                     <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xF5B0;"/>
                                     <TextBlock x:Uid="DetailPagePlayButton" Margin="12,0" Text="Play"/>

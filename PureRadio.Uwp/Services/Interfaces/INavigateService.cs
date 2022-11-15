@@ -15,7 +15,7 @@ namespace PureRadio.Uwp.Services.Interfaces
         /// <summary>
         /// 导航事件
         /// </summary>
-        public event EventHandler<AppNavigationEventArgs> Navigating;
+        event EventHandler<AppNavigationEventArgs> Navigating;
 
         /// <summary>
         /// 当前主视图展示的页面 Id.
@@ -45,6 +45,6 @@ namespace PureRadio.Uwp.Services.Interfaces
         /// 导航到播放页，传入播放参数.
         /// </summary>
         /// <param name="parameter">播放参数.</param>
-        void NavigateToPlayView(PlaySnapshot parameter);
+        void NavigateToPlayView(PlayItemSnapshot parameter);
     }
 }

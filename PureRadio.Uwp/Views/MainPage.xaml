@@ -8,6 +8,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls" 
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls" 
     xmlns:convert="using:PureRadio.Uwp.Resources.Converter"
     xmlns:viewmodels="using:PureRadio.Uwp.ViewModels" 
     d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
@@ -18,6 +19,12 @@
         <Thickness x:Key="NavigationViewContentGridBorderThickness">0</Thickness>
         <SolidColorBrush x:Key="NavigationViewContentBackground" Color="Transparent"></SolidColorBrush>
         <convert:AccountStateToDisplayConverter x:Key="AccountStateToDisplayConverter"/>
+        <convert:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <convert:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
+        <convert:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+        <convert:MediaPlaybackStateToIconConverter x:Key="MediaPlaybackStateToIconConverter"/>
+        <convert:MutedStateToIconConverter x:Key="MutedStateToIconConverter"/>
+        <convert:MediaPositionToDisplayConverter x:Key="MediaPositionToDisplayConverter"/>
         <Flyout x:Key="UserInfoFlyout" Placement="BottomEdgeAlignedRight" 
                 FlyoutPresenterStyle="{StaticResource UserInfoFlyoutStyle}">
             <StackPanel Orientation="Vertical" MinWidth="240">
@@ -74,6 +81,8 @@
                     <VisualState.Setters>
                         <Setter Target="AppTitleSearchBar.Margin" Value="0,0,30,0"/>
                         <Setter Target="AppTitleTextBlock.Visibility" Value="Visible"/>
+                        <Setter Target="ExtInfoPanel.Visibility" Value="Visible"/>
+                        <Setter Target="ExtControlPanel.Visibility" Value="Visible"/>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="NarrowLayout">
@@ -83,6 +92,8 @@
                     <VisualState.Setters>
                         <Setter Target="AppTitleSearchBar.Margin" Value="0,0,30,0"/>
                         <Setter Target="AppTitleTextBlock.Visibility" Value="Collapsed"/>
+                        <Setter Target="ExtInfoPanel.Visibility" Value="Collapsed"/>
+                        <Setter Target="ExtControlPanel.Visibility" Value="Collapsed"/>
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
@@ -296,7 +307,6 @@
             AlwaysShowHeader="False"
             Loaded="NavigationView_Loaded"
             ItemInvoked="NavigationView_ItemInvoked">
-            <!--Style="{StaticResource CustomNavigationView}"-->
             <muxc:NavigationView.MenuItems>
                 <muxc:NavigationViewItem Tag="1" x:Uid="navHome">
                     <muxc:NavigationViewItem.Icon>
@@ -332,7 +342,7 @@
                         x:Name="ContentFrame"
                         IsTabStop="False"/>
                     <Button Click="Button_Click"/>
-                    <!--<Grid 
+                    <Grid 
                         x:Name="NowPlayFrame"
                         VerticalAlignment="Bottom"
                         Height="100"
@@ -343,39 +353,112 @@
                             Opacity="0"                            
                             Background="{ThemeResource MediaContainerHoverBrush}">
                             <animations:Implicit.ShowAnimations>
-                                <animations:OpacityAnimation From="0" To="1" Duration="0:0:0.1"/>
+                                <animations:OpacityAnimation From="0" To="1" Duration="0:0:0.3"/>
                             </animations:Implicit.ShowAnimations>
                             <animations:Implicit.HideAnimations>
-                                <animations:OpacityAnimation From="1" To="0" Duration="0:0:0.1"/>
+                                <animations:OpacityAnimation From="1" To="0" Duration="0:0:0.3"/>
                             </animations:Implicit.HideAnimations>
                         </Grid>
                         <Grid 
                             x:Name="PlayerContainer"
                             Height="84" 
+                            BorderThickness="0,1,0,0"
+                            BorderBrush="{ThemeResource NavigationViewContentGridBorderBrush}"
                             VerticalAlignment="Bottom"
                             PointerPressed="PlayerContainer_PointerPressed"
                             PointerEntered="PlayerContainer_PointerEntered"
                             PointerExited="PlayerContainer_PointerExited"
                             Background="{ThemeResource AcrylicMediaContainerBrush}">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="84"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition x:Name="CoverColumn" Width="auto"/>
+                                <ColumnDefinition x:Name="InfoColumn" />
+                                <ColumnDefinition x:Name="ExtInfoColumn" Width="auto"/>
+                                <ColumnDefinition x:Name="ControlColumn" Width="auto"/>
+                                <ColumnDefinition x:Name="ExtControlColumn" Width="auto"/>
                             </Grid.ColumnDefinitions>
-                            <Border Grid.Column="0" CornerRadius="8" Width="60" Height="60" >
-                                <Image Width="60" Height="60" Source="{x:Bind player.Cover, Mode=OneWay}"/>
-                            </Border>
-                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Orientation="Vertical">
-                                <TextBlock Text="{x:Bind player.Title, Mode=OneWay}" Style="{StaticResource SubtitleTextBlockStyle}"/>
-                                <TextBlock Text="{x:Bind player.Playing, Mode=OneWay}" Margin="0,4,0,0" Style="{StaticResource BaseTextBlockStyle}"/>
+                            <controls:ImageEx
+                                Grid.Column="0"
+                                Stretch="Fill" VerticalAlignment="Center"
+                                Width="60" Height="60"
+                                Margin="12,0" CornerRadius="4"
+                                Source="{x:Bind PlayerViewModel.Cover, Mode=OneWay}"/>
+                            <StackPanel 
+                                Grid.Column="1"
+                                Orientation="Vertical" VerticalAlignment="Center">
+                                <TextBlock 
+                                    Text="{x:Bind PlayerViewModel.Title, Mode=OneWay}" 
+                                    TextTrimming="CharacterEllipsis"
+                                    MaxLines="1"
+                                    Style="{StaticResource SubtitleTextBlockStyle}"/>
+                                <TextBlock 
+                                    Margin="0,4,0,0" 
+                                    Text="{x:Bind PlayerViewModel.SubTitle, Mode=OneWay}" 
+                                    TextTrimming="CharacterEllipsis"
+                                    Style="{StaticResource BaseTextBlockStyle}"/>
                             </StackPanel>
-                            <StackPanel Grid.Column="2" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Right">
-                                <TextBlock x:Name="Duration" Text="{x:Bind player.Duration, Mode=OneWay}" Margin="8,0" VerticalAlignment="Center" Style="{StaticResource BodyTextBlockStyle}"/>
-                                <Button Click="{x:Bind ViewModel.ToggleFav}" x:Name="FavButton" Margin="8,0" Height="42" Width="42" BorderThickness="0" Background="Transparent">
-                                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="{x:Bind ViewModel.IsFavNP, Mode=OneWay, Converter={StaticResource FavStateToButtonIconConverter}}"/>
+                            <StackPanel
+                                Grid.Column="2"
+                                x:Name="ExtInfoPanel"
+                                VerticalAlignment="Center" 
+                                Orientation="Horizontal">
+                                <StackPanel
+                                    Visibility="{x:Bind PlayerViewModel.IsLive, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                    Orientation="Horizontal">
+                                    <TextBlock 
+                                        Margin="4,0,0,0" VerticalAlignment="Center"
+                                        Text="{x:Bind PlayerViewModel.StartTime, Mode=OneWay}"
+                                        Style="{StaticResource BodyTextBlockStyle}"/>
+                                    <TextBlock 
+                                        Margin="0" VerticalAlignment="Center"
+                                        Text="-"
+                                        Visibility="{x:Bind PlayerViewModel.ShowElement,Mode=OneWay,Converter={StaticResource BooleanToVisibilityConverter}}"                                        
+                                        Style="{StaticResource BodyTextBlockStyle}"/>
+                                    <TextBlock 
+                                        Margin="0,0,4,0" VerticalAlignment="Center"
+                                        Text="{x:Bind PlayerViewModel.EndTime, Mode=OneWay}"
+                                        Style="{StaticResource BodyTextBlockStyle}"/>
+                                </StackPanel>
+                                <StackPanel
+                                    Visibility="{x:Bind PlayerViewModel.IsLive, Mode=OneWay, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
+                                    Orientation="Horizontal">
+                                    <TextBlock 
+                                        Margin="4,0,0,0" VerticalAlignment="Center"
+                                        Text="{x:Bind PlayerViewModel.NowPositonText, Mode=OneWay}"
+                                        Style="{StaticResource BodyTextBlockStyle}"/>
+                                    <TextBlock 
+                                        Margin="0" VerticalAlignment="Center"
+                                        Text="/"
+                                        Visibility="{x:Bind PlayerViewModel.ShowElement,Mode=OneWay,Converter={StaticResource BooleanToVisibilityConverter}}"                                        
+                                        Style="{StaticResource BodyTextBlockStyle}"/>
+                                    <TextBlock 
+                                        Margin="0,0,4,0" VerticalAlignment="Center"
+                                        Text="{x:Bind PlayerViewModel.DurationText, Mode=OneWay}"
+                                        Style="{StaticResource BodyTextBlockStyle}"/>
+                                </StackPanel>
+                                <Button 
+                                    x:Name="FavButton" Margin="8,0" Height="42" Width="42" BorderThickness="0" Background="Transparent"
+                                    Visibility="{x:Bind PlayerViewModel.ShowElement,Mode=OneWay,Converter={StaticResource BooleanToVisibilityConverter}}"                                        >
+                                    <FontIcon FontFamily="{StaticResource FluentIcons}" Glyph="&#xEB51;"/>
                                 </Button>
-                                <Button Click="{x:Bind player.SkipPrevious}" IsEnabled="{x:Bind player.CanSkipPrevious, Mode=OneWay}" Margin="8,0" Height="42" Width="42" BorderThickness="0" Background="Transparent">
-                                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xF8AC;"/>
+                                <animations:Implicit.Animations>
+                                    <animations:OffsetAnimation Duration="0:0:0.1"/>
+                                </animations:Implicit.Animations>
+                                <animations:Implicit.ShowAnimations>
+                                    <animations:OpacityAnimation From="0" To="1" Duration="0:0:0.1"/>
+                                </animations:Implicit.ShowAnimations>
+                                <animations:Implicit.HideAnimations>
+                                    <animations:OpacityAnimation From="1" To="0" Duration="0:0:0.1"/>
+                                </animations:Implicit.HideAnimations>
+                            </StackPanel>
+                            <StackPanel 
+                                Grid.Column="3" 
+                                VerticalAlignment="Center" 
+                                Orientation="Horizontal">
+                                <Button 
+                                    Click="{x:Bind PlayerViewModel.TryPrevious}"
+                                    IsEnabled="{x:Bind PlayerViewModel.CanSkipPrevious, Mode=OneWay}" 
+                                    Margin="8,0" Height="42" Width="42" BorderThickness="0" Background="Transparent">
+                                    <FontIcon FontFamily="{StaticResource FluentIcons}" Glyph="&#xF8AC;"/>
                                     <Button.Resources>
                                         <ResourceDictionary>
                                             <ResourceDictionary.ThemeDictionaries>
@@ -389,11 +472,16 @@
                                         </ResourceDictionary>
                                     </Button.Resources>
                                 </Button>
-                                <Button Click="{x:Bind player.TogglePlayPause}" Margin="8,0" Height="42" Width="42" BorderThickness="0" Background="Transparent"
-                                    Content = "{x:Bind player.IsPlaying, Mode=OneWay, Converter={StaticResource MediaPlaybackStateToButtonIconConverter}}">
+                                <Button 
+                                    Click="{x:Bind PlayerViewModel.TogglePlay}"
+                                    Margin="8,0" Height="42" Width="42" BorderThickness="0" Background="Transparent">
+                                    <FontIcon FontFamily="{StaticResource FluentIcons}" Glyph="{x:Bind PlayerViewModel.PlayerState, Mode=OneWay, Converter={StaticResource MediaPlaybackStateToIconConverter}}"/>
                                 </Button>
-                                <Button Click="{x:Bind player.SkipNext}" IsEnabled="{x:Bind player.CanSkipNext, Mode=OneWay}" Margin="8,0" Height="42" Width="42" BorderThickness="0" Background="Transparent">
-                                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xF8AD;"/>
+                                <Button 
+                                    Click="{x:Bind PlayerViewModel.TryNext}"
+                                    IsEnabled="{x:Bind PlayerViewModel.CanSkipNext, Mode=OneWay}" 
+                                    Margin="8,0" Height="42" Width="42" BorderThickness="0" Background="Transparent">
+                                    <FontIcon FontFamily="{StaticResource FluentIcons}" Glyph="&#xF8AD;"/>
                                     <Button.Resources>
                                         <ResourceDictionary>
                                             <ResourceDictionary.ThemeDictionaries>
@@ -408,7 +496,7 @@
                                     </Button.Resources>
                                 </Button>
                                 <Button x:Name="VolumeButton" Margin="8,0" Height="42" Width="42" BorderThickness="0" Background="Transparent">
-                                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE767;" />
+                                    <FontIcon FontFamily="{StaticResource FluentIcons}" Glyph="&#xE767;" />
                                     <Button.Flyout>
                                         <Flyout>
                                             <Flyout.FlyoutPresenterStyle>
@@ -418,39 +506,57 @@
                                                 </Style>
                                             </Flyout.FlyoutPresenterStyle>
                                             <StackPanel Height="42" Orientation="Horizontal">
-                                                <Button Click="{x:Bind player.Mute}" Height="42" Width="42" BorderThickness="0" Background="Transparent"
-                                                        Content = "{x:Bind player.IsMuted, Mode=OneWay, Converter={StaticResource MediaMuteStateToButtonIconConverter}}">
+                                                <Button 
+                                                    Click="{x:Bind PlayerViewModel.Mute}"
+                                                    Height="42" Width="42" BorderThickness="0" Background="Transparent">
+                                                    <FontIcon FontFamily="{StaticResource FluentIcons}" Glyph="{x:Bind PlayerViewModel.IsMuted, Mode=OneWay, Converter={StaticResource MutedStateToIconConverter}}"/>
                                                 </Button>
                                                 <Slider
                                                     x:Name="VolumeControl" Orientation="Horizontal" 
                                                     Margin="8,0"
+                                                    PointerEntered="VolumeControl_PointerEntered"
+                                                    PointerExited="VolumeControl_PointerExited"
+                                                    IsEnabled="{x:Bind PlayerViewModel.IsMuted, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}"
                                                     Maximum="100" Minimum="0"
                                                     Height="32" Width="200"
-                                                    Value="{x:Bind player.PlayerVolume, Mode=TwoWay}"/>
+                                                    Value="{x:Bind PlayerViewModel.Volume, Mode=OneWay}"/>
                                             </StackPanel>
                                         </Flyout>
                                     </Button.Flyout>
                                 </Button>
-                                <Button x:Name="RefreshButton" Click="{x:Bind player.Refresh}" Margin="8,0,16,0" Height="42" Width="42" BorderThickness="0" Background="Transparent">
-                                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE72C;" />
-                                </Button>
+                                <animations:Implicit.Animations>
+                                    <animations:OffsetAnimation Duration="0:0:0.1"/>
+                                </animations:Implicit.Animations>
                             </StackPanel>
+                            <Button 
+                                Click="{x:Bind PlayerViewModel.Refresh}"
+                                Grid.Column="4" x:Name="ExtControlPanel"
+                                Margin="8,0,16,0" Height="42" Width="42" BorderThickness="0" Background="Transparent">
+                                <FontIcon FontFamily="{StaticResource FluentIcons}" Glyph="&#xE72C;" />
+                                <animations:Implicit.Animations>
+                                    <animations:OffsetAnimation Duration="0:0:0.1"/>
+                                </animations:Implicit.Animations>
+                                <animations:Implicit.ShowAnimations>
+                                    <animations:OpacityAnimation From="0" To="1" Duration="0:0:0.1"/>
+                                </animations:Implicit.ShowAnimations>
+                                <animations:Implicit.HideAnimations>
+                                    <animations:OpacityAnimation From="1" To="0" Duration="0:0:0.1"/>
+                                </animations:Implicit.HideAnimations>
+                            </Button>
                         </Grid>
                         <Slider 
-                            x:Name="MediaPositionLive"
-                            Maximum="{x:Bind player.MediaTotalSeconds, Mode=OneWay}"
-                            Value="{x:Bind player.MediaNowPosition, Mode=OneWay}"
+                            x:Name="MediaPosition"
+                            Maximum="{x:Bind PlayerViewModel.MediaTotalSeconds, Mode=OneWay}"
+                            Value="{x:Bind PlayerViewModel.MediaNowPosition, Mode=OneWay}"
                             Tapped="MediaPositionLive_Tapped"
                             PointerEntered="MediaPositionLive_PointerEntered"
                             PointerExited="MediaPositionLive_PointerExited"
-                            PointerReleased="MediaPositionLive_PointerReleased"
-                            ThumbToolTipValueConverter="{StaticResource MediaPositionToTimeConverter}"
-                            Visibility="{x:Bind player.PositionLiveDisplay,Mode=OneWay,Converter={StaticResource BooleanToVisibilityConverter}}"
+                            ThumbToolTipValueConverter="{StaticResource MediaPositionToDisplayConverter}"
+                            Visibility="{x:Bind PlayerViewModel.ShowElement,Mode=OneWay,Converter={StaticResource BooleanToVisibilityConverter}}"
                             CornerRadius="0"
                             Height="32" Margin="0,2,0,0" VerticalAlignment="Top"
                             IsEnabled="True"
-                            Width="auto"
-                            Style="{StaticResource CustomMediaSliderStyle}">
+                            Width="auto">
                             <Slider.Resources>
                                 <ResourceDictionary>
                                     <ResourceDictionary.ThemeDictionaries>
@@ -470,7 +576,7 @@
                                 </ResourceDictionary>
                             </Slider.Resources>
                         </Slider>
-                    </Grid>-->
+                    </Grid>
                 </Grid>
             </muxc:NavigationView.Content>
         </muxc:NavigationView>
