@@ -189,7 +189,7 @@
     <Compile Include="Providers\Interfaces\IHttpProvider.cs" />
     <Compile Include="Providers\Interfaces\IRadioProvider.cs" />
     <Compile Include="Providers\Interfaces\ISearchProvider.cs" />
-    <Compile Include="Providers\RadioProvider.cs.cs" />
+    <Compile Include="Providers\RadioProvider.cs" />
     <Compile Include="Providers\SearchProvider.cs" />
     <Compile Include="Resources\Converter\AccountStateToDisplayConverter.cs" />
     <Compile Include="Resources\Converter\BooleanToDisplayConverter.cs" />
@@ -201,7 +201,6 @@
     <Compile Include="Resources\Converter\MediaPlaybackStateToIconConverter.cs" />
     <Compile Include="Resources\Converter\MediaPositionToDisplayConverter.cs" />
     <Compile Include="Resources\Converter\MutedStateToIconConverter.cs" />
-    <Compile Include="Resources\Converter\PlayingStateToIconConverter.cs" />
     <Compile Include="Resources\Converter\ThemeToDisplayConverter.cs" />
     <Compile Include="Resources\Converter\ThemeToIndexConverter.cs" />
     <Compile Include="Services\Interfaces\INavigateService.cs" />

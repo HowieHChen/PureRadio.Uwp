@@ -20,6 +20,11 @@ namespace PureRadio.Uwp.Services.Interfaces
         MediaPlayer AudioPlayer { get; }
 
         /// <summary>
+        /// 播放器状态
+        /// </summary>
+        MediaPlaybackState AudioPlaybackState { get; }
+
+        /// <summary>
         /// 当前播放位置
         /// </summary>
         TimeSpan NowPosition { get; }

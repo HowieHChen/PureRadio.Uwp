@@ -1,9 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Uwp.UI;
+using PureRadio.Uwp.Adapters;
 using PureRadio.Uwp.Adapters.Interfaces;
+using PureRadio.Uwp.Models.Args;
 using PureRadio.Uwp.Models.Data.Radio;
 using PureRadio.Uwp.Models.Enums;
 using PureRadio.Uwp.Models.Local;
+using PureRadio.Uwp.Providers;
 using PureRadio.Uwp.Providers.Interfaces;
 using PureRadio.Uwp.Services.Interfaces;
 using System;
@@ -85,23 +88,25 @@ namespace PureRadio.Uwp.ViewModels
             this.playbackService = playbackService;
             this.radioProvider = radioProvider;
             this.playerAdapter = playerAdapter;
-            IsActive = true;
             _refreshTimer = new DispatcherTimer
             {
                 Interval = TimeSpan.MaxValue,
             };
-            _refreshTimer.Tick += OnRefreshTimerTick;
             Cover = new BitmapImage(new Uri("ms-appx:///Assets/Image/DefaultCover.png"));
+            IsActive = true;
         }
 
         protected override void OnActivated()
         {
             base.OnActivated();
+            _refreshTimer.Tick += OnRefreshTimerTick;
         }
 
         protected override void OnDeactivated()
         {
-
+            if (_refreshTimer.IsEnabled)
+                _refreshTimer.Stop();
+            _refreshTimer.Tick -= OnRefreshTimerTick;
             base.OnDeactivated();
         }
 
@@ -113,6 +118,8 @@ namespace PureRadio.Uwp.ViewModels
                 var result = await radioProvider.GetRadioDetailInfo(RadioId, CancellationToken.None);
                 Title = result.Title;
                 Cover = await ImageCache.Instance.GetFromCacheAsync(result.Cover);
+                Cover.DecodePixelHeight = Cover.DecodePixelWidth = 200;
+                Cover.DecodePixelType = DecodePixelType.Logical;
                 Description = result.Description;
                 AudienceCount = result.AudienceCount;
                 Nowplaying = result.Nowplaying;
@@ -173,15 +180,10 @@ namespace PureRadio.Uwp.ViewModels
             currentSource = target;
         }
 
-        private async void OnRefreshTimerTick(object sender, object e)
+        private void OnRefreshTimerTick(object sender, object e)
         {
-            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            {
-                _refreshTimer.Interval = TimeSpan.MaxValue;
-                _refreshTimer.Stop();
-                GetRadioDetail();
-                if (DateTime.Now.Hour == 0 && DateTime.Now.Second < 2) GetRadioPlaylist();
-            });           
+            _refreshTimer.Stop();
+            UpdateRadioLiveInfo();
         }
 
         public void PlayRadioLive()
@@ -218,8 +220,54 @@ namespace PureRadio.Uwp.ViewModels
                         var snapshotList = playerAdapter.ConvertToPlayItemSnapshotList(radioDetail, RadioPlaylist);
                         playbackService.PlayRadioDemand(RadioId, index, snapshotList);
                         break;
-                }            
+                }
         }
 
+        private async void UpdateRadioLiveInfo()
+        {
+            var detail = await radioProvider.GetRadioDetailInfo(RadioId, CancellationToken.None);
+            int count = 0;
+            while (detail.RadioId == RadioId && detail.EndTime == radioDetail.EndTime && detail.UpdateTime != TimeSpan.Zero)
+            {
+                if (count < 5)
+                    await Task.Run(() =>
+                    {
+                        Thread.Sleep(1500);
+                    });
+                else
+                    await Task.Run(() =>
+                    {
+                        Thread.Sleep(3000);
+                    });
+                detail = await radioProvider.GetRadioDetailInfo(RadioId, CancellationToken.None);
+                count++;
+            }
+            IsInfoLoading = true;
+            Title = detail.Title;
+            Cover = await ImageCache.Instance.GetFromCacheAsync(detail.Cover);
+            Cover.DecodePixelHeight = Cover.DecodePixelWidth = 200;
+            Cover.DecodePixelType = DecodePixelType.Logical;
+            Description = detail.Description;
+            AudienceCount = detail.AudienceCount;
+            Nowplaying = detail.Nowplaying;
+            TopCategoryTitle = detail.TopCategoryTitle;
+            if (detail.UpdateTime != TimeSpan.Zero)
+            {
+                if (_refreshTimer.IsEnabled)
+                    _refreshTimer.Stop();
+                _refreshTimer.Interval = detail.UpdateTime.Add(TimeSpan.FromSeconds(1));
+                if (!_refreshTimer.IsEnabled)
+                    _refreshTimer.Start();
+            }
+            else
+            {
+                if (_refreshTimer.IsEnabled)
+                    _refreshTimer.Stop();
+            }
+            itemSnapshot = playerAdapter.ConvertToPlayItemSnapshot(detail);
+            radioDetail = detail;
+            IsInfoLoading = false;
+            if (DateTime.Now.Hour == 0 && DateTime.Now.Second < 5) GetRadioPlaylist();
+        }
     }
 }

@@ -77,7 +77,21 @@ namespace PureRadio.Uwp.ViewModels
             {
                 Interval = TimeSpan.FromSeconds(1),
             };
+            IsActive = true;
+        }
+
+        protected override void OnActivated()
+        {
+            base.OnActivated();
             _refreshTimer.Tick += OnRefreshTimer_Tick;
+        }
+
+        protected override void OnDeactivated()
+        {
+            if (_refreshTimer.IsEnabled)
+                _refreshTimer.Stop();
+            _refreshTimer.Tick -= OnRefreshTimer_Tick;
+            base.OnDeactivated();
         }
 
         private void OnRefreshTimer_Tick(object sender, object e)
@@ -88,26 +102,34 @@ namespace PureRadio.Uwp.ViewModels
                 _ticksCount = 1;
                 if (_currentType == MediaPlayType.RadioLive)
                 {
-                    if (PlayerState == MediaPlaybackState.Playing && !IsMoveMediaPosition) MediaNowPosition = (int)(DateTime.Now - _startDateTime).TotalSeconds;
+                    if (!IsMoveMediaPosition) 
+                        MediaNowPosition = (int)(DateTime.Now - _startDateTime).TotalSeconds;
                 }
                 else if (_currentType == MediaPlayType.RadioDemand || _currentType == MediaPlayType.ContentDemand)
                 {
                     _nowPositonTimeSpan = playService.NowPosition;
-                    if (!IsMoveMediaPosition) MediaNowPosition = (int)_nowPositonTimeSpan.TotalSeconds;
+                    if (!IsMoveMediaPosition) 
+                        MediaNowPosition = (int)_nowPositonTimeSpan.TotalSeconds;
                     NowPositonText = _nowPositonTimeSpan.ToString(@"hh\:mm\:ss");
-                    DurationText = playService.NaturalDuration.ToString(@"hh\:mm\:ss");
+                }
+                if(playService.AudioPlaybackState != MediaPlaybackState.Playing)
+                {
+                    _playerState = playService.AudioPlaybackState;
+                    _refreshTimer.Stop();
                 }
             }
             else
             {
                 if (_currentType == MediaPlayType.RadioLive)
                 {
-                    if (PlayerState == MediaPlaybackState.Playing && !IsMoveMediaPosition) MediaNowPosition++;
+                    if (!IsMoveMediaPosition) 
+                        MediaNowPosition++;
                 }
                 else if (_currentType == MediaPlayType.RadioDemand || _currentType == MediaPlayType.ContentDemand)
                 {
                     _nowPositonTimeSpan = _nowPositonTimeSpan.Add(TimeSpan.FromSeconds(1));
-                    if (!IsMoveMediaPosition) MediaNowPosition = (int)_nowPositonTimeSpan.TotalSeconds;
+                    if (!IsMoveMediaPosition) 
+                        MediaNowPosition = (int)_nowPositonTimeSpan.TotalSeconds;
                     NowPositonText = _nowPositonTimeSpan.ToString(@"hh\:mm\:ss");
                 }
             }
@@ -136,14 +158,17 @@ namespace PureRadio.Uwp.ViewModels
                     if (!IsMoveVolume) Volume = playState.Volume;
                     if (_currentType != MediaPlayType.RadioLive)
                     {
-                        if (!IsMoveMediaPosition) MediaNowPosition = playState.NowPosition;
+                        _nowPositonTimeSpan = TimeSpan.FromSeconds(playState.NowPosition);
+                        if (!IsMoveMediaPosition) 
+                            MediaNowPosition = (int)_nowPositonTimeSpan.TotalSeconds;
                         MediaTotalSeconds = playState.TotalSeconds;
+                        NowPositonText = _nowPositonTimeSpan.ToString(@"hh\:mm\:ss");
+                        DurationText = TimeSpan.FromSeconds(playState.TotalSeconds).ToString(@"hh\:mm\:ss");
                     }
-                    _nowPositonTimeSpan = TimeSpan.FromSeconds(playState.NowPosition);
-                    if (PlayerState == MediaPlaybackState.Playing && !_refreshTimer.IsEnabled) 
-                        _refreshTimer.Start(); 
-                    else if(_refreshTimer.IsEnabled) 
-                        _refreshTimer.Stop();
+                    if ((PlayerState == MediaPlaybackState.Paused || PlayerState == MediaPlaybackState.None) && _refreshTimer.IsEnabled) 
+                        _refreshTimer.Stop(); 
+                    else if(!_refreshTimer.IsEnabled) 
+                        _refreshTimer.Start();
                 });                
             }
         }
@@ -166,14 +191,14 @@ namespace PureRadio.Uwp.ViewModels
                     }
                     else
                     {
-                        var cover = (await ImageCache.Instance.GetFromCacheAsync(playItem.Cover)) ?? new BitmapImage(new Uri("ms-appx:///Assets/Image/DefaultCover.png"));
-                        cover.DecodePixelHeight = cover.DecodePixelWidth = 60;
-                        Cover = cover;
+                        Cover = (await ImageCache.Instance.GetFromCacheAsync(playItem.Cover)) ?? new BitmapImage(new Uri("ms-appx:///Assets/Image/DefaultCover.png"));
+                        Cover.DecodePixelHeight = Cover.DecodePixelWidth = 60;
+                        Cover.DecodePixelType = DecodePixelType.Logical;
                         Title = playItem.Title;
                         SubTitle = playItem.SubTitle;
-                        DurationText = TimeSpan.FromSeconds(playItem.Duration).ToString(@"hh\:mm\:ss");
                         if (_currentType == MediaPlayType.RadioLive)
                         {
+                            DurationText = TimeSpan.FromSeconds(playItem.Duration).ToString(@"hh\:mm\:ss");
                             MediaTotalSeconds = playItem.Duration;
                             StartTime = playItem.StartTime;
                             EndTime = playItem.EndTime;
@@ -184,9 +209,7 @@ namespace PureRadio.Uwp.ViewModels
                         }
                         ShowElement = playItem.Type != MediaPlayType.None;
                         IsLive = playItem.Type == MediaPlayType.RadioLive;
-                    }
-                    
-                    
+                    }                   
                 });
             }            
         }

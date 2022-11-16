@@ -24,7 +24,7 @@ namespace PureRadio.Uwp.Adapters
                 if (item.Nowplaying.EndTime == "23:59:00")
                 {
                     //item.Nowplaying.EndTime = "23:59:59";
-                    updateTime = updateTime.AddMinutes(1);
+                    updateTime = updateTime.AddSeconds(90);
                 }
                 timeSpan = updateTime - DateTime.Now;
             }

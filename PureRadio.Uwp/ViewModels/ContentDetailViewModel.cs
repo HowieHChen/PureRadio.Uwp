@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace PureRadio.Uwp.ViewModels
@@ -59,7 +60,7 @@ namespace PureRadio.Uwp.ViewModels
         [ObservableProperty]
         private bool _isPlaylistLoading;
 
-
+        private readonly DispatcherTimer _refreshTimer;
         public ContentDetailViewModel(
             IPlaybackService playbackService,
             INavigateService navigate, 
@@ -70,12 +71,33 @@ namespace PureRadio.Uwp.ViewModels
             this.navigate = navigate;
             this.contentProvider = contentProvider;
             this.playerAdapter = playerAdapter;
-            IsActive = true;
+            
+            _refreshTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromSeconds(5),
+            }; IsActive = true;
         }
 
         protected override void OnActivated()
         {
             base.OnActivated();
+            _refreshTimer.Tick += _refreshTimer_Tick;
+            _refreshTimer.Start();
+        }
+
+        private void _refreshTimer_Tick(object sender, object e)
+        {
+            testFunc();
+        }
+
+        private async void testFunc()
+        {
+            IsInfoLoading = true;
+            await Task.Run(() =>
+            {
+                Thread.Sleep(5000);
+            });
+            IsInfoLoading = false;
         }
 
         protected override void OnDeactivated()
@@ -93,6 +115,8 @@ namespace PureRadio.Uwp.ViewModels
                 if (result != null) 
                 {
                     Cover = await ImageCache.Instance.GetFromCacheAsync(result.Cover);
+                    Cover.DecodePixelHeight = Cover.DecodePixelWidth = 200;
+                    Cover.DecodePixelType = DecodePixelType.Logical;
                     Title = result.Title;
                     Podcasters = result.Podcasters;
                     PlayCount = result.PlayCount;

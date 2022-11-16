@@ -15,6 +15,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.Resources;
 using Windows.Media;
@@ -38,13 +39,15 @@ namespace PureRadio.Uwp.Services
         private readonly IRadioProvider _radioProvider;
         private readonly IContentProvider _contentProvider;
         private readonly IAccountProvider _accountProvider;
-        private readonly DispatcherTimer _refreshTimer;
+        private readonly System.Timers.Timer _refreshTimer;
 
         public MediaPlayer AudioPlayer { get; set; }
 
         public TimeSpan NowPosition => AudioPlayer.PlaybackSession.Position;
 
         public TimeSpan NaturalDuration => AudioPlayer.PlaybackSession.NaturalDuration;
+
+        public MediaPlaybackState AudioPlaybackState => AudioPlayer.PlaybackSession.PlaybackState;
 
         private MediaSource _mediaSource;
         private AdaptiveMediaSource _adaptiveMediaSource;
@@ -95,11 +98,11 @@ namespace PureRadio.Uwp.Services
             _liveStream.DefaultRequestHeaders.TryAppendWithoutValidation("sec-fetch-dest", "audio");
             _liveStream.DefaultRequestHeaders.TryAppendWithoutValidation("sec-fetch-mode", "no-cors");
             _liveStream.DefaultRequestHeaders.TryAppendWithoutValidation("sec-fetch-site", "cross-site");
-            _refreshTimer = new DispatcherTimer
+            _refreshTimer = new System.Timers.Timer()
             {
-                Interval = TimeSpan.MaxValue,
+                Interval = double.MaxValue,
             };
-            _refreshTimer.Tick += OnRefreshTimer_Tick;
+            _refreshTimer.Elapsed += OnRefreshTimer_Tick;
             _playItem = new PlayItemSnapshot(MediaPlayType.None, null, new Uri("ms-appx:///Assets/Image/DefaultCover.png"), string.Empty, string.Empty, 0, 0, 0);
             _nowState = MediaPlaybackState.None;
         }
@@ -178,14 +181,10 @@ namespace PureRadio.Uwp.Services
                 _playItem));
         }
 
-        private async void AudioPlayer_SourceChanged(MediaPlayer sender, object args)
+        private void AudioPlayer_SourceChanged(MediaPlayer sender, object args)
         {
-            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            {
-                if (_currentType != MediaPlayType.RadioLive && _refreshTimer.IsEnabled)
-                    _refreshTimer.Stop();
-            });
-            
+            if (_currentType != MediaPlayType.RadioLive && _refreshTimer.Enabled)
+                _refreshTimer.Stop();
         }
 
         private void MediaPlaybackList_CurrentItemChanged(MediaPlaybackList sender, CurrentMediaPlaybackItemChangedEventArgs args)
@@ -255,15 +254,15 @@ namespace PureRadio.Uwp.Services
                 UpdateProperties(playItem);
                 if (detail.UpdateTime != TimeSpan.Zero)
                 {
-                    if (_refreshTimer.IsEnabled)
+                    if (_refreshTimer.Enabled)
                         _refreshTimer.Stop();
-                    _refreshTimer.Interval = detail.UpdateTime.Add(TimeSpan.FromSeconds(1));
-                    if (!_refreshTimer.IsEnabled)
+                    _refreshTimer.Interval = detail.UpdateTime.Add(TimeSpan.FromSeconds(1)).TotalMilliseconds;
+                    if (!_refreshTimer.Enabled)
                         _refreshTimer.Start();
                 }
                 else
                 {
-                    if (_refreshTimer.IsEnabled)
+                    if (_refreshTimer.Enabled)
                         _refreshTimer.Stop();
                 }
                 //Register for download requests
@@ -462,19 +461,35 @@ namespace PureRadio.Uwp.Services
         private async void UpdateRadioLiveInfo()
         {
             var detail = await _radioProvider.GetRadioDetailInfo(_playItem.MainId, CancellationToken.None);
+            int count = 0;
+            while (detail.RadioId == _playItem.MainId && detail.EndTime == _playItem.EndTime && detail.UpdateTime != TimeSpan.Zero)
+            {
+                if (count < 5)
+                    await Task.Run(() =>
+                    {
+                        Thread.Sleep(1500);
+                    });
+                else
+                    await Task.Run(() =>
+                    {
+                        Thread.Sleep(3000);
+                    });
+                detail = await _radioProvider.GetRadioDetailInfo(_playItem.MainId, CancellationToken.None);
+                count++;
+            }
             var snapshot = _playerAdapter.ConvertToPlayItemSnapshot(detail);
             _playItem = snapshot;
             if (detail.UpdateTime != TimeSpan.Zero)
             {
-                if (_refreshTimer.IsEnabled)
+                if (_refreshTimer.Enabled)
                     _refreshTimer.Stop();
-                _refreshTimer.Interval = detail.UpdateTime.Add(TimeSpan.FromSeconds(1));
-                if (!_refreshTimer.IsEnabled)
+                _refreshTimer.Interval = detail.UpdateTime.Add(TimeSpan.FromSeconds(1)).TotalMilliseconds;
+                if (!_refreshTimer.Enabled)
                     _refreshTimer.Start();
             }
             else
             {
-                if (_refreshTimer.IsEnabled)
+                if (_refreshTimer.Enabled)
                     _refreshTimer.Stop();
             }
             PlayerItemChanged?.Invoke(this, new PlayerItemChangedEventArgs(

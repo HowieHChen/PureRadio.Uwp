@@ -82,6 +82,7 @@
                         <Setter Target="AppTitleSearchBar.Margin" Value="0,0,30,0"/>
                         <Setter Target="AppTitleTextBlock.Visibility" Value="Visible"/>
                         <Setter Target="ExtInfoPanel.Visibility" Value="Visible"/>
+                        <Setter Target="FavButton.Visibility" Value="Visible"/>
                         <Setter Target="ExtControlPanel.Visibility" Value="Visible"/>
                     </VisualState.Setters>
                 </VisualState>
@@ -93,6 +94,7 @@
                         <Setter Target="AppTitleSearchBar.Margin" Value="0,0,30,0"/>
                         <Setter Target="AppTitleTextBlock.Visibility" Value="Collapsed"/>
                         <Setter Target="ExtInfoPanel.Visibility" Value="Collapsed"/>
+                        <Setter Target="FavButton.Visibility" Value="Collapsed"/>
                         <Setter Target="ExtControlPanel.Visibility" Value="Collapsed"/>
                     </VisualState.Setters>
                 </VisualState>
@@ -394,66 +396,83 @@
                                     Margin="0,4,0,0" 
                                     Text="{x:Bind PlayerViewModel.SubTitle, Mode=OneWay}" 
                                     TextTrimming="CharacterEllipsis"
+                                    MaxLines="1"
                                     Style="{StaticResource BaseTextBlockStyle}"/>
                             </StackPanel>
-                            <StackPanel
+                            <Grid
                                 Grid.Column="2"
                                 x:Name="ExtInfoPanel"
                                 VerticalAlignment="Center" 
-                                Orientation="Horizontal">
+                                HorizontalAlignment="Stretch">
                                 <StackPanel
                                     Visibility="{x:Bind PlayerViewModel.IsLive, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
                                     Orientation="Horizontal">
                                     <TextBlock 
-                                        Margin="4,0,0,0" VerticalAlignment="Center"
+                                        Width="55"
+                                        Margin="4,0,0,0" VerticalAlignment="Center" TextAlignment="Right"
                                         Text="{x:Bind PlayerViewModel.StartTime, Mode=OneWay}"
                                         Style="{StaticResource BodyTextBlockStyle}"/>
                                     <TextBlock 
-                                        Margin="0" VerticalAlignment="Center"
+                                        Margin="2,0" VerticalAlignment="Center"
                                         Text="-"
                                         Visibility="{x:Bind PlayerViewModel.ShowElement,Mode=OneWay,Converter={StaticResource BooleanToVisibilityConverter}}"                                        
                                         Style="{StaticResource BodyTextBlockStyle}"/>
                                     <TextBlock 
-                                        Margin="0,0,4,0" VerticalAlignment="Center"
+                                        Width="55"
+                                        Margin="0,0,4,0" VerticalAlignment="Center" TextAlignment="Left"
                                         Text="{x:Bind PlayerViewModel.EndTime, Mode=OneWay}"
                                         Style="{StaticResource BodyTextBlockStyle}"/>
                                 </StackPanel>
                                 <StackPanel
                                     Visibility="{x:Bind PlayerViewModel.IsLive, Mode=OneWay, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
+                                    HorizontalAlignment="Right"
                                     Orientation="Horizontal">
                                     <TextBlock 
-                                        Margin="4,0,0,0" VerticalAlignment="Center"
+                                        Width="55"
+                                        Margin="4,0,0,0" VerticalAlignment="Center" TextAlignment="Right"
                                         Text="{x:Bind PlayerViewModel.NowPositonText, Mode=OneWay}"
                                         Style="{StaticResource BodyTextBlockStyle}"/>
                                     <TextBlock 
-                                        Margin="0" VerticalAlignment="Center"
+                                        Margin="2,0" VerticalAlignment="Center"
                                         Text="/"
                                         Visibility="{x:Bind PlayerViewModel.ShowElement,Mode=OneWay,Converter={StaticResource BooleanToVisibilityConverter}}"                                        
                                         Style="{StaticResource BodyTextBlockStyle}"/>
                                     <TextBlock 
-                                        Margin="0,0,4,0" VerticalAlignment="Center"
+                                        Width="55"
+                                        Margin="0,0,4,0" VerticalAlignment="Center" TextAlignment="Left"
                                         Text="{x:Bind PlayerViewModel.DurationText, Mode=OneWay}"
                                         Style="{StaticResource BodyTextBlockStyle}"/>
                                 </StackPanel>
-                                <Button 
-                                    x:Name="FavButton" Margin="8,0" Height="42" Width="42" BorderThickness="0" Background="Transparent"
-                                    Visibility="{x:Bind PlayerViewModel.ShowElement,Mode=OneWay,Converter={StaticResource BooleanToVisibilityConverter}}"                                        >
-                                    <FontIcon FontFamily="{StaticResource FluentIcons}" Glyph="&#xEB51;"/>
-                                </Button>
                                 <animations:Implicit.Animations>
                                     <animations:OffsetAnimation Duration="0:0:0.1"/>
                                 </animations:Implicit.Animations>
                                 <animations:Implicit.ShowAnimations>
+                                    <animations:TranslationAnimation From="16,0" To="0,0" Duration="0:0:0.1"/>
                                     <animations:OpacityAnimation From="0" To="1" Duration="0:0:0.1"/>
                                 </animations:Implicit.ShowAnimations>
                                 <animations:Implicit.HideAnimations>
+                                    <animations:TranslationAnimation From="0,0" To="16,0" Duration="0:0:0.1"/>
                                     <animations:OpacityAnimation From="1" To="0" Duration="0:0:0.1"/>
                                 </animations:Implicit.HideAnimations>
-                            </StackPanel>
+                            </Grid>
                             <StackPanel 
                                 Grid.Column="3" 
                                 VerticalAlignment="Center" 
                                 Orientation="Horizontal">
+                                <Button 
+                                    x:Name="FavButton" Margin="8,0" Height="42" Width="42" BorderThickness="0" Background="Transparent"
+                                    Visibility="{x:Bind PlayerViewModel.ShowElement,Mode=OneWay,Converter={StaticResource BooleanToVisibilityConverter}}"                                        >
+                                    <FontIcon FontFamily="{StaticResource FluentIcons}" Glyph="&#xEB51;"/>
+                                    <animations:Implicit.Animations>
+                                        <animations:OffsetAnimation Duration="0:0:0.1"/>
+                                    </animations:Implicit.Animations>
+                                    <animations:Implicit.ShowAnimations>
+                                        <animations:OpacityAnimation From="0" To="1" Duration="0:0:0.1"/>
+                                    </animations:Implicit.ShowAnimations>
+                                    <animations:Implicit.HideAnimations>
+                                        <animations:OpacityAnimation From="1" To="0" Duration="0:0:0.1"/>
+                                    </animations:Implicit.HideAnimations>
+                                </Button>
                                 <Button 
                                     Click="{x:Bind PlayerViewModel.TryPrevious}"
                                     IsEnabled="{x:Bind PlayerViewModel.CanSkipPrevious, Mode=OneWay}" 
