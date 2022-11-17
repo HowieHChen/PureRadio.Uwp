@@ -98,13 +98,25 @@ namespace PureRadio.Uwp.Views
 
         private void Navigate_Navigating(object sender, Models.Args.AppNavigationEventArgs e)
         {
-            if(e.Type == Models.Enums.NavigationType.Player)
+            if(e.Type == NavigationType.Player)
             {
-                RootFrame.Navigate(typeof(PlayerPage), e.Parameter);
+                if ((bool?)e.Parameter ?? true)
+                {
+                    if (RootFrame.CanGoBack)
+                        RootFrame.GoBack();
+                    else
+                        RootFrame.Navigate(typeof(MainPage), e.TransitionInfo);
+                }                    
+                else
+                    RootFrame.Navigate(typeof(PlayerPage), e.TransitionInfo) ;
             }
-            else if(RootFrame.SourcePageType == typeof(PlayerPage))
+            else if(RootFrame.SourcePageType != typeof(MainPage))
             {
-                RootFrame.Navigate(typeof(MainPage), e.Parameter);
+                if (RootFrame.CanGoBack)
+                    RootFrame.GoBack();
+                else
+                    RootFrame.Navigate(typeof(MainPage), e.TransitionInfo);
+                Ioc.Default.GetRequiredService<INavigateService>();
             }
         }
 

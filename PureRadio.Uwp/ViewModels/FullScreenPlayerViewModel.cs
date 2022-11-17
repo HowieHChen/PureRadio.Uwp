@@ -13,15 +13,18 @@ using Windows.ApplicationModel.Core;
 using Windows.Media.Playback;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace PureRadio.Uwp.ViewModels
 {
-    public sealed partial class NativePlayerViewModel : ObservableRecipient
+    public sealed partial class FullScreenPlayerViewModel : ObservableRecipient
     {
         private readonly IPlaybackService playService;
+        private readonly INavigateService navigate;
         private readonly DispatcherTimer _refreshTimer;
+
+        public event EventHandler<MediaPlaybackState> PlayerStateChanged;
 
         private MediaPlayType _currentType;
         private TimeSpan _nowPositonTimeSpan;
@@ -46,6 +49,8 @@ namespace PureRadio.Uwp.ViewModels
         [ObservableProperty]
         private string _startTime;
         [ObservableProperty]
+        private string _nowTime;
+        [ObservableProperty]
         private string _endTime;
         [ObservableProperty]
         private bool _isLive;
@@ -64,11 +69,13 @@ namespace PureRadio.Uwp.ViewModels
         private int _mediaNowPosition;
         [ObservableProperty]
         private MediaPlaybackState _playerState;
-
-
-        public NativePlayerViewModel(IPlaybackService playbackService)
+        
+        public FullScreenPlayerViewModel(
+            IPlaybackService playbackService,
+            INavigateService navigateService)
         {
             playService = playbackService;
+            navigate = navigateService;
             UpdatePlayerState(playService.GetCurrentPlayerState());
             UpdatePlayerItem(playService.GetCurrentPlayItem());
             _refreshTimer = new DispatcherTimer
@@ -100,22 +107,23 @@ namespace PureRadio.Uwp.ViewModels
         private void OnRefreshTimer_Tick(object sender, object e)
         {
             _ticksCount++;
-            if(_ticksCount > 5)
+            if (_ticksCount > 5)
             {
                 _ticksCount = 1;
                 if (_currentType == MediaPlayType.RadioLive)
                 {
-                    if (!IsMoveMediaPosition) 
+                    if (!IsMoveMediaPosition)
                         MediaNowPosition = (int)(DateTime.Now - _startDateTime).TotalSeconds;
+                    NowTime = DateTime.Now.ToString(@"HH\:mm\:ss");
                 }
                 else if (_currentType == MediaPlayType.RadioDemand || _currentType == MediaPlayType.ContentDemand)
                 {
                     _nowPositonTimeSpan = playService.NowPosition;
-                    if (!IsMoveMediaPosition) 
+                    if (!IsMoveMediaPosition)
                         MediaNowPosition = (int)_nowPositonTimeSpan.TotalSeconds;
                     NowPositonText = _nowPositonTimeSpan.ToString(@"hh\:mm\:ss");
                 }
-                if(playService.AudioPlaybackState != MediaPlaybackState.Playing)
+                if (playService.AudioPlaybackState != MediaPlaybackState.Playing)
                 {
                     _playerState = playService.AudioPlaybackState;
                     _refreshTimer.Stop();
@@ -125,13 +133,14 @@ namespace PureRadio.Uwp.ViewModels
             {
                 if (_currentType == MediaPlayType.RadioLive)
                 {
-                    if (!IsMoveMediaPosition) 
+                    if (!IsMoveMediaPosition)
                         MediaNowPosition++;
+                    NowTime = DateTime.Now.ToString(@"HH\:mm\:ss");
                 }
                 else if (_currentType == MediaPlayType.RadioDemand || _currentType == MediaPlayType.ContentDemand)
                 {
                     _nowPositonTimeSpan = _nowPositonTimeSpan.Add(TimeSpan.FromSeconds(1));
-                    if (!IsMoveMediaPosition) 
+                    if (!IsMoveMediaPosition)
                         MediaNowPosition = (int)_nowPositonTimeSpan.TotalSeconds;
                     NowPositonText = _nowPositonTimeSpan.ToString(@"hh\:mm\:ss");
                 }
@@ -150,7 +159,7 @@ namespace PureRadio.Uwp.ViewModels
 
         private async void UpdatePlayerState(PlayStateSnapshot playState)
         {
-            if(playState != null)
+            if (playState != null)
             {
                 await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
@@ -162,7 +171,7 @@ namespace PureRadio.Uwp.ViewModels
                     if (_currentType != MediaPlayType.RadioLive)
                     {
                         _nowPositonTimeSpan = TimeSpan.FromSeconds(playState.NowPosition);
-                        if (!IsMoveMediaPosition) 
+                        if (!IsMoveMediaPosition)
                             MediaNowPosition = (int)_nowPositonTimeSpan.TotalSeconds;
                         MediaTotalSeconds = playState.TotalSeconds;
                         NowPositonText = _nowPositonTimeSpan.ToString(@"hh\:mm\:ss");
@@ -170,18 +179,19 @@ namespace PureRadio.Uwp.ViewModels
                     }
                     if (PlayerState == MediaPlaybackState.Paused || PlayerState == MediaPlaybackState.None)
                     {
-                        if (_refreshTimer.IsEnabled) 
+                        if (_refreshTimer.IsEnabled)
                             _refreshTimer.Stop();
-                    }  
-                    else if(!_refreshTimer.IsEnabled) 
+                    }
+                    else if (!_refreshTimer.IsEnabled)
                         _refreshTimer.Start();
-                });                
+                    PlayerStateChanged?.Invoke(this, PlayerState);
+                });
             }
         }
 
         private async void UpdatePlayerItem(PlayItemSnapshot playItem)
         {
-            if(playItem != null)
+            if (playItem != null)
             {
                 await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
                 {
@@ -189,7 +199,7 @@ namespace PureRadio.Uwp.ViewModels
                     if (playItem.Type == MediaPlayType.None)
                     {
                         Cover = new BitmapImage(new Uri("ms-appx:///Assets/Image/DefaultCover.png"));
-                        Cover.DecodePixelHeight = Cover.DecodePixelWidth = 60;
+                        Cover.DecodePixelHeight = Cover.DecodePixelWidth = 400;
                         Cover.DecodePixelType = DecodePixelType.Logical;
                         Title = SubTitle = NowPositonText = DurationText = StartTime = EndTime = string.Empty;
                         ShowElement = IsLive = false;
@@ -198,7 +208,7 @@ namespace PureRadio.Uwp.ViewModels
                     else
                     {
                         Cover = (await ImageCache.Instance.GetFromCacheAsync(playItem.Cover)) ?? new BitmapImage(new Uri("ms-appx:///Assets/Image/DefaultCover.png"));
-                        Cover.DecodePixelHeight = Cover.DecodePixelWidth = 60;
+                        Cover.DecodePixelHeight = Cover.DecodePixelWidth = 400;
                         Cover.DecodePixelType = DecodePixelType.Logical;
                         Title = playItem.Title;
                         SubTitle = playItem.SubTitle;
@@ -207,6 +217,7 @@ namespace PureRadio.Uwp.ViewModels
                             DurationText = TimeSpan.FromSeconds(playItem.Duration).ToString(@"hh\:mm\:ss");
                             MediaTotalSeconds = playItem.Duration;
                             StartTime = playItem.StartTime;
+                            NowTime = DateTime.Now.ToString(@"HH\:mm\:ss");
                             EndTime = playItem.EndTime;
                             if (DateTime.TryParse(StartTime, out _startDateTime))
                             {
@@ -215,9 +226,9 @@ namespace PureRadio.Uwp.ViewModels
                         }
                         ShowElement = playItem.Type != MediaPlayType.None;
                         IsLive = playItem.Type == MediaPlayType.RadioLive;
-                    }                   
+                    }
                 });
-            }            
+            }
         }
 
         public void TogglePlay()
@@ -266,14 +277,19 @@ namespace PureRadio.Uwp.ViewModels
 
         public void SetPosition(int position)
         {
-            if(_currentType == MediaPlayType.RadioDemand || _currentType == MediaPlayType.ContentDemand)
+            if (_currentType == MediaPlayType.RadioDemand || _currentType == MediaPlayType.ContentDemand)
                 playService.SetPosition(position);
         }
 
         public void Refresh()
         {
-            if(_currentType != MediaPlayType.None)
+            if (_currentType != MediaPlayType.None)
                 playService.Refresh();
+        }
+
+        public void NavigateBack()
+        {
+            navigate.NavigateToPlayView(new EntranceNavigationTransitionInfo(), true);
         }
     }
 }

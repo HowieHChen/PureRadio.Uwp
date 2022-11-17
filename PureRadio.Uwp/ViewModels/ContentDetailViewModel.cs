@@ -1,7 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Uwp.UI;
 using PureRadio.Uwp.Adapters.Interfaces;
+using PureRadio.Uwp.Models.Args;
 using PureRadio.Uwp.Models.Data.Content;
+using PureRadio.Uwp.Models.Enums;
 using PureRadio.Uwp.Models.QingTing.Content;
 using PureRadio.Uwp.Providers.Interfaces;
 using PureRadio.Uwp.Services.Interfaces;
@@ -12,6 +14,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace PureRadio.Uwp.ViewModels
@@ -60,7 +63,6 @@ namespace PureRadio.Uwp.ViewModels
         [ObservableProperty]
         private bool _isPlaylistLoading;
 
-        private readonly DispatcherTimer _refreshTimer;
         public ContentDetailViewModel(
             IPlaybackService playbackService,
             INavigateService navigate, 
@@ -71,33 +73,13 @@ namespace PureRadio.Uwp.ViewModels
             this.navigate = navigate;
             this.contentProvider = contentProvider;
             this.playerAdapter = playerAdapter;
-            
-            _refreshTimer = new DispatcherTimer
-            {
-                Interval = TimeSpan.FromSeconds(5),
-            }; IsActive = true;
+            Cover = new BitmapImage(new Uri("ms-appx:///Assets/Image/DefaultCover.png"));
+            IsActive = true;
         }
 
         protected override void OnActivated()
         {
             base.OnActivated();
-            _refreshTimer.Tick += _refreshTimer_Tick;
-            _refreshTimer.Start();
-        }
-
-        private void _refreshTimer_Tick(object sender, object e)
-        {
-            testFunc();
-        }
-
-        private async void testFunc()
-        {
-            IsInfoLoading = true;
-            await Task.Run(() =>
-            {
-                Thread.Sleep(5000);
-            });
-            IsInfoLoading = false;
         }
 
         protected override void OnDeactivated()
@@ -156,6 +138,15 @@ namespace PureRadio.Uwp.ViewModels
                 //var playlist = playerAdapter.ConvertToPlayItemSnapshotList(_contentDetail, ContentPlaylists);
                 //playbackService.PlayContent(ContentId, programId, playlist);
                 playbackService.PlayContent(ContentId, programId, _version);
+            }
+        }
+
+        public void NavigateToCategory(AttributesItem attributes)
+        {
+            if (attributes.CategoryId != 0 && attributes.AttrId != 0)
+            {
+                navigate.NavigateToSecondaryView(PageIds.ContentCategory, new EntranceNavigationTransitionInfo(), new ContentCategoryEventArgs(
+                    attributes.CategoryId, attributes.AttrId, attributes.Name));
             }
         }
     }

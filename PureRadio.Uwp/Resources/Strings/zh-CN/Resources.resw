@@ -162,6 +162,48 @@
   <data name="LangPodcasterUnknown" xml:space="preserve">
     <value>未知</value>
   </data>
+  <data name="LangRadioCategory429" xml:space="preserve">
+    <value>交通台</value>
+  </data>
+  <data name="LangRadioCategory430" xml:space="preserve">
+    <value>体育台</value>
+  </data>
+  <data name="LangRadioCategory431" xml:space="preserve">
+    <value>双语台</value>
+  </data>
+  <data name="LangRadioCategory432" xml:space="preserve">
+    <value>文艺台</value>
+  </data>
+  <data name="LangRadioCategory433" xml:space="preserve">
+    <value>资讯台</value>
+  </data>
+  <data name="LangRadioCategory434" xml:space="preserve">
+    <value>方言台</value>
+  </data>
+  <data name="LangRadioCategory435" xml:space="preserve">
+    <value>旅游台</value>
+  </data>
+  <data name="LangRadioCategory436" xml:space="preserve">
+    <value>曲艺台</value>
+  </data>
+  <data name="LangRadioCategory438" xml:space="preserve">
+    <value>生活台</value>
+  </data>
+  <data name="LangRadioCategory439" xml:space="preserve">
+    <value>经济台</value>
+  </data>
+  <data name="LangRadioCategory440" xml:space="preserve">
+    <value>综合台</value>
+  </data>
+  <data name="LangRadioCategory441" xml:space="preserve">
+    <value>都市台</value>
+  </data>
+  <data name="LangRadioCategory442" xml:space="preserve">
+    <value>音乐台</value>
+  </data>
+  <data name="LangRadioCategoryUnknown" xml:space="preserve">
+    <value>未知</value>
+  </data>
   <data name="LangSearchNoResultTip" xml:space="preserve">
     <value>没有找到结果</value>
   </data>
@@ -239,6 +281,12 @@
   </data>
   <data name="navSettings.Content" xml:space="preserve">
     <value>设置</value>
+  </data>
+  <data name="PageCategoryNoResult.Text" xml:space="preserve">
+    <value>没有找到您要的结果</value>
+  </data>
+  <data name="PageCategoryTitle.Text" xml:space="preserve">
+    <value>分类</value>
   </data>
   <data name="PageContentDetailPodcaster.Text" xml:space="preserve">
     <value>主播:</value>

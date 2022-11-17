@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.Toolkit.Uwp.UI.Controls;
+using PureRadio.Uwp.Models.Args;
 using PureRadio.Uwp.Models.Data.Content;
 using PureRadio.Uwp.Models.Data.Radio;
 using PureRadio.Uwp.Models.Enums;
@@ -17,7 +18,6 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
@@ -27,36 +27,28 @@ namespace PureRadio.Uwp.Views.Secondary
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class SearchPage : Page
+    public sealed partial class ContentCategoryPage : Page
     {
-        public SearchViewModel ViewModel => (SearchViewModel)DataContext;
-
-        public SearchPage()
+        public ContentCategoryViewModel ViewModel => (ContentCategoryViewModel)DataContext;
+        public ContentCategoryPage()
         {
             this.InitializeComponent();
 
-            DataContext = Ioc.Default.GetRequiredService<SearchViewModel>();
-
+            DataContext = Ioc.Default.GetRequiredService<ContentCategoryViewModel>();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            ViewModel.Keyword = (string)e.Parameter ?? string.Empty;
+            var Parameters = (ContentCategoryEventArgs)e.Parameter;
+            ViewModel.AttrId = Parameters?.AttributeId ?? 0;
+            ViewModel.CategoryTitle = Parameters?.CategoryTitle ?? string.Empty;
+            ViewModel.CategoryId = Parameters?.CategoryId ?? 0;
         }
 
-        private void RadioGridView_ItemClick(object sender, ItemClickEventArgs e)
+        private void AdaptiveGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            if (e.ClickedItem != null && e.ClickedItem is RadioInfoSearch radioInfo)
-            {
-                (sender as AdaptiveGridView).PrepareConnectedAnimation("RadioToDetailAni", radioInfo, "RadioCover");
-                ViewModel.Navigate(PageIds.RadioDetail, radioInfo.RadioId);
-            }
-        }
-
-        private void ContentGridView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            if (e.ClickedItem != null && e.ClickedItem is ContentInfoSearch contentInfo)
+            if (e.ClickedItem != null && e.ClickedItem is ContentInfoCategory contentInfo)
             {
                 (sender as AdaptiveGridView).PrepareConnectedAnimation("ContentToDetailAni", contentInfo, "ContentCover");
                 ViewModel.Navigate(PageIds.ContentDetail, contentInfo.ContentId);

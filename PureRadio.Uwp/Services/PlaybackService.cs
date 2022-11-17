@@ -111,6 +111,7 @@ namespace PureRadio.Uwp.Services
         {
             _transportControls = SystemMediaTransportControls.GetForCurrentView();
             AudioPlayer.CommandManager.IsEnabled = false;
+            _transportControls.IsEnabled = false;
             _transportControls.IsPlayEnabled = true;
             _transportControls.IsPauseEnabled = true;
             _transportControls.ButtonPressed += CustomTransportControls_ButtonPressed;
@@ -166,6 +167,7 @@ namespace PureRadio.Uwp.Services
 
         private void AudioPlayer_MediaEnded(MediaPlayer sender, object args)
         {
+            _transportControls.IsEnabled = false;
             PlayerStateChanged?.Invoke(this, new PlayerStateChangedEventArgs(
                     GetCurrentPlayerState()));
             _playItem = new PlayItemSnapshot(MediaPlayType.None, null, new Uri("ms-appx:///Assets/Image/DefaultCover.png"), string.Empty, string.Empty, 0, 0, 0);
@@ -200,7 +202,6 @@ namespace PureRadio.Uwp.Services
 
         private void UpdateProperties(PlayItemSnapshot playItem)
         {
-            var resources = new ResourceLoader();
             //MediaItemDisplayProperties props = _mediaPlaybackItem.GetDisplayProperties();
             //props.Type = Windows.Media.MediaPlaybackType.Music;
             //props.MusicProperties.Title = _currentType == MediaPlayType.RadioLive ? resources.GetString("LangLiveNow") : playItem.Title;
@@ -249,6 +250,7 @@ namespace PureRadio.Uwp.Services
                 //UpdateProperties(playItem);
                 //PlayerItemChanged?.Invoke(this, new PlayerItemChangedEventArgs(
                 //    _playItem));
+                _transportControls.IsEnabled = true;
                 _transportControls.IsPreviousEnabled = _transportControls.IsNextEnabled = false;
                 Play();
                 UpdateProperties(playItem);
@@ -319,6 +321,7 @@ namespace PureRadio.Uwp.Services
                 AudioPlayer.Source = _mediaPlaybackList;
                 _mediaPlaybackList.CurrentItemChanged += MediaPlaybackList_CurrentItemChanged;
                 _mediaPlaybackList.MoveTo(_radioPlayListIndex);
+                _transportControls.IsEnabled = true;
                 _transportControls.IsPreviousEnabled = _canPrevious;
                 _transportControls.IsNextEnabled = _canNext;
                 Play();
@@ -464,16 +467,14 @@ namespace PureRadio.Uwp.Services
             int count = 0;
             while (detail.RadioId == _playItem.MainId && detail.EndTime == _playItem.EndTime && detail.UpdateTime != TimeSpan.Zero)
             {
-                if (count < 5)
-                    await Task.Run(() =>
-                    {
-                        Thread.Sleep(1500);
-                    });
+                if (count < 4)
+                    await Task.Delay(5000);
+                else if (count < 10)
+                    await Task.Delay(10000);
                 else
-                    await Task.Run(() =>
-                    {
-                        Thread.Sleep(3000);
-                    });
+                {
+                    return;
+                }
                 detail = await _radioProvider.GetRadioDetailInfo(_playItem.MainId, CancellationToken.None);
                 count++;
             }
@@ -515,6 +516,7 @@ namespace PureRadio.Uwp.Services
             _playItem = playItem;
             _canPrevious = _contentPlayListIndex > 0;
             _canNext = _contentPlayListIndex < _playList.Count - 1;
+            _transportControls.IsEnabled = true;
             _transportControls.IsPreviousEnabled = _canPrevious;
             _transportControls.IsNextEnabled = _canNext;
             UpdateProperties(playItem);

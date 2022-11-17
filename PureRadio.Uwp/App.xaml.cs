@@ -166,6 +166,9 @@ namespace PureRadio.Uwp
                         .AddTransient<RadioDetailViewModel>()
                         .AddTransient<ContentDetailViewModel>()
                         .AddTransient<NativePlayerViewModel>()
+                        .AddTransient<RadioCategoryViewModel>()
+                        .AddTransient<ContentCategoryViewModel>()
+                        .AddTransient<FullScreenPlayerViewModel>()
                         // Build
                         .BuildServiceProvider());
             }
@@ -177,6 +180,7 @@ namespace PureRadio.Uwp
                 if (rootFrame.Content == null)
                 {
                     bool loadState = (e.PreviousExecutionState == ApplicationExecutionState.Terminated);
+                    ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(500, 500));
                     RootPage extendedSplash = new RootPage(e.SplashScreen, loadState);
                     Window.Current.Content = extendedSplash;
                     // 当导航堆栈尚未还原时，导航到第一页，

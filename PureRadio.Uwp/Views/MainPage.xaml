@@ -343,7 +343,6 @@
                     <Frame 
                         x:Name="ContentFrame"
                         IsTabStop="False"/>
-                    <Button Click="Button_Click"/>
                     <Grid 
                         x:Name="NowPlayFrame"
                         VerticalAlignment="Bottom"
@@ -352,7 +351,7 @@
                         <Grid 
                             x:Name="DynamicBackground" 
                             Height="84" VerticalAlignment="Bottom"
-                            Opacity="0"                            
+                            Opacity="0" Visibility="Collapsed"
                             Background="{ThemeResource MediaContainerHoverBrush}">
                             <animations:Implicit.ShowAnimations>
                                 <animations:OpacityAnimation From="0" To="1" Duration="0:0:0.3"/>
@@ -364,7 +363,7 @@
                         <Grid 
                             x:Name="PlayerContainer"
                             Height="84" 
-                            BorderThickness="0,1,0,0"
+                            BorderThickness="1,1,0,0"
                             BorderBrush="{ThemeResource NavigationViewContentGridBorderBrush}"
                             VerticalAlignment="Bottom"
                             PointerPressed="PlayerContainer_PointerPressed"
@@ -378,12 +377,18 @@
                                 <ColumnDefinition x:Name="ControlColumn" Width="auto"/>
                                 <ColumnDefinition x:Name="ExtControlColumn" Width="auto"/>
                             </Grid.ColumnDefinitions>
-                            <controls:ImageEx
-                                Grid.Column="0"
-                                Stretch="Fill" VerticalAlignment="Center"
-                                Width="60" Height="60"
-                                Margin="12,0" CornerRadius="4"
-                                Source="{x:Bind PlayerViewModel.Cover, Mode=OneWay}"/>
+                            <Border 
+                                x:Name="Cover"
+                                Grid.Column="0" 
+                                Margin="12,0" Height="60" Width="60" 
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                CornerRadius="4" BorderThickness="0">
+                                <Image 
+                                    Width="60" Height="60"
+                                    Stretch="UniformToFill"
+                                    Source="{x:Bind PlayerViewModel.Cover, Mode=OneWay}" />
+                            </Border>
                             <StackPanel 
                                 Grid.Column="1"
                                 Orientation="Vertical" VerticalAlignment="Center">
@@ -460,8 +465,7 @@
                                 VerticalAlignment="Center" 
                                 Orientation="Horizontal">
                                 <Button 
-                                    x:Name="FavButton" Margin="8,0" Height="42" Width="42" BorderThickness="0" Background="Transparent"
-                                    Visibility="{x:Bind PlayerViewModel.ShowElement,Mode=OneWay,Converter={StaticResource BooleanToVisibilityConverter}}"                                        >
+                                    x:Name="FavButton" Margin="8,0" Height="42" Width="42" BorderThickness="0" Background="Transparent"                                       >
                                     <FontIcon FontFamily="{StaticResource FluentIcons}" Glyph="&#xEB51;"/>
                                     <animations:Implicit.Animations>
                                         <animations:OffsetAnimation Duration="0:0:0.1"/>
@@ -533,11 +537,13 @@
                                                 <Slider
                                                     x:Name="VolumeControl" Orientation="Horizontal" 
                                                     Margin="8,0"
+                                                    Tapped="VolumeControl_Tapped"
                                                     PointerEntered="VolumeControl_PointerEntered"
                                                     PointerExited="VolumeControl_PointerExited"
                                                     IsEnabled="{x:Bind PlayerViewModel.IsMuted, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}"
                                                     Maximum="100" Minimum="0"
                                                     Height="32" Width="200"
+                                                    StepFrequency="1"
                                                     Value="{x:Bind PlayerViewModel.Volume, Mode=OneWay}"/>
                                             </StackPanel>
                                         </Flyout>
@@ -551,7 +557,7 @@
                                 Click="{x:Bind PlayerViewModel.Refresh}"
                                 Grid.Column="4" x:Name="ExtControlPanel"
                                 Margin="8,0,16,0" Height="42" Width="42" BorderThickness="0" Background="Transparent">
-                                <FontIcon FontFamily="{StaticResource FluentIcons}" Glyph="&#xE72C;" />
+                                <FontIcon FontSize="16" FontFamily="{StaticResource FluentIcons}" Glyph="&#xE72C;" />
                                 <animations:Implicit.Animations>
                                     <animations:OffsetAnimation Duration="0:0:0.1"/>
                                 </animations:Implicit.Animations>
@@ -574,26 +580,14 @@
                             Visibility="{x:Bind PlayerViewModel.ShowElement,Mode=OneWay,Converter={StaticResource BooleanToVisibilityConverter}}"
                             CornerRadius="0"
                             Height="32" Margin="0,2,0,0" VerticalAlignment="Top"
-                            IsEnabled="True"
-                            Width="auto">
-                            <Slider.Resources>
-                                <ResourceDictionary>
-                                    <ResourceDictionary.ThemeDictionaries>
-                                        <ResourceDictionary x:Key="Default">
-                                            <SolidColorBrush x:Key="SliderContainerBackgroundDisabled" Color="{StaticResource ControlFillColorTransparent}"/>
-                                            <SolidColorBrush x:Key="SliderThumbBackgroundDisabled" Color="{ThemeResource SystemAccentColorLight2}"/>
-                                            <SolidColorBrush x:Key="SliderTrackFillDisabled" Color="{StaticResource ControlStrongFillColorDefault}"/>
-                                            <SolidColorBrush x:Key="SliderTrackValueFillDisabled" Color="{ThemeResource SystemAccentColorLight2}"/>
-                                        </ResourceDictionary>
-                                        <ResourceDictionary x:Key="Light">
-                                            <SolidColorBrush x:Key="SliderContainerBackgroundDisabled" Color="{StaticResource ControlFillColorTransparent}"/>
-                                            <SolidColorBrush x:Key="SliderThumbBackgroundDisabled" Color="{ThemeResource SystemAccentColorDark1}"/>
-                                            <SolidColorBrush x:Key="SliderTrackFillDisabled" Color="{StaticResource ControlStrongFillColorDefault}"/>
-                                            <SolidColorBrush x:Key="SliderTrackValueFillDisabled" Color="{ThemeResource SystemAccentColorDark1}"/>
-                                        </ResourceDictionary>
-                                    </ResourceDictionary.ThemeDictionaries>
-                                </ResourceDictionary>
-                            </Slider.Resources>
+                            IsEnabled="{x:Bind PlayerViewModel.IsLive, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}"
+                            Style="{StaticResource CustomMediaPositionSliderStyle}">
+                            <animations:Implicit.ShowAnimations>
+                                <animations:OpacityAnimation From="0" To="1" Duration="0:0:0.3"/>
+                            </animations:Implicit.ShowAnimations>
+                            <animations:Implicit.HideAnimations>
+                                <animations:OpacityAnimation From="1" To="0" Duration="0:0:0.3"/>
+                            </animations:Implicit.HideAnimations>
                         </Slider>
                     </Grid>
                 </Grid>

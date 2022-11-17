@@ -2,6 +2,9 @@
 using PureRadio.Uwp.Adapters.Interfaces;
 using PureRadio.Uwp.Models.Data.Constants;
 using PureRadio.Uwp.Models.Data.Content;
+using PureRadio.Uwp.Models.Data.Radio;
+using PureRadio.Uwp.Models.Enums;
+using PureRadio.Uwp.Models.Local;
 using PureRadio.Uwp.Models.QingTing.Content;
 using PureRadio.Uwp.Models.QingTing.Radio;
 using PureRadio.Uwp.Providers.Interfaces;
@@ -70,6 +73,23 @@ namespace PureRadio.Uwp.Providers
             }
             while (items.Count < _total);
             return items;
+        }
+
+        public async Task<ResultSet<ContentInfoCategory>> GetContentCategoryResult(int categoryId, CancellationToken cancellationToken, int attrId = 0, int page = 1)
+        {
+            Dictionary<string, string> parameters = new()
+            {
+                {ServiceConstants.Params.Category, categoryId.ToString()},
+                {ServiceConstants.Params.Attributes, attrId.ToString() },
+                {ServiceConstants.Params.CurPage, page.ToString() },
+            };
+            var request = await _httpProvider.GetRequestMessageAsync(ApiConstants.Content.Category, HttpMethod.Get, parameters, RequestType.Default);
+            var response = await _httpProvider.SendAsync(request);
+            var result = await _httpProvider.ParseAsync<ContentCategoryResponse>(response);
+            var items = (cancellationToken.IsCancellationRequested || result.Data.Contents == null || result.Data.Contents?.Count == 0)
+                ? new List<ContentInfoCategory>()
+                : result.Data.Contents.Select(p => _contentAdapter.ConvertToContentInfoCategory(p)).ToList();
+            return new ResultSet<ContentInfoCategory>(items, result.Total <= page * 12);
         }
     }
 }

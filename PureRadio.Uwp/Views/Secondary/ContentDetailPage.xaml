@@ -92,20 +92,21 @@
                         <ColumnDefinition x:Name="InfoColuumn" Width="*"/>
                         <ColumnDefinition x:Name="ButtonColuumn" Width="auto"/>
                     </Grid.ColumnDefinitions>
-
-                    <controls:ImageEx
+                    <Border 
                         x:Name="Cover"
-                        Grid.Row="0" Grid.Column="0"
-                        Height="200" Width="200"
-                        Margin="20"
+                        Grid.Row="0" Grid.Column="0" 
+                        Margin="20" Height="200" Width="200" 
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
-                        CornerRadius="4"
-                        Source="{x:Bind ViewModel.Cover, Mode=OneWay}">
+                        CornerRadius="4" BorderThickness="0">
+                        <Image 
+                            Width="200" Height="200"
+                            Stretch="UniformToFill"
+                            Source="{x:Bind ViewModel.Cover, Mode=OneWay}" />
                         <animations:Implicit.Animations>
                             <animations:OffsetAnimation Duration="0:0:0.2"/>
                         </animations:Implicit.Animations>
-                    </controls:ImageEx>
+                    </Border>
                     <Grid
                         x:Name="TextInfoPannel"
                         Grid.Row="0" Grid.Column="1"
@@ -152,12 +153,15 @@
                                 HorizontalAlignment="Left"
                                 Margin="0"
                                 Padding="0,2,0,0"
+                                SelectionMode="None"
+                                IsItemClickEnabled="True"
+                                ItemClick="ContentTag_ItemClick"
                                 ItemsSource="{x:Bind ViewModel.Attributes, Mode=OneWay}"
                                 ItemContainerStyle="{StaticResource AttributesItemContainerStyle}">
                                 <GridView.ItemTemplate>
                                     <DataTemplate x:Name="AttributeTemplate" x:DataType="qingting:AttributesItem">
                                         <Grid Style="{StaticResource AttributesContainer}">
-                                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{x:Bind Name, Mode=OneWay}" Style="{StaticResource CaptionTextBlockStyle}"/>
+                                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{x:Bind Name}" Style="{StaticResource CaptionTextBlockStyle}"/>
                                         </Grid>
                                     </DataTemplate>
                                 </GridView.ItemTemplate>

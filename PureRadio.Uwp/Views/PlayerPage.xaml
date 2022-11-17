@@ -1,4 +1,5 @@
 ﻿<Page
+    x:Name="FullScreenPlayerPage"
     x:Class="PureRadio.Uwp.Views.PlayerPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -7,19 +8,369 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:animatedVisuals="using:Microsoft.UI.Xaml.Controls.AnimatedVisuals"
     xmlns:animations="using:Microsoft.Toolkit.Uwp.UI.Animations"
-    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:media="using:Microsoft.Toolkit.Uwp.UI.Media"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls" 
+    xmlns:convert="using:PureRadio.Uwp.Resources.Converter"
+    xmlns:viewmodels="using:PureRadio.Uwp.ViewModels" 
+    d:DataContext="{d:DesignInstance Type=viewmodels:FullScreenPlayerViewModel}"
     mc:Ignorable="d"
+    RequestedTheme="Dark"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+    <Page.RenderTransform>
+        <TranslateTransform/>
+    </Page.RenderTransform>
+    <Page.Resources>
+        <convert:AccountStateToDisplayConverter x:Key="AccountStateToDisplayConverter"/>
+        <convert:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <convert:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
+        <convert:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+        <convert:MediaPlaybackStateToIconConverter x:Key="MediaPlaybackStateToIconConverter"/>
+        <convert:MutedStateToIconConverter x:Key="MutedStateToIconConverter"/>
+        <convert:MediaPositionToDisplayConverter x:Key="MediaPositionToDisplayConverter"/>
+    </Page.Resources>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="48"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <Rectangle
-            x:Name="TitleBarHost"
-            Grid.Row="0"
-            MinHeight="48"
-            Fill="Transparent" />
+        <Border
+            Background="#EBEBEB"
+            x:Name="CoverLarge"
+            BorderThickness="0">
+            <Image
+                x:Name="CoverLargeImage" 
+                Stretch="UniformToFill"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                Source="{x:Bind ViewModel.Cover, Mode=OneWay}">
+                <media:UIElementExtensions.VisualFactory>
+                    <media:PipelineVisualFactory>
+                        <media:SaturationEffect x:Name="ImageSaturationEffect" Value="0.4" IsAnimatable="True"/>
+                    </media:PipelineVisualFactory>
+                </media:UIElementExtensions.VisualFactory>
+            </Image>
+        </Border>
+        <Grid x:Name="RootGrid">
+            <Grid.Background>
+                <media:AcrylicBrush 
+                    x:Name="blurBrush"
+                    BackgroundSource="Backdrop"
+                    TintColor="Black"
+                    TintOpacity="0.5"
+                    BlurAmount="100"/>
+            </Grid.Background>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="48"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Rectangle
+                x:Name="TitleBarHost"
+                Grid.Row="0"
+                MinHeight="48"
+                Fill="Transparent" />
+            <Grid x:Name="ContentGrid" Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <!-- Hide button -->
+                    <ColumnDefinition Width="Auto" />
+                    <!-- Stretch -->
+                    <ColumnDefinition Width="*" />
+                    <!-- Flex column -->
+                    <ColumnDefinition x:Name="RightPaddingColumn" Width="188" />
+                </Grid.ColumnDefinitions>
+                <Button
+                    x:Name="HideButton"
+                    Grid.Column="0"
+                    Style="{StaticResource TitleBarButtonStyle}"
+                    Click="HideButton_Click"
+                    Padding="6,0,0,0"
+                    TabIndex="1"
+                    ToolTipService.ToolTip="Hide">
+                    <Button.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="Back" />
+                    </Button.KeyboardAccelerators>
+                    <Viewbox
+                        Width="16"
+                        Height="16"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch">
+                        <muxc:AnimatedIcon>
+                            <animatedVisuals:AnimatedChevronDownSmallVisualSource />
+                            <muxc:AnimatedIcon.FallbackIconSource>
+                                <muxc:FontIconSource FontFamily="{StaticResource FluentIcons}" Glyph="&#xE96E;"/>
+                            </muxc:AnimatedIcon.FallbackIconSource>
+                        </muxc:AnimatedIcon>
+                    </Viewbox>
+                </Button>
+            </Grid>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" MinWidth="300" MaxWidth="360"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+                <Grid
+                    x:Name="PlayerPanel"
+                    Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="7*" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="3*" />
+                    </Grid.RowDefinitions>
+                    <Viewbox
+                        Grid.Row="0"
+                        Stretch="Uniform"   
+                        HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                        MaxWidth="360">
+                        <Border 
+                            x:Name="Cover"
+                            Margin="0,16" Height="200" Width="200" 
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Translation="0,0,16"
+                            Background="#EBEBEB"
+                            RenderTransformOrigin="0.5,0.5"
+                            CornerRadius="8" BorderThickness="0">
+                            <Border.RenderTransform>
+                                <ScaleTransform x:Name="ScaleTrans" ScaleX="1" ScaleY="1"/>
+                            </Border.RenderTransform>
+                            <Border.Shadow>
+                                <ThemeShadow />
+                            </Border.Shadow>
+                            <Border.Resources>
+                                <Storyboard x:Name="ScaleInTrans">
+                                    <DoubleAnimation Storyboard.TargetName="ScaleTrans" Storyboard.TargetProperty="ScaleX" To="0.8" Duration="0:0:0.2">
+                                        <DoubleAnimation.EasingFunction>
+                                            <CircleEase EasingMode="EaseOut"/>
+                                        </DoubleAnimation.EasingFunction>
+                                    </DoubleAnimation>
+                                    <DoubleAnimation Storyboard.TargetName="ScaleTrans" Storyboard.TargetProperty="ScaleY" To="0.8" Duration="0:0:0.2">
+                                        <DoubleAnimation.EasingFunction>
+                                            <CircleEase EasingMode="EaseOut"/>
+                                        </DoubleAnimation.EasingFunction>
+                                    </DoubleAnimation>
+                                </Storyboard>
+                                <Storyboard x:Name="ScaleOutTrans">
+                                    <DoubleAnimation Storyboard.TargetName="ScaleTrans" Storyboard.TargetProperty="ScaleX" To="1" Duration="0:0:0.2">
+                                        <DoubleAnimation.EasingFunction>
+                                            <CircleEase EasingMode="EaseOut"/>
+                                        </DoubleAnimation.EasingFunction>
+                                    </DoubleAnimation>
+                                    <DoubleAnimation Storyboard.TargetName="ScaleTrans" Storyboard.TargetProperty="ScaleY" To="1" Duration="0:0:0.2">
+                                        <DoubleAnimation.EasingFunction>
+                                            <CircleEase EasingMode="EaseOut"/>
+                                        </DoubleAnimation.EasingFunction>
+                                    </DoubleAnimation>
+                                </Storyboard>
+                            </Border.Resources>
+                            <Image 
+                                Width="200" Height="200"
+                                Stretch="UniformToFill"
+                                Source="{x:Bind ViewModel.Cover, Mode=OneWay}" />
+                            <animations:Implicit.Animations>
+                                <animations:OffsetAnimation Duration="0:0:0.2"/>
+                                <animations:ScaleAnimation Duration="0:0:0.1"/>
+                            </animations:Implicit.Animations>
+                        </Border>
+                    </Viewbox>
+                    <Grid
+                        Grid.Row="1"
+                        Margin="0,24,0,24">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+                        <StackPanel 
+                            Grid.Row="0"
+                            Grid.ColumnSpan="2"
+                            Orientation="Vertical" VerticalAlignment="Center">
+                            <TextBlock 
+                                Text="{x:Bind ViewModel.Title, Mode=OneWay}" 
+                                TextTrimming="CharacterEllipsis"
+                                MaxLines="1" FontWeight="Bold"
+                                Foreground="#FFFFFFFF"
+                                Style="{StaticResource SubtitleTextBlockStyle}"/>
+                            <TextBlock 
+                                Margin="0,4,0,0" 
+                                Text="{x:Bind ViewModel.SubTitle, Mode=OneWay}" 
+                                TextTrimming="CharacterEllipsis"
+                                MaxLines="1" FontWeight="Medium"
+                                Foreground="#C0FFFFFF"
+                                Style="{StaticResource SubtitleTextBlockStyle}"/>
+                        </StackPanel>
+                        <Slider 
+                            x:Name="MediaPosition"
+                            Grid.Row="1"
+                            Grid.ColumnSpan="2"
+                            Maximum="{x:Bind ViewModel.MediaTotalSeconds, Mode=OneWay}"
+                            Value="{x:Bind ViewModel.MediaNowPosition, Mode=OneWay}"
+                            Tapped="MediaPosition_Tapped"
+                            PointerEntered="MediaPosition_PointerEntered"
+                            PointerExited="MediaPosition_PointerExited"
+                            ThumbToolTipValueConverter="{StaticResource MediaPositionToDisplayConverter}"
+                            CornerRadius="2"
+                            Height="40" Margin="0,2,0,0" VerticalAlignment="Top"
+                            IsEnabled="{x:Bind ViewModel.IsLive, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}"
+                            Style="{StaticResource CustomMediaPositionSliderStyle}">
+                            <Slider.Resources>
+                                <ResourceDictionary>
+                                    <ResourceDictionary.ThemeDictionaries>
+                                        <ResourceDictionary x:Key="Default">
+                                            <SolidColorBrush x:Key="SliderOuterThumbBackground" Color="#66FFFFFF"/>
+                                            <SolidColorBrush x:Key="SliderThumbBorderBrush" Color="Transparent"/>
+                                            
+                                            <SolidColorBrush x:Key="SliderContainerBackground" Color="Transparent"/>
+                                            <SolidColorBrush x:Key="SliderThumbBackground" Color="#E6FFFFFF"/>                                            
+                                            <SolidColorBrush x:Key="SliderTrackFill" Color="#80FFFFFF"/>
+                                            <SolidColorBrush x:Key="SliderTrackValueFill" Color="#E6FFFFFF"/>
+
+                                            <SolidColorBrush x:Key="SliderContainerBackgroundPointerOver" Color="Transparent"/>
+                                            <SolidColorBrush x:Key="SliderThumbBackgroundPointerOver" Color="#E6FFFFFF"/>
+                                            <SolidColorBrush x:Key="SliderTrackFillPointerOver" Color="#8FFFFFFF"/>
+                                            <SolidColorBrush x:Key="SliderTrackValueFillPointerOver" Color="#FFFFFFFF"/>
+
+                                            <SolidColorBrush x:Key="SliderContainerBackgroundPressed" Color="Transparent"/>
+                                            <SolidColorBrush x:Key="SliderThumbBackgroundPressed" Color="#E6FFFFFF"/>
+                                            <SolidColorBrush x:Key="SliderTrackFillPressed" Color="#8FFFFFFF"/>
+                                            <SolidColorBrush x:Key="SliderTrackValueFillPressed" Color="#FFFFFFFF"/>
+                                        </ResourceDictionary>
+                                    </ResourceDictionary.ThemeDictionaries>
+                                </ResourceDictionary>
+                            </Slider.Resources>
+                        </Slider>
+                        <TextBlock 
+                            Grid.Row="2" Grid.Column="0"
+                            Width="58"
+                            Margin="0" VerticalAlignment="Center" HorizontalAlignment="Left" TextAlignment="Left"
+                            Visibility="{x:Bind ViewModel.IsLive, Mode=OneWay, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
+                            Foreground="#80FFFFFF"
+                            Text="{x:Bind ViewModel.NowPositonText, Mode=OneWay}"
+                            Style="{StaticResource BaseTextBlockStyle}"/>
+                        <TextBlock 
+                            Grid.Row="2" Grid.Column="0"
+                            Width="58"
+                            Margin="0" VerticalAlignment="Center" HorizontalAlignment="Left" TextAlignment="Left"
+                            Visibility="{x:Bind ViewModel.IsLive, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Foreground="#80FFFFFF"
+                            Text="{x:Bind ViewModel.NowTime, Mode=OneWay}"
+                            Style="{StaticResource BaseTextBlockStyle}"/>
+                        <TextBlock 
+                            Grid.Row="2" Grid.Column="1"
+                            Width="58"
+                            Margin="0" VerticalAlignment="Center" HorizontalAlignment="Right" TextAlignment="Right"
+                            Visibility="{x:Bind ViewModel.IsLive, Mode=OneWay, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
+                            Text="{x:Bind ViewModel.DurationText, Mode=OneWay}"
+                            Foreground="#80FFFFFF"
+                            Style="{StaticResource BaseTextBlockStyle}"/>
+                        <TextBlock 
+                            Grid.Row="2" Grid.Column="1"
+                            Width="58"
+                            Margin="0" VerticalAlignment="Center" HorizontalAlignment="Right" TextAlignment="Right"
+                            Visibility="{x:Bind ViewModel.IsLive, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Foreground="#80FFFFFF"
+                            Text="{x:Bind ViewModel.EndTime, Mode=OneWay}"
+                            Style="{StaticResource BaseTextBlockStyle}"/>
+                    </Grid>
+                    <Grid 
+                        x:Name="ButtonPanel"
+                        Grid.Row="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="24" />
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*" />
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="3*" />
+                        </Grid.ColumnDefinitions>
+                        <Button 
+                            Grid.Row="0" Grid.Column="0"
+                            HorizontalAlignment="Center" VerticalAlignment="Center"
+                            Click="{x:Bind ViewModel.TryPrevious}"
+                            IsEnabled="{x:Bind ViewModel.CanSkipPrevious, Mode=OneWay}" 
+                            Height="50" Width="50" BorderThickness="0" Background="Transparent">
+                            <FontIcon FontSize="24" FontFamily="{StaticResource FluentIcons}" Glyph="&#xF8AC;"/>
+                            <Button.Resources>
+                                <ResourceDictionary>
+                                    <ResourceDictionary.ThemeDictionaries>
+                                        <ResourceDictionary x:Key="Default">
+                                            <SolidColorBrush x:Key="ButtonBackgroundDisabled" Color="Transparent"/>
+                                        </ResourceDictionary>
+                                        <ResourceDictionary x:Key="Light">
+                                            <SolidColorBrush x:Key="ButtonBackgroundDisabled" Color="Transparent"/>
+                                        </ResourceDictionary>
+                                    </ResourceDictionary.ThemeDictionaries>
+                                </ResourceDictionary>
+                            </Button.Resources>
+                        </Button>
+                        <Button 
+                            Grid.Row="0" Grid.Column="1"
+                            HorizontalAlignment="Center" VerticalAlignment="Center"
+                            Click="{x:Bind ViewModel.TogglePlay}"
+                            Height="64" Width="64" BorderThickness="0" Background="Transparent">
+                            <FontIcon FontSize="40" FontFamily="{StaticResource FluentIcons}" Glyph="{x:Bind ViewModel.PlayerState, Mode=OneWay, Converter={StaticResource MediaPlaybackStateToIconConverter}}"/>
+                        </Button>
+                        <Button 
+                            Grid.Row="0" Grid.Column="2"
+                            HorizontalAlignment="Center" VerticalAlignment="Center"
+                            Click="{x:Bind ViewModel.TryNext}"
+                            IsEnabled="{x:Bind ViewModel.CanSkipNext, Mode=OneWay}" 
+                            Height="50" Width="50" BorderThickness="0" Background="Transparent">
+                            <FontIcon FontSize="24" FontFamily="{StaticResource FluentIcons}" Glyph="&#xF8AD;"/>
+                            <Button.Resources>
+                                <ResourceDictionary>
+                                    <ResourceDictionary.ThemeDictionaries>
+                                        <ResourceDictionary x:Key="Default">
+                                            <SolidColorBrush x:Key="ButtonBackgroundDisabled" Color="Transparent"/>
+                                        </ResourceDictionary>
+                                        <ResourceDictionary x:Key="Light">
+                                            <SolidColorBrush x:Key="ButtonBackgroundDisabled" Color="Transparent"/>
+                                        </ResourceDictionary>
+                                    </ResourceDictionary.ThemeDictionaries>
+                                </ResourceDictionary>
+                            </Button.Resources>
+                        </Button>
+                        <Button 
+                            Grid.Row="2" Grid.Column="0"
+                            HorizontalAlignment="Center" VerticalAlignment="Center"
+                            x:Name="VolumeButton" Height="48" Width="48" BorderThickness="0" Background="Transparent">
+                            <FontIcon FontSize="24" FontFamily="{StaticResource FluentIcons}" Glyph="&#xE767;" />
+                            <Button.Flyout>
+                                <Flyout>
+                                    <Flyout.FlyoutPresenterStyle>
+                                        <Style TargetType="FlyoutPresenter">
+                                            <Setter Property="Padding" Value="8"/>
+                                            <Setter Property="CornerRadius" Value="8"/>
+                                        </Style>
+                                    </Flyout.FlyoutPresenterStyle>
+                                    <StackPanel Height="42" Orientation="Horizontal">
+                                        <Button 
+                                            Click="{x:Bind ViewModel.Mute}"
+                                            Height="42" Width="42" BorderThickness="0" Background="Transparent">
+                                            <FontIcon 
+                                                FontFamily="{StaticResource FluentIcons}" Glyph="{x:Bind ViewModel.IsMuted, Mode=OneWay, Converter={StaticResource MutedStateToIconConverter}}"/>
+                                        </Button>
+                                        <Slider
+                                            x:Name="VolumeControl" Orientation="Horizontal" 
+                                            Margin="8,0"
+                                            Tapped="VolumeControl_Tapped"
+                                            PointerEntered="VolumeControl_PointerEntered"
+                                            PointerExited="VolumeControl_PointerExited"
+                                            IsEnabled="{x:Bind ViewModel.IsMuted, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}"
+                                            Maximum="100" Minimum="0"
+                                            Height="32" Width="200"
+                                            StepFrequency="1"
+                                            Value="{x:Bind ViewModel.Volume, Mode=OneWay}"/>
+                                    </StackPanel>
+                                </Flyout>
+                            </Button.Flyout>
+                        </Button>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>
     </Grid>
 </Page>

@@ -28,7 +28,10 @@ namespace PureRadio.Uwp.Models.Data.Constants
             public const string CurPage = "curpage";
             public const string PageSize = "pagesize";
             public const string Order = "order";
-
+            public const string Page = "page";
+            public const string CategoryId = "category_id";
+            public const string Category = "category";
+            public const string Attributes = "attrs";
         }
 
         public static class Query

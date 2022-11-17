@@ -85,6 +85,16 @@ namespace PureRadio.Uwp.Views
 
             MediaPosition.AddHandler(PointerReleasedEvent, new PointerEventHandler(MediaPositionLive_PointerReleased), true);
             VolumeControl.AddHandler(PointerReleasedEvent, new PointerEventHandler(VolumeControl_PointerReleased), true);
+
+            ApplicationViewTitleBar titleBar = ApplicationView.GetForCurrentView().TitleBar;
+            Color foreground = App.RootTheme switch
+            {
+                ElementTheme.Dark => Colors.White,
+                ElementTheme.Light => Colors.Black,
+                _ => Windows.UI.Xaml.Application.Current.RequestedTheme == ApplicationTheme.Dark ? Colors.White : Colors.Black,
+            };
+            titleBar.ButtonForegroundColor = foreground;
+            AppTitleTextBlock.Foreground = new SolidColorBrush(foreground);
         }
 
         private void MainPage_Unloaded(object sender, RoutedEventArgs e)
@@ -108,11 +118,11 @@ namespace PureRadio.Uwp.Views
         {
             if(e.Type == NavigationType.Main)
             {
-                NavigateToMainView(e.PageId, e.Parameter);
+                NavigateToMainView(e.PageId, e.TransitionInfo, e.Parameter);
             }
             else if(e.Type == NavigationType.Secondary)
             {
-                NavigateToSecondaryView(e.PageId, e.Parameter);
+                NavigateToSecondaryView(e.PageId, e.TransitionInfo, e.Parameter);
             }
         }
 
@@ -163,7 +173,7 @@ namespace PureRadio.Uwp.Views
             // Add handler for ContentFrame navigation.
             ContentFrame.Navigated += On_Navigated;
             // NavView doesn't load any page by default, so load home page.
-            NavigateToMainView(PageIds.Home);
+            NavigateToMainView(PageIds.Home, new EntranceNavigationTransitionInfo());
             // Listen to the window directly so the app responds
             // to accelerator keys regardless of which element has focus.
             Window.Current.CoreWindow.Dispatcher.AcceleratorKeyActivated +=
@@ -172,10 +182,12 @@ namespace PureRadio.Uwp.Views
             Window.Current.CoreWindow.PointerPressed += CoreWindow_PointerPressed;
 
             SystemNavigationManager.GetForCurrentView().BackRequested += System_BackRequested;
+
+            NavigationCacheMode = NavigationCacheMode.Enabled;
         }
 
 
-        private void NavigateToMainView(PageIds pageId, object parameter = null)
+        private void NavigateToMainView(PageIds pageId, NavigationTransitionInfo transitionInfo, object parameter = null)
         {
             Type pageType = null;
             switch (pageId)
@@ -203,13 +215,13 @@ namespace PureRadio.Uwp.Views
             {
                 if(_currentPageId != pageId)
                 {
-                    ContentFrame.Navigate(pageType, parameter, new EntranceNavigationTransitionInfo());
+                    ContentFrame.Navigate(pageType, parameter, transitionInfo);
                     _currentPageId = pageId;
                 }
             }
         }
 
-        private void NavigateToSecondaryView(PageIds pageId, object parameter = null)
+        private void NavigateToSecondaryView(PageIds pageId, NavigationTransitionInfo transitionInfo, object parameter = null)
         {
             Type pageType = null;
             switch (pageId)
@@ -229,10 +241,16 @@ namespace PureRadio.Uwp.Views
                 case PageIds.ContentDetail:
                     pageType = typeof(ContentDetailPage);
                     break;
+                case PageIds.RadioCategory:
+                    pageType = typeof(RadioCategoryPage);
+                    break;
+                case PageIds.ContentCategory:
+                    pageType = typeof(ContentCategoryPage);
+                    break;
             }
             if (pageType != null)
             {
-                ContentFrame.Navigate(pageType, parameter, new EntranceNavigationTransitionInfo());
+                ContentFrame.Navigate(pageType, parameter, transitionInfo);
                 _currentPageId = pageId;
             }
         }
@@ -268,6 +286,16 @@ namespace PureRadio.Uwp.Views
                 item = _secondaryPages.FirstOrDefault(p => p.Page == e.SourcePageType);
                 if (item.Tag != null) _currentPageId = item.pageIds;
             }
+
+            if(e.NavigationMode == NavigationMode.New)
+            {
+                ConnectedAnimation animation =
+                ConnectedAnimationService.GetForCurrentView().GetAnimation("PlayerToMainAni");
+                if (animation != null)
+                {
+                    animation.TryStart(Cover);
+                }
+            }            
         }
 
         private bool TryGoBack()
@@ -326,12 +354,12 @@ namespace PureRadio.Uwp.Views
 
         private void PlayerContainer_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
-            ViewModel.Navigate(PageIds.Player);
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            ViewModel.Navigate(PageIds.Player);
+            if (PlayerViewModel.ShowElement)
+            {
+                ConnectedAnimationService.GetForCurrentView()
+                    .PrepareToAnimate("MainToPlayerAni", Cover);
+                ViewModel.Navigate(PageIds.Player);
+            }                
         }
 
         private void BackButton_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)

@@ -19,6 +19,7 @@ using System.Windows.Input;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace PureRadio.Uwp.ViewModels
@@ -76,7 +77,6 @@ namespace PureRadio.Uwp.ViewModels
             {
                 Interval = TimeSpan.FromMilliseconds(350),
             };
-            _suggestionTimer.Tick += OnSuggestionTimerTickAsync;
             var resourceLoader = Windows.ApplicationModel.Resources.ResourceLoader.GetForCurrentView();
             _noResultTip = resourceLoader.GetString("LangSearchNoResultTip");
             UserPicture = new BitmapImage(new Uri("ms-appx:///Assets/Image/DefaultAvatar.png"));
@@ -89,10 +89,12 @@ namespace PureRadio.Uwp.ViewModels
             AccountState = accountProvider.State;
             GetAccountInfo();
             accountProvider.StateChanged += AccountStateChanged;
+            _suggestionTimer.Tick += OnSuggestionTimerTickAsync;
         }
 
         protected override void OnDeactivated()
         {
+            _suggestionTimer.Tick -= OnSuggestionTimerTickAsync;
             accountProvider.StateChanged -= AccountStateChanged;
             base.OnDeactivated();
         }
@@ -109,13 +111,13 @@ namespace PureRadio.Uwp.ViewModels
             switch (type)
             {
                 case NavigationType.Main:
-                    navigate.NavigateToMainView(pageId, parameter);
+                    navigate.NavigateToMainView(pageId, new EntranceNavigationTransitionInfo(), parameter);
                     break;
                 case NavigationType.Secondary:
-                    navigate.NavigateToSecondaryView(pageId, parameter);
+                    navigate.NavigateToSecondaryView(pageId, new EntranceNavigationTransitionInfo(), parameter);
                     break;
                 case NavigationType.Player:
-                    navigate.NavigateToPlayView((PlayItemSnapshot)parameter);
+                    navigate.NavigateToPlayView(new EntranceNavigationTransitionInfo(), false);
                     break;
                 default:
                     break;

@@ -102,20 +102,21 @@
                         <ColumnDefinition x:Name="InfoColuumn" Width="*"/>
                         <ColumnDefinition x:Name="ButtonColuumn" Width="auto"/>
                     </Grid.ColumnDefinitions>
-                    
-                    <controls:ImageEx
+                    <Border 
                         x:Name="Cover"
-                        Grid.Row="0" Grid.Column="0"
-                        Height="200" Width="200"
-                        Margin="20"
+                        Grid.Row="0" Grid.Column="0" 
+                        Margin="20" Height="200" Width="200" 
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
-                        CornerRadius="4"
-                        Source="{x:Bind ViewModel.Cover, Mode=OneWay}">
+                        CornerRadius="4" BorderThickness="0">
+                        <Image 
+                            Width="200" Height="200"
+                            Stretch="UniformToFill"
+                            Source="{x:Bind ViewModel.Cover, Mode=OneWay}" />
                         <animations:Implicit.Animations>
                             <animations:OffsetAnimation Duration="0:0:0.2"/>
                         </animations:Implicit.Animations>
-                    </controls:ImageEx>
+                    </Border>
                     <Grid
                         x:Name="TextInfoPannel"
                         Grid.Row="0" Grid.Column="1"
@@ -152,7 +153,9 @@
                                 MaxLines="4"
                                 TextTrimming="CharacterEllipsis" Margin="0,12" 
                                 Text="{x:Bind ViewModel.Description, Mode=OneWay}" Style="{StaticResource BodyTextBlockStyle}"/>
-                            <Button x:Name="RadioTag" CornerRadius="15" Width="80" Height="30">
+                            <Button 
+                                Click="{x:Bind ViewModel.NavigateToCategory}"
+                                x:Name="RadioTag" CornerRadius="15" Width="80" Height="30">
                                 <TextBlock Text="{x:Bind ViewModel.TopCategoryTitle, Mode=OneWay}" Style="{StaticResource CaptionTextBlockStyle}"/>
                                 <animations:Implicit.Animations>
                                     <animations:OffsetAnimation Duration="0:0:0.2"/>
@@ -187,6 +190,9 @@
                             <animations:OffsetAnimation Duration="0:0:0.3"/>
                         </animations:Implicit.Animations>
                     </Grid>
+                    <animations:Implicit.Animations>
+                        <animations:SizeAnimation Duration="0:0:0.3"/>
+                    </animations:Implicit.Animations>
                 </Grid>
                 <Grid
                     x:Name="PlayListPanel"

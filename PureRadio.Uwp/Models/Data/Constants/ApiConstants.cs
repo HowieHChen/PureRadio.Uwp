@@ -118,6 +118,10 @@ namespace PureRadio.Uwp.Models.Data.Constants
             /// 电台播放(回放) https://lcache.qtfm.cn/cache/{年月日:20220531}/{广播电台id}/{广播电台id}_{年月日}_{开始时间}_{结束时间}_24_0.aac
             /// </summary>
             public const string OnDemand = "https://lcache.qtfm.cn/cache/{0}/{1}/{2}_{3}_{4}_{5}_24_0.aac";
+            /// <summary>
+            /// 根据分类请求电台
+            /// </summary>
+            public const string Category = "http://rapi.qingting.fm/channels";
         }
 
         /// <summary>
@@ -137,6 +141,10 @@ namespace PureRadio.Uwp.Models.Data.Constants
             /// 专辑播放
             /// </summary>
             public const string Play = "https://audio.qtfm.cn/audiostream/redirect/{0}/{1}";
+            /// <summary>
+            /// 根据分类请求专辑
+            /// </summary>
+            public const string Category = "https://i.qingting.fm/capi/neo-channel-filter";
         }
 
         /// <summary>

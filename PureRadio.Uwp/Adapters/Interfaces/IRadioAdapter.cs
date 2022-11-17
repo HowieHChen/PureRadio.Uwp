@@ -26,5 +26,12 @@ namespace PureRadio.Uwp.Adapters.Interfaces
         /// <param name="item">将来自 Web 的电台播放列表项.</param>
         /// <returns><see cref="RadioPlaylistDetail"/>.</returns>
         RadioPlaylistDetail ConvertToRadioPlaylistItem(RadioPlaylistItem item);
+
+        /// <summary>
+        /// 将来自 Web 的电台分类结果项 <see cref="RadioCategoryItem"/> 转换为本地电台分类结果项 <see cref="RadioInfoCategory"/> .
+        /// </summary>
+        /// <param name="item">来自 Web 的电台分类结果项.</param>
+        /// <returns><see cref="RadioInfoCategory"/>.</returns>
+        RadioInfoCategory ConvertToRadioInfoCategory(RadioCategoryItem item);
     }
 }

@@ -162,6 +162,48 @@
   <data name="LangPodcasterUnknown" xml:space="preserve">
     <value>Unknown</value>
   </data>
+  <data name="LangRadioCategory429" xml:space="preserve">
+    <value>Traffic</value>
+  </data>
+  <data name="LangRadioCategory430" xml:space="preserve">
+    <value>Sports</value>
+  </data>
+  <data name="LangRadioCategory431" xml:space="preserve">
+    <value>International</value>
+  </data>
+  <data name="LangRadioCategory432" xml:space="preserve">
+    <value>Art</value>
+  </data>
+  <data name="LangRadioCategory433" xml:space="preserve">
+    <value>News</value>
+  </data>
+  <data name="LangRadioCategory434" xml:space="preserve">
+    <value>Dialect</value>
+  </data>
+  <data name="LangRadioCategory435" xml:space="preserve">
+    <value>Travel</value>
+  </data>
+  <data name="LangRadioCategory436" xml:space="preserve">
+    <value>Opera</value>
+  </data>
+  <data name="LangRadioCategory438" xml:space="preserve">
+    <value>Life</value>
+  </data>
+  <data name="LangRadioCategory439" xml:space="preserve">
+    <value>Business</value>
+  </data>
+  <data name="LangRadioCategory440" xml:space="preserve">
+    <value>Comprehensive</value>
+  </data>
+  <data name="LangRadioCategory441" xml:space="preserve">
+    <value>Urban</value>
+  </data>
+  <data name="LangRadioCategory442" xml:space="preserve">
+    <value>Music</value>
+  </data>
+  <data name="LangRadioCategoryUnknown" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
   <data name="LangSearchNoResultTip" xml:space="preserve">
     <value>No results found</value>
   </data>
@@ -239,6 +281,12 @@
   </data>
   <data name="navSettings.Content" xml:space="preserve">
     <value>Settings</value>
+  </data>
+  <data name="PageCategoryNoResult.Text" xml:space="preserve">
+    <value>No results found for you</value>
+  </data>
+  <data name="PageCategoryTitle.Text" xml:space="preserve">
+    <value>Category</value>
   </data>
   <data name="PageContentDetailPodcaster.Text" xml:space="preserve">
     <value>Podcasters:</value>

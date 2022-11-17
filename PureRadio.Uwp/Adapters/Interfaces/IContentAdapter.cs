@@ -30,5 +30,12 @@ namespace PureRadio.Uwp.Adapters.Interfaces
         /// <param name="version">将来自 Web 的专辑节目版本号.</param>
         /// <returns><see cref="ContentPlaylistDetail"/>.</returns>
         ContentPlaylistDetail ConvertToContentPlaylistItem(ContentProgramListItem item, string version);
+
+        /// <summary>
+        /// 将来自 Web 的分类专辑节目列表项 <see cref="ContentCategoryItem"/> 转换为本地分类专辑节目列表项 <see cref="ContentInfoCategory"/> .
+        /// </summary>
+        /// <param name="item">来自 Web 的分类专辑节目列表项.</param>
+        /// <returns><see cref="ContentInfoCategory"/>.</returns>
+        ContentInfoCategory ConvertToContentInfoCategory(ContentCategoryItem item);
     }
 }

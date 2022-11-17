@@ -1,5 +1,6 @@
 ﻿using PureRadio.Uwp.Models.Data.Radio;
 using PureRadio.Uwp.Models.Enums;
+using PureRadio.Uwp.Models.Local;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,5 +39,15 @@ namespace PureRadio.Uwp.Providers.Interfaces
         /// <param name="cancellationToken">异步中止令牌.</param>
         /// <returns>电台播放列表集合</returns>
         Task<List<RadioPlaylistDetail>> GetRadioPlaylistDetail(int radioId, PlaylistDay day, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// 获取指定分类的电台结果.
+        /// </summary>
+        /// <param name="categoryId">分类Id.</param>
+        /// <param name="cancellationToken">异步中止令牌.</param>
+        /// <param name="page">页数</param>
+        /// <param name="pageSize">页大小</param>
+        /// <returns></returns>
+        Task<ResultSet<RadioInfoCategory>> GetRadioCategoryResult(int categoryId, CancellationToken cancellationToken, int page = 1, int pageSize = 30);
     }
 }

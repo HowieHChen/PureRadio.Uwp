@@ -55,5 +55,14 @@ namespace PureRadio.Uwp.Adapters
                 item.StartTime, item.EndTime, item.Duration, item.Day, 
                 item.RadioId, item.ProgramId, item.Title, boardcasters);
         }
+
+        public RadioInfoCategory ConvertToRadioInfoCategory(RadioCategoryItem item)
+        {
+            var resourceLoader = new ResourceLoader();
+            string nowPlaying = item.Nowplaying?.Title ?? resourceLoader.GetString("LangLiveProgramUnknown");
+            return new RadioInfoCategory(
+                item.RadioId, new Uri(item.Cover), item.Title, 
+                nowPlaying, item.Description, item.AudienceCount.ToString());
+        }
     }
 }

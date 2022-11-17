@@ -17,6 +17,7 @@ namespace PureRadio.Uwp.Models.Enums
         None = -1,
 
         /// 一级页面[0,100)
+        Main = 0,
 
         /// <summary>
         /// 主页
@@ -64,6 +65,16 @@ namespace PureRadio.Uwp.Models.Enums
         /// 内容详细信息页
         /// </summary>
         ContentDetail = 103,
+
+        /// <summary>
+        /// 电台分类结果页
+        /// </summary>
+        RadioCategory = 104,
+
+        /// <summary>
+        /// 内容分类结果页
+        /// </summary>
+        ContentCategory = 105,
 
         /// <summary>
         /// 全屏的播放页

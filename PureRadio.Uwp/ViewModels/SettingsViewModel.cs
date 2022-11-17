@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Toolkit.Uwp.UI;
 using Newtonsoft.Json.Linq;
 using PureRadio.Uwp.Models.Data.Constants;
 using PureRadio.Uwp.Models.Enums;
@@ -133,9 +134,11 @@ namespace PureRadio.Uwp.ViewModels
             Language = savedLanguage;
         }
 
-        public void ClearCache()
+        public async void ClearCache()
         {
             ClearingCache = true;
+            await ImageCache.Instance.ClearAsync();
+            ClearingCache = false;
         }
     }
 }

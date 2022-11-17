@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Media.Animation;
 
 namespace PureRadio.Uwp.Models.Args
 {
@@ -23,6 +24,25 @@ namespace PureRadio.Uwp.Models.Args
             Type = type;
             PageId = pageId;
             Parameter = parameter;
+            TransitionInfo = new EntranceNavigationTransitionInfo();
+        }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AppNavigationEventArgs"/> class.
+        /// </summary>
+        /// <param name="type">导航类型.</param>
+        /// <param name="pageId">导航页面 Id.</param>
+        /// <param name="parameter">导航参数.</param>\
+        /// <param name="transitionInfo">导航动画.</param>
+        public AppNavigationEventArgs(
+            NavigationType type,
+            PageIds pageId,
+            object parameter,
+            NavigationTransitionInfo transitionInfo)
+        {
+            Type = type;
+            PageId = pageId;
+            Parameter = parameter;
+            TransitionInfo = transitionInfo;
         }
 
         /// <summary>
@@ -34,6 +54,11 @@ namespace PureRadio.Uwp.Models.Args
         /// 页面 Id.
         /// </summary>
         public PageIds PageId { get; }
+
+        /// <summary>
+        /// 导航动画.
+        /// </summary>
+        public NavigationTransitionInfo TransitionInfo { get; }
 
         /// <summary>
         /// 导航参数.

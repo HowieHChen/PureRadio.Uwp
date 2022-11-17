@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Core;
+using Windows.UI.Xaml.Media.Animation;
 
 namespace PureRadio.Uwp.Services
 {
@@ -18,31 +19,31 @@ namespace PureRadio.Uwp.Services
 
         public event EventHandler<AppNavigationEventArgs> Navigating;
 
-        public void NavigateToMainView(PageIds pageId, object parameter = null)
+        public void NavigateToMainView(PageIds pageId, NavigationTransitionInfo transitionInfo, object parameter = null)
         {
             //if (pageId != MainViewId)
             //{
             //    MainViewId = pageId;
                 
             //}
-            var args = new AppNavigationEventArgs(NavigationType.Main, pageId, parameter);
+            var args = new AppNavigationEventArgs(NavigationType.Main, pageId, parameter, transitionInfo);
             Navigating?.Invoke(this, args);
         }
 
-        public void NavigateToSecondaryView(PageIds pageId, object parameter = null)
+        public void NavigateToSecondaryView(PageIds pageId, NavigationTransitionInfo transitionInfo, object parameter = null)
         {
             //if (pageId != SecondaryViewId)
             //{
             //    SecondaryViewId = pageId;
                 
             //}
-            var args = new AppNavigationEventArgs(NavigationType.Secondary, pageId, parameter);
+            var args = new AppNavigationEventArgs(NavigationType.Secondary, pageId, parameter, transitionInfo);
             Navigating?.Invoke(this, args);
         }
 
-        public void NavigateToPlayView(PlayItemSnapshot parameter)
+        public void NavigateToPlayView(NavigationTransitionInfo transitionInfo, bool back = false)
         {
-            var args = new AppNavigationEventArgs(NavigationType.Player, PageIds.Player, parameter);
+            var args = new AppNavigationEventArgs(NavigationType.Player, PageIds.Player, back, transitionInfo);
             Navigating?.Invoke(this, args);
         }
     }

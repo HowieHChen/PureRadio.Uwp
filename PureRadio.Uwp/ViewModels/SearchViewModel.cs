@@ -15,6 +15,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.UI.Xaml.Media.Animation;
 
 namespace PureRadio.Uwp.ViewModels
 {
@@ -37,9 +38,6 @@ namespace PureRadio.Uwp.ViewModels
 
         [ObservableProperty]
         private bool _isEmpty;
-
-        [ObservableProperty]
-        private bool _noResult;
 
         public ICommand RadioResultCommand { get; }
 
@@ -143,7 +141,7 @@ namespace PureRadio.Uwp.ViewModels
         {
             if (pageId == PageIds.RadioDetail || pageId == PageIds.ContentDetail)
             {
-                navigate.NavigateToSecondaryView(pageId, parameter);
+                navigate.NavigateToSecondaryView(pageId, new EntranceNavigationTransitionInfo(), parameter);
             }
         }
     }

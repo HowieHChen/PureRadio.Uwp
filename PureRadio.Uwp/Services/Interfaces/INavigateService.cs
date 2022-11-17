@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Core;
+using Windows.UI.Xaml.Media.Animation;
 
 namespace PureRadio.Uwp.Services.Interfaces
 {
@@ -31,20 +32,23 @@ namespace PureRadio.Uwp.Services.Interfaces
         /// 在主视图中进行导航，传入的 PageIds 应该是主视图的页面 Id.
         /// </summary>
         /// <param name="pageId">页面 Id.</param>
+        /// <param name="transitionInfo">导航动画.</param>
         /// <param name="parameter">导航参数.</param>
-        void NavigateToMainView(PageIds pageId, object parameter = null);
+        void NavigateToMainView(PageIds pageId, NavigationTransitionInfo transitionInfo, object parameter = null);
 
         /// <summary>
         /// 导航到指定的二级页面，传入的 PageIds 应该是二级页面的页面 Id.
         /// </summary>
         /// <param name="pageId">页面 Id.</param>
+        /// <param name="transitionInfo">导航动画.</param>
         /// <param name="parameter">导航参数.</param>
-        void NavigateToSecondaryView(PageIds pageId, object parameter = null);
+        void NavigateToSecondaryView(PageIds pageId, NavigationTransitionInfo transitionInfo, object parameter = null);
 
         /// <summary>
-        /// 导航到播放页，传入播放参数.
+        /// 导航到播放页.
         /// </summary>
-        /// <param name="parameter">播放参数.</param>
-        void NavigateToPlayView(PlayItemSnapshot parameter);
+        /// <param name="transitionInfo">导航动画.</param>
+        /// <param name="back">返回主页面标志.</param>
+        void NavigateToPlayView(NavigationTransitionInfo transitionInfo, bool back = false);
     }
 }
