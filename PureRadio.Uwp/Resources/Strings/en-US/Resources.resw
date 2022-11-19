@@ -136,10 +136,10 @@
     <value>listening</value>
   </data>
   <data name="LangIsFavFalse" xml:space="preserve">
-    <value>Add to favorites</value>
+    <value>Add to library</value>
   </data>
   <data name="LangIsFavTrue" xml:space="preserve">
-    <value>Added to favorites</value>
+    <value>Added to library</value>
   </data>
   <data name="LangIsFreeFalse.Text" xml:space="preserve">
     <value>Paid content</value>
