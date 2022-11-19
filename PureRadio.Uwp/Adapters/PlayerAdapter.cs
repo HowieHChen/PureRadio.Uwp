@@ -41,6 +41,12 @@ namespace PureRadio.Uwp.Adapters
                 MediaPlayType.RadioLive, sourceUri, item.Cover, item.Nowplaying, item.Title, item.RadioId, 0, duration, item.StartTIme, item.EndTime);
         }
 
+        public PlayItemSnapshot ConvertToPlayItemSnapshot(ContentInfoDetail item)
+        {
+            return new PlayItemSnapshot(
+                MediaPlayType.ContentDemand, null, item.Cover, item.Title, item.Title, item.ContentId, 0, 0);
+        }
+
         private PlayItemSnapshot ConvertToPlayItemSnapshot(RadioPlaylistDetail item, Uri cover, string radioTitle)
         {
             int today = (int)DateTime.Today.DayOfWeek + 1;

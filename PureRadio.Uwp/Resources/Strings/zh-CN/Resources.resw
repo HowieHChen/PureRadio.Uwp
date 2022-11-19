@@ -135,11 +135,17 @@
   <data name="LangAudienceCount.Text" xml:space="preserve">
     <value>听众</value>
   </data>
+  <data name="LangIsFavFalse" xml:space="preserve">
+    <value>收藏</value>
+  </data>
+  <data name="LangIsFavTrue" xml:space="preserve">
+    <value>已收藏</value>
+  </data>
   <data name="LangIsFreeFalse.Text" xml:space="preserve">
     <value>付费内容</value>
   </data>
   <data name="LangLiveNow" xml:space="preserve">
-    <value>正在直播</value>
+    <value>直播</value>
   </data>
   <data name="LangLiveProgramUnknown" xml:space="preserve">
     <value>无</value>
@@ -302,6 +308,27 @@
   </data>
   <data name="PageDetailCantPlayTip.Title" xml:space="preserve">
     <value>暂时无法播放</value>
+  </data>
+  <data name="PageLibraryAddTime.Text" xml:space="preserve">
+    <value>添加时间: </value>
+  </data>
+  <data name="PageLibraryDelFavButton.Content" xml:space="preserve">
+    <value>移除</value>
+  </data>
+  <data name="PageLibrarySourceContent.Content" xml:space="preserve">
+    <value>内容</value>
+  </data>
+  <data name="PageLibrarySourceHistory.Content" xml:space="preserve">
+    <value>历史</value>
+  </data>
+  <data name="PageLibrarySourceRadio.Content" xml:space="preserve">
+    <value>电台</value>
+  </data>
+  <data name="PageLibraryTitle.Text" xml:space="preserve">
+    <value>库</value>
+  </data>
+  <data name="PageLibraryTitleButton.Content" xml:space="preserve">
+    <value>清除所有</value>
   </data>
   <data name="PageRadioDetailNavBYDAY.Content" xml:space="preserve">
     <value>前天</value>

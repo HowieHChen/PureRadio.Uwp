@@ -3,19 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml.Data;
 
 namespace PureRadio.Uwp.Resources.Converter
 {
-    public class BooleanToDisplayConverter : IValueConverter
+    public class FavStateToIconConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            bool status = (bool)value;
-            var resourceLoader = new ResourceLoader();
-            if (status) return resourceLoader.GetString("LangSettingsSwitchOn");
-            else return resourceLoader.GetString("LangSettingsSwitchOff");
+            return ((bool?)value ?? false) ? "\xEB52" : "\xEB51";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

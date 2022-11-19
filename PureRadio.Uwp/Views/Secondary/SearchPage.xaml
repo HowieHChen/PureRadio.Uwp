@@ -161,11 +161,36 @@
         Background="{ThemeResource LayerFillColorDefaultBrush}"
         BorderThickness="1,1,0,0"
         BorderBrush="{ThemeResource NavigationViewContentGridBorderBrush}">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="WideLayout">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="850" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="HeaderPanel.Padding" Value="36,0,36,0"/>
+                        <Setter Target="RadioResult.Padding" Value="32,0,28,100"/>
+                        <Setter Target="ContentResult.Padding" Value="32,0,28,100"/>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="NarrowLayout">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="HeaderPanel.Padding" Value="24,0,24,0"/>
+                        <Setter Target="RadioResult.Padding" Value="20,0,16,100"/>
+                        <Setter Target="ContentResult.Padding" Value="20,0,16,100"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel 
+            x:Name="HeaderPanel"
             Grid.Row="0"
             Padding="36,0,36,0"
             HorizontalAlignment="Stretch" 
@@ -193,6 +218,9 @@
                         <animations:OffsetAnimation Duration="0:0:0.2"/>
                     </animations:Implicit.Animations>
                 </TextBlock>
+                <animations:Implicit.Animations>
+                    <animations:OffsetAnimation Duration="0:0:0.3"/>
+                </animations:Implicit.Animations>
             </StackPanel>
             <!-- Search Type -->
             <StackPanel
@@ -211,6 +239,9 @@
                     Command="{x:Bind ViewModel.ContentResultCommand}"
                     Margin="8,0" Style="{StaticResource OutlinedToggleButtonStyle}" 
                     Content="Content"/>
+                <animations:Implicit.Animations>
+                    <animations:OffsetAnimation Duration="0:0:0.3"/>
+                </animations:Implicit.Animations>
             </StackPanel>
         </StackPanel>
         <muxc:ProgressBar 
@@ -223,8 +254,9 @@
             Grid.Row="1">
             <!-- Radio Result -->
             <controls:AdaptiveGridView
+                x:Name="RadioResult"
                 Visibility="{x:Bind ViewModel.IsRadioModuleShown, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
-                Padding="32,0,28,84"
+                Padding="32,0,28,100"
                 StretchContentForSingleRow="False"
                 OneRowModeEnabled="False"
                 ItemHeight="140"
@@ -240,14 +272,15 @@
                     <animations:TranslationAnimation From="0,8" To="0" Duration="0:0:0.3"/>
                 </animations:Implicit.ShowAnimations>
                 <animations:Implicit.HideAnimations>
-                    <animations:OpacityAnimation From="1" To="0" Duration="0:0:0.3"/>
+                    <animations:OpacityAnimation From="1" To="0" Duration="0:0:0.2"/>
                     <animations:TranslationAnimation From="0" To="0,8" Duration="0:0:0.3"/>
                 </animations:Implicit.HideAnimations>
             </controls:AdaptiveGridView>
             <!-- Content Result -->
             <controls:AdaptiveGridView
+                x:Name="ContentResult"
                 Visibility="{x:Bind ViewModel.IsContentModuleShown, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
-                Padding="32,0,28,84"
+                Padding="32,0,28,100"
                 StretchContentForSingleRow="False"
                 OneRowModeEnabled="False"
                 ItemHeight="140"
@@ -263,7 +296,7 @@
                     <animations:TranslationAnimation From="0,8" To="0" Duration="0:0:0.3"/>
                 </animations:Implicit.ShowAnimations>
                 <animations:Implicit.HideAnimations>
-                    <animations:OpacityAnimation From="1" To="0" Duration="0:0:0.3"/>
+                    <animations:OpacityAnimation From="1" To="0" Duration="0:0:0.2"/>
                     <animations:TranslationAnimation From="0" To="0,8" Duration="0:0:0.3"/>
                 </animations:Implicit.HideAnimations>
             </controls:AdaptiveGridView>
@@ -275,6 +308,12 @@
                     HorizontalAlignment="Center" VerticalAlignment="Center"
                     Text="Empty Here"
                     Style="{StaticResource SubtitleTextBlockStyle}"/>
+                <animations:Implicit.ShowAnimations>
+                    <animations:OpacityAnimation From="0" To="1" Duration="0:0:0.2"/>
+                </animations:Implicit.ShowAnimations>
+                <animations:Implicit.HideAnimations>
+                    <animations:OpacityAnimation From="1" To="0" Duration="0:0:0.2"/>
+                </animations:Implicit.HideAnimations>
             </Grid>
         </Grid>
     </Grid>

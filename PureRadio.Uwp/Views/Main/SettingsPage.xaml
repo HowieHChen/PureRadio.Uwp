@@ -28,16 +28,34 @@
         Background="{ThemeResource LayerFillColorDefaultBrush}"
         BorderThickness="1,1,0,0"
         BorderBrush="{ThemeResource NavigationViewContentGridBorderBrush}">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="WideLayout">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="850" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="contentSV.Margin" Value="36,0,36,100"/>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="NarrowLayout">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="contentSV.Margin" Value="24,0,24,100"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
         <ScrollViewer
-            x:Name="contentSV"
-            Padding="36,0,36,0"
-            Margin="0,0,0,0"
             IsTabStop="False"
             UseSystemFocusVisuals="False"
             VerticalScrollBarVisibility="Auto"
             VerticalScrollMode="Auto">
             <StackPanel 
-                HorizontalAlignment="Stretch" Margin="0,0,0,100">
+                x:Name="contentSV"
+                HorizontalAlignment="Stretch" Margin="36,0,36,100">
                 <!-- Settings -->
                 <TextBlock
                     x:Uid="PageSrttingsTitle"
@@ -52,7 +70,7 @@
                 <TextBlock
                     x:Uid="PageSettingsAppearanceTitle"
                     Style="{StaticResource BodyTextBlockStyle}"
-                    Margin="0,8,0,0"
+                    Margin="0,16,0,0"
                     Text="Appearance" >
                     <animations:Implicit.Animations>
                         <animations:OffsetAnimation Duration="0:0:0.2"/>
@@ -320,24 +338,33 @@
                     </muxc:Expander.Header>
                     <muxc:Expander.Content>
                         <StackPanel Margin="28,0,0,0" Orientation="Vertical">
-                            <HyperlinkButton NavigateUri="https://github.com/microsoft/microsoft-ui-xaml" >
-                                <TextBlock Text="Microsoft/microsoft-ui-xaml" TextTrimming="CharacterEllipsis"/>
-                            </HyperlinkButton>
-                            <HyperlinkButton NavigateUri="https://github.com/microsoft/WinUI-Gallery" >
-                                <TextBlock Text="Microsoft/WinUI-Gallery" TextTrimming="CharacterEllipsis"/>
-                            </HyperlinkButton>
                             <HyperlinkButton NavigateUri="https://github.com/CommunityToolkit/MVVM-Samples" >
                                 <TextBlock Text="CommunityToolkit/MVVM-Samples" TextTrimming="CharacterEllipsis"/>
                             </HyperlinkButton>
                             <HyperlinkButton NavigateUri="https://github.com/CommunityToolkit/WindowsCommunityToolkit" >
                                 <TextBlock Text="CommunityToolkit/WindowsCommunityToolkit" TextTrimming="CharacterEllipsis"/>
                             </HyperlinkButton>
+                            <HyperlinkButton NavigateUri="https://github.com/JamesNK/Newtonsoft.Json" >
+                                <TextBlock Text="JamesNK/Newtonsoft.Json" TextTrimming="CharacterEllipsis"/>
+                            </HyperlinkButton>
+                            <HyperlinkButton NavigateUri="https://github.com/microsoft/microsoft-ui-xaml" >
+                                <TextBlock Text="Microsoft/microsoft-ui-xaml" TextTrimming="CharacterEllipsis"/>
+                            </HyperlinkButton>
+                            <HyperlinkButton NavigateUri="https://github.com/microsoft/WinUI-Gallery" >
+                                <TextBlock Text="Microsoft/WinUI-Gallery" TextTrimming="CharacterEllipsis"/>
+                            </HyperlinkButton>                            
                             <HyperlinkButton NavigateUri="https://github.com/Richasy/Bili.Uwp" >
                                 <TextBlock Text="Richasy/Bili.Uwp" TextTrimming="CharacterEllipsis"/>
+                            </HyperlinkButton>
+                            <HyperlinkButton NavigateUri="https://github.com/Rise-Software/Rise-Media-Player" >
+                                <TextBlock Text="Rise-Software/Rise-Media-Player" TextTrimming="CharacterEllipsis"/>
                             </HyperlinkButton>
                         </StackPanel>
                     </muxc:Expander.Content>
                 </muxc:Expander>
+                <animations:Implicit.Animations>
+                    <animations:OffsetAnimation Duration="0:0:0.3"/>
+                </animations:Implicit.Animations>
             </StackPanel>
         </ScrollViewer>
     </Grid>

@@ -43,7 +43,7 @@ namespace PureRadio.Uwp.Views
             (((int)PageIds.Home).ToString(), PageIds.Home, typeof(HomePage)),
             //(((int)PageIds.Radio).ToString(), typeof(CategoriesPage)),
             //(((int)PageIds.Content).ToString(), typeof(RankPage)),
-            //(((int)PageIds.Library).ToString(), typeof(ContentPage)),
+            (((int)PageIds.Library).ToString(),PageIds.Library, typeof(LibraryPage)),
             (((int)PageIds.Settings).ToString(), PageIds.Settings, typeof(SettingsPage))
         };
 
@@ -205,7 +205,7 @@ namespace PureRadio.Uwp.Views
 
                     break;
                 case PageIds.Library:
-
+                    pageType = typeof(LibraryPage);
                     break;
                 case PageIds.Settings:
                     pageType = typeof(SettingsPage);

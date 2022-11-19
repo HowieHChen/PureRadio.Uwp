@@ -140,6 +140,9 @@ namespace PureRadio.Uwp.Views
             dismissed = true;
 
             // Complete app setup operations here...
+
+            await Ioc.Default.GetRequiredService<ISqliteService>().InitializeDatabaseAsync();
+            
             try
             {
                 var httpProvider = Ioc.Default.GetRequiredService<IHttpProvider>();

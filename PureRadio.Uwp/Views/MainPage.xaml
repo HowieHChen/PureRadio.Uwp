@@ -25,6 +25,7 @@
         <convert:MediaPlaybackStateToIconConverter x:Key="MediaPlaybackStateToIconConverter"/>
         <convert:MutedStateToIconConverter x:Key="MutedStateToIconConverter"/>
         <convert:MediaPositionToDisplayConverter x:Key="MediaPositionToDisplayConverter"/>
+        <convert:FavStateToIconConverter x:Key="FavStateToIconConverter"/>
         <Flyout x:Key="UserInfoFlyout" Placement="BottomEdgeAlignedRight" 
                 FlyoutPresenterStyle="{StaticResource UserInfoFlyoutStyle}">
             <StackPanel Orientation="Vertical" MinWidth="240">
@@ -465,8 +466,9 @@
                                 VerticalAlignment="Center" 
                                 Orientation="Horizontal">
                                 <Button 
-                                    x:Name="FavButton" Margin="8,0" Height="42" Width="42" BorderThickness="0" Background="Transparent"                                       >
-                                    <FontIcon FontFamily="{StaticResource FluentIcons}" Glyph="&#xEB51;"/>
+                                    x:Name="FavButton" Margin="8,0" Height="42" Width="42" BorderThickness="0" Background="Transparent"  
+                                    Command="{x:Bind PlayerViewModel.ToggleFavCommand}">
+                                    <FontIcon FontFamily="{StaticResource FluentIcons}" Glyph="{x:Bind PlayerViewModel.IsFav,Mode=OneWay,Converter={StaticResource FavStateToIconConverter}}"/>
                                     <animations:Implicit.Animations>
                                         <animations:OffsetAnimation Duration="0:0:0.1"/>
                                     </animations:Implicit.Animations>

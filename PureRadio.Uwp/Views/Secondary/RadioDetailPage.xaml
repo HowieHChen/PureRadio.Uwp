@@ -18,6 +18,8 @@
         <ResourceDictionary>
             <convert:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
             <convert:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
+            <convert:FavStateToIconConverter x:Key="FavStateToIconConverter"/>
+            <convert:FavStateToDisplayConverter x:Key="FavStateToDisplayConverter"/>
         </ResourceDictionary>
     </Page.Resources>
     
@@ -175,14 +177,15 @@
                                 Click="{x:Bind ViewModel.PlayRadioLive}"
                                 HorizontalAlignment="Stretch" Style="{StaticResource AccentButtonStyle}" >
                                 <StackPanel Orientation="Horizontal">
-                                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xF5B0;"/>
+                                    <FontIcon FontFamily="{StaticResource FluentIcons}" Glyph="&#xF5B0;"/>
                                     <TextBlock x:Uid="DetailPagePlayButton" Margin="12,0" Text="Play"/>
                                 </StackPanel>
                             </Button>
-                            <Button HorizontalAlignment="Stretch" Margin="0,8">
+                            <Button HorizontalAlignment="Stretch" Margin="0,8"
+                                    Command="{x:Bind ViewModel.ToggleFavCommand}">
                                 <StackPanel Orientation="Horizontal">
-                                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xF5B0;"/>
-                                    <TextBlock Margin="12,0" Text="Fav"/>
+                                    <FontIcon FontFamily="{StaticResource FluentIcons}" Glyph="{x:Bind ViewModel.IsFav,Mode=OneWay,Converter={StaticResource FavStateToIconConverter}}"/>
+                                    <TextBlock Margin="12,0" Text="{x:Bind ViewModel.IsFav, Mode=OneWay, Converter={StaticResource FavStateToDisplayConverter}}"/>
                                 </StackPanel>
                             </Button>
                         </StackPanel>

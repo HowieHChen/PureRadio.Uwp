@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Microsoft.Toolkit.Uwp.UI;
 using PureRadio.Uwp.Adapters;
 using PureRadio.Uwp.Adapters.Interfaces;
@@ -30,6 +31,7 @@ namespace PureRadio.Uwp.ViewModels
     {
         private readonly INavigateService navigate;
         private readonly IPlaybackService playbackService;
+        private readonly ILibraryService library;
         private readonly IRadioProvider radioProvider;
         private readonly IPlayerAdapter playerAdapter;
         private readonly DispatcherTimer _refreshTimer;
@@ -45,11 +47,16 @@ namespace PureRadio.Uwp.ViewModels
             set
             {
                 SetProperty(ref _radioId, value);
+                GetRadioFavState();
                 GetRadioDetail();
                 GetRadioPlaylist();
             }
         }
 
+        public IAsyncRelayCommand ToggleFavCommand { get; }
+
+        [ObservableProperty]
+        private bool _isFav;
         [ObservableProperty]
         private string _title;
         [ObservableProperty]
@@ -84,10 +91,12 @@ namespace PureRadio.Uwp.ViewModels
             INavigateService navigate, 
             IRadioProvider radioProvider,
             IPlaybackService playbackService,
+            ILibraryService library,
             IPlayerAdapter playerAdapter)
         {
             this.navigate = navigate;
             this.playbackService = playbackService;
+            this.library = library;
             this.radioProvider = radioProvider;
             this.playerAdapter = playerAdapter;
             _refreshTimer = new DispatcherTimer
@@ -95,13 +104,16 @@ namespace PureRadio.Uwp.ViewModels
                 Interval = TimeSpan.MaxValue,
             };
             Cover = new BitmapImage(new Uri("ms-appx:///Assets/Image/DefaultCover.png"));
+            ToggleFavCommand = new AsyncRelayCommand(ToggleFavState);
             IsActive = true;
+            
         }
 
         protected override void OnActivated()
         {
             base.OnActivated();
             _refreshTimer.Tick += OnRefreshTimerTick;
+            library.FavItemChanging += Library_FavItemChanging;
         }
 
         protected override void OnDeactivated()
@@ -109,7 +121,30 @@ namespace PureRadio.Uwp.ViewModels
             if (_refreshTimer.IsEnabled)
                 _refreshTimer.Stop();
             _refreshTimer.Tick -= OnRefreshTimerTick;
+            library.FavItemChanging -= Library_FavItemChanging;
             base.OnDeactivated();
+        }
+
+        private void Library_FavItemChanging(object sender, FavItemChangedEventArgs e)
+        {
+            if(e.ItemType == MediaPlayType.RadioLive && e.MainId == RadioId)
+            {
+                IsFav = e.Action switch
+                {
+                    LibraryItemAction.Add => true,
+                    LibraryItemAction.Remove => false,
+                    LibraryItemAction.Update => true,
+                    _ => false,
+                };
+            }
+        }
+
+        private async void GetRadioFavState()
+        {
+            if (RadioId != 0)
+            {
+                IsFav = await library.IsFavItem(MediaPlayType.RadioLive, RadioId);
+            }
         }
 
         private async void GetRadioDetail()
@@ -231,6 +266,21 @@ namespace PureRadio.Uwp.ViewModels
             if(RadioId != 0&& _topCategoryId != 0)
             {
                 navigate.NavigateToSecondaryView(PageIds.RadioCategory, new EntranceNavigationTransitionInfo(), _topCategoryId);
+            }
+        }
+
+        public async Task ToggleFavState()
+        {
+            if (RadioId != 0 && itemSnapshot != null)
+            {
+                if (IsFav)
+                {
+                    _ = await library.RemoveFromFav(MediaPlayType.RadioLive, RadioId);
+                }
+                else
+                {
+                    _ = await library.AddToFav(itemSnapshot);
+                }
             }
         }
 

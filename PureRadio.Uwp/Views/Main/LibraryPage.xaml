@@ -1,0 +1,365 @@
+﻿<Page
+    x:Class="PureRadio.Uwp.Views.Main.LibraryPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:animatedVisuals="using:Microsoft.UI.Xaml.Controls.AnimatedVisuals"
+    xmlns:animations="using:Microsoft.Toolkit.Uwp.UI.Animations"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:convert="using:PureRadio.Uwp.Resources.Converter" 
+    xmlns:local="using:PureRadio.Uwp.Views.Main"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls" 
+    xmlns:viewmodels="using:PureRadio.Uwp.ViewModels" xmlns:database="using:PureRadio.Uwp.Models.Database"
+    d:DataContext="{d:DesignInstance Type=viewmodels:LibraryViewModel}"
+    mc:Ignorable="d"
+    Background="Transparent">
+    <Page.Resources>
+        <convert:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <convert:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+        <convert:DateTimeToDisplayConverter x:Key="DateTimeToDisplayConverter"/>
+        <DataTemplate
+            x:Key="FavRadioTemplate"
+            x:DataType="database:FavRadio">
+            <Grid
+                x:Name="CardCantainer"
+                CornerRadius="4"
+                Style="{StaticResource CardViewContainer}"
+                Height="72"
+                Canvas.ZIndex="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <controls:ImageEx
+                    x:Name="FavRadioCover"
+                    BorderThickness="0"
+                    BackgroundSizing="InnerBorderEdge"
+                    Grid.Column="0"
+                    Margin="12,0,12,0"
+                    Height="48" Width="48" CornerRadius="4"
+                    IsCacheEnabled="True"
+                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Stretch="UniformToFill"
+                    Source="{x:Bind LocalCover}"/>
+                <StackPanel Grid.Column="1"  VerticalAlignment="Center">
+                    <TextBlock 
+                        Margin="0,0,0,2"
+                        TextTrimming="CharacterEllipsis" MaxLines="1" 
+                        Text="{x:Bind Title}" Style="{StaticResource BodyTextBlockStyle}"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock 
+                            x:Uid="PageLibraryAddTime" Text="Time added: " TextTrimming="CharacterEllipsis" MaxLines="1"
+                            Foreground="{ThemeResource CustomNavigationViewItemForeground}"
+                            Style="{StaticResource CaptionTextBlockStyle}" />
+                        <TextBlock 
+                            Margin="2,0,2,0" Text="{x:Bind AddTime, Converter={StaticResource DateTimeToDisplayConverter}}" 
+                            Foreground="{ThemeResource CustomNavigationViewItemForeground}"
+                            Style="{StaticResource CaptionTextBlockStyle}"/>
+                    </StackPanel>
+                </StackPanel>
+                <Button 
+                    x:Uid="PageLibraryDelFavButton"
+                    Click="RadioItemButton_Click"
+                    Grid.Column="2"
+                    Margin="2,0,12,0"
+                    Width="120"
+                    Content="Remove"/>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate
+            x:Key="FavContentTemplate"
+            x:DataType="database:FavContent">
+            <Grid
+                x:Name="CardCantainer"
+                CornerRadius="4"
+                Style="{StaticResource CardViewContainer}"
+                Height="72"
+                Canvas.ZIndex="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <controls:ImageEx
+                    x:Name="FavContentCover"
+                    BorderThickness="0"
+                    BackgroundSizing="InnerBorderEdge"
+                    Grid.Column="0"
+                    Margin="12,0,12,0"
+                    Height="48" Width="48" CornerRadius="4"
+                    IsCacheEnabled="True"
+                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Stretch="UniformToFill"
+                    Source="{x:Bind LocalCover}"/>
+                <StackPanel Grid.Column="1"  VerticalAlignment="Center">
+                    <TextBlock 
+                        Margin="0,0,0,2"
+                        TextTrimming="CharacterEllipsis" MaxLines="1" 
+                        Text="{x:Bind Title}" Style="{StaticResource BodyTextBlockStyle}"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock 
+                            x:Uid="PageLibraryAddTime" Text="Time added: " TextTrimming="CharacterEllipsis" MaxLines="1"
+                            Foreground="{ThemeResource CustomNavigationViewItemForeground}"
+                            Style="{StaticResource CaptionTextBlockStyle}" />
+                        <TextBlock 
+                            Margin="2,0,2,0" Text="{x:Bind AddTime, Converter={StaticResource DateTimeToDisplayConverter}}" 
+                            Foreground="{ThemeResource CustomNavigationViewItemForeground}"
+                            Style="{StaticResource CaptionTextBlockStyle}"/>
+                    </StackPanel>
+                </StackPanel>
+                <Button 
+                    x:Uid="PageLibraryDelFavButton"
+                    Click="ContentItemButton_Click"
+                    Grid.Column="2"
+                    Margin="2,0,12,0"
+                    Width="120"
+                    Content="Remove"/>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate
+            x:Key="HistoryTemplate"
+            x:DataType="database:History">
+            <Grid
+                x:Name="CardCantainer"
+                CornerRadius="4"
+                Style="{StaticResource CardViewContainer}"
+                Height="72"
+                Canvas.ZIndex="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <controls:ImageEx
+                    x:Name="HistoryCover"
+                    BorderThickness="0"
+                    BackgroundSizing="InnerBorderEdge"
+                    Grid.Column="0"
+                    Margin="12,0,12,0"
+                    Height="48" Width="48" CornerRadius="4"
+                    IsCacheEnabled="True"
+                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Stretch="UniformToFill"
+                    Source="{x:Bind LocalCover}"/>
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <TextBlock 
+                        Margin="0,0,0,2"
+                        TextTrimming="CharacterEllipsis" MaxLines="1" 
+                        Text="{x:Bind Title}" 
+                        Style="{StaticResource BodyTextBlockStyle}"/>
+                    <TextBlock 
+                        Text="{x:Bind SubTitle}" 
+                        Foreground="{ThemeResource CustomNavigationViewItemForeground}"
+                        Style="{StaticResource CaptionTextBlockStyle}"/>
+                </StackPanel>
+                <TextBlock 
+                    Grid.Column="2" 
+                    Margin="4,0,12,0"
+                    VerticalAlignment="Center"
+                    MaxLines="1" TextTrimming="CharacterEllipsis"
+                    Text="{x:Bind LastPlayTime, Converter={StaticResource DateTimeToDisplayConverter}}"
+                    Style="{StaticResource BodyTextBlockStyle}"/>
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
+    <Grid
+        CornerRadius="8,0,0,0"
+        Background="{ThemeResource LayerFillColorDefaultBrush}"
+        BorderThickness="1,1,0,0"
+        BorderBrush="{ThemeResource NavigationViewContentGridBorderBrush}">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="WideLayout">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="850" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="HeaderPanel.Padding" Value="36,0,36,0"/>
+                        <Setter Target="RadioListView.Padding" Value="33,0,33,100"/>
+                        <Setter Target="ContentListView.Padding" Value="33,0,33,100"/>
+                        <Setter Target="HistoryListView.Padding" Value="33,0,33,100"/>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="NarrowLayout">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="HeaderPanel.Padding" Value="24,0,24,0"/>
+                        <Setter Target="RadioListView.Padding" Value="21,0,21,100"/>
+                        <Setter Target="ContentListView.Padding" Value="21,0,21,100"/>
+                        <Setter Target="HistoryListView.Padding" Value="21,0,21,100"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel 
+            x:Name="HeaderPanel"
+            Grid.Row="0"
+            Padding="36,0,36,0"
+            HorizontalAlignment="Stretch" 
+            VerticalAlignment="Stretch">
+            <!-- Library -->
+            <Grid
+                Margin="0,32,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock
+                    Grid.Column="0"
+                    x:Uid="PageLibraryTitle"
+                    Style="{StaticResource TitleTextBlockStyle}"
+                    Text="Library" >
+                    <animations:Implicit.Animations>
+                        <animations:OffsetAnimation Duration="0:0:0.2"/>
+                    </animations:Implicit.Animations>
+                </TextBlock>
+                <Button
+                    Grid.Column="1"
+                    x:Uid="PageLibraryTitleButton"
+                    Command="{x:Bind ViewModel.ClearHistoryCommand}"
+                    Width="80"
+                    Visibility="{x:Bind ViewModel.IsHistoryShown, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Content="Clear all">
+                    <animations:Implicit.ShowAnimations>
+                        <animations:OpacityAnimation From="0" To="1" Duration="0:0:0.2"/>
+                        <animations:TranslationAnimation From="16,0" To="0,0" Duration="0:0:0.2"/>
+                    </animations:Implicit.ShowAnimations>
+                    <animations:Implicit.HideAnimations>
+                        <animations:OpacityAnimation From="1" To="0" Duration="0:0:0.2"/>
+                        <animations:TranslationAnimation From="0,0" To="16,0" Duration="0:0:0.2"/>
+                    </animations:Implicit.HideAnimations>
+                </Button>
+                <animations:Implicit.Animations>
+                    <animations:OffsetAnimation Duration="0:0:0.2"/>
+                </animations:Implicit.Animations>
+            </Grid>
+            <!-- Library Type -->
+            <StackPanel
+                Orientation="Horizontal" Margin="0,16">
+                <ToggleButton
+                    x:Uid="PageLibrarySourceRadio"
+                    IsEnabled="{x:Bind ViewModel.IsLoading, Mode=OneWay,Converter={StaticResource InverseBooleanConverter}}"
+                    IsChecked="{x:Bind ViewModel.IsFavRadioShown, Mode=TwoWay}"
+                    Command="{x:Bind ViewModel.FavRadioCommand}"
+                    Style="{StaticResource OutlinedToggleButtonStyle}" 
+                    Content="Radio"/>
+                <ToggleButton
+                    x:Uid="PageLibrarySourceContent"
+                    IsEnabled="{x:Bind ViewModel.IsLoading, Mode=OneWay,Converter={StaticResource InverseBooleanConverter}}"
+                    IsChecked="{x:Bind ViewModel.IsFavContentShown, Mode=TwoWay}"
+                    Command="{x:Bind ViewModel.FavContentCommand}"
+                    Margin="8,0" Style="{StaticResource OutlinedToggleButtonStyle}" 
+                    Content="Content"/>
+                <ToggleButton
+                    x:Uid="PageLibrarySourceHistory"
+                    IsEnabled="{x:Bind ViewModel.IsLoading, Mode=OneWay,Converter={StaticResource InverseBooleanConverter}}"
+                    IsChecked="{x:Bind ViewModel.IsHistoryShown, Mode=TwoWay}"
+                    Command="{x:Bind ViewModel.HistoryCommand}"
+                    Style="{StaticResource OutlinedToggleButtonStyle}" 
+                    Content="History"/>
+                <animations:Implicit.Animations>
+                    <animations:OffsetAnimation Duration="0:0:0.2"/>
+                </animations:Implicit.Animations>
+            </StackPanel>
+        </StackPanel>
+        <muxc:ProgressBar 
+            Grid.Row="0"
+            VerticalAlignment="Bottom"
+            IsIndeterminate="True"
+            ShowPaused="{x:Bind ViewModel.IsLoading, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}"
+            Visibility="{x:Bind ViewModel.IsLoading, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+        <Grid
+            Grid.Row="1">
+            <!-- Loading -->
+            <Border
+                HorizontalAlignment="Stretch"
+                MinHeight="300"
+                Visibility="{x:Bind ViewModel.IsItemsLoading,Mode=OneWay,Converter={StaticResource BooleanToVisibilityConverter}}">
+                <muxc:ProgressRing/>
+            </Border>
+            <!-- FavRadio -->
+            <ListView 
+                x:Name="RadioListView" 
+                Visibility="{x:Bind ViewModel.IsFavRadioShown, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                ItemsSource="{x:Bind ViewModel.FavRadioResults, Mode=TwoWay}"
+                IsItemClickEnabled="True"
+                SelectionMode="None"
+                Padding="33,0,33,100"
+                ItemTemplate="{StaticResource FavRadioTemplate}"
+                ItemContainerStyle="{StaticResource ListViewItemContainerStyle}"
+                ItemClick="RadioListView_ItemClick">
+                <animations:Implicit.ShowAnimations>
+                    <animations:OpacityAnimation From="0" To="1" Duration="0:0:0.3"/>
+                    <animations:TranslationAnimation From="0,8" To="0" Duration="0:0:0.3"/>
+                </animations:Implicit.ShowAnimations>
+                <animations:Implicit.HideAnimations>
+                    <animations:OpacityAnimation From="1" To="0" Duration="0:0:0.2"/>
+                    <animations:TranslationAnimation From="0" To="0,8" Duration="0:0:0.3"/>
+                </animations:Implicit.HideAnimations>
+            </ListView>
+            <!-- FavContent -->
+            <ListView 
+                x:Name="ContentListView" 
+                Visibility="{x:Bind ViewModel.IsFavContentShown, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                ItemsSource="{x:Bind ViewModel.FavContentResults, Mode=TwoWay}"
+                IsItemClickEnabled="True"
+                SelectionMode="None"
+                Padding="33,0,33,100"
+                ItemTemplate="{StaticResource FavContentTemplate}"
+                ItemContainerStyle="{StaticResource ListViewItemContainerStyle}"
+                ItemClick="ContentListView_ItemClick">
+                <animations:Implicit.ShowAnimations>
+                    <animations:OpacityAnimation From="0" To="1" Duration="0:0:0.3"/>
+                    <animations:TranslationAnimation From="0,8" To="0" Duration="0:0:0.3"/>
+                </animations:Implicit.ShowAnimations>
+                <animations:Implicit.HideAnimations>
+                    <animations:OpacityAnimation From="1" To="0" Duration="0:0:0.2"/>
+                    <animations:TranslationAnimation From="0" To="0,8" Duration="0:0:0.3"/>
+                </animations:Implicit.HideAnimations>
+            </ListView>
+            <!-- History -->
+            <ListView 
+                x:Name="HistoryListView" 
+                Visibility="{x:Bind ViewModel.IsHistoryShown, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                ItemsSource="{x:Bind ViewModel.HistoryResults, Mode=TwoWay}"
+                IsItemClickEnabled="True"
+                SelectionMode="None"
+                Padding="33,0,33,100"
+                ItemTemplate="{StaticResource HistoryTemplate}"
+                ItemContainerStyle="{StaticResource ListViewItemContainerStyle}"
+                ItemClick="HistoryListView_ItemClick">
+                <animations:Implicit.ShowAnimations>
+                    <animations:OpacityAnimation From="0" To="1" Duration="0:0:0.3"/>
+                    <animations:TranslationAnimation From="0,8" To="0" Duration="0:0:0.3"/>
+                </animations:Implicit.ShowAnimations>
+                <animations:Implicit.HideAnimations>
+                    <animations:OpacityAnimation From="1" To="0" Duration="0:0:0.2"/>
+                    <animations:TranslationAnimation From="0" To="0,8" Duration="0:0:0.3"/>
+                </animations:Implicit.HideAnimations>
+            </ListView>
+            <!-- No Result -->
+            <Grid
+                Visibility="{x:Bind ViewModel.IsEmpty, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <TextBlock
+                    x:Uid="PageSearchNoResult"
+                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Text="Empty Here"
+                    Style="{StaticResource SubtitleTextBlockStyle}"/>
+                <animations:Implicit.ShowAnimations>
+                    <animations:OpacityAnimation From="0" To="1" Duration="0:0:0.2"/>
+                </animations:Implicit.ShowAnimations>
+                <animations:Implicit.HideAnimations>
+                    <animations:OpacityAnimation From="1" To="0" Duration="0:0:0.2"/>
+                </animations:Implicit.HideAnimations>
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>

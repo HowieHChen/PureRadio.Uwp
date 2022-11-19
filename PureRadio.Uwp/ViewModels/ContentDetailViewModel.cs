@@ -1,9 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Microsoft.Toolkit.Uwp.UI;
 using PureRadio.Uwp.Adapters.Interfaces;
 using PureRadio.Uwp.Models.Args;
 using PureRadio.Uwp.Models.Data.Content;
 using PureRadio.Uwp.Models.Enums;
+using PureRadio.Uwp.Models.Local;
 using PureRadio.Uwp.Models.QingTing.Content;
 using PureRadio.Uwp.Providers.Interfaces;
 using PureRadio.Uwp.Services.Interfaces;
@@ -23,22 +25,28 @@ namespace PureRadio.Uwp.ViewModels
     {
         private readonly IPlaybackService playbackService;
         private readonly INavigateService navigate;
+        private readonly ILibraryService library;
         private readonly IContentProvider contentProvider;
         private readonly IPlayerAdapter playerAdapter;
 
         private string _version;
         private int _contentId;
         private ContentInfoDetail _contentDetail;
+        private PlayItemSnapshot itemSnapshot;
         public int ContentId
         {
             get => _contentId;
             set
             {
                 SetProperty(ref _contentId, value);
+                GetContentFavState();
                 GetContentDetail();
             }
         }
+        public IAsyncRelayCommand ToggleFavCommand { get; }
 
+        [ObservableProperty]
+        private bool _isFav;
         [ObservableProperty]
         private BitmapImage _cover;
         [ObservableProperty]
@@ -65,27 +73,53 @@ namespace PureRadio.Uwp.ViewModels
 
         public ContentDetailViewModel(
             IPlaybackService playbackService,
-            INavigateService navigate, 
+            INavigateService navigate,
+            ILibraryService library, 
             IContentProvider contentProvider,
             IPlayerAdapter playerAdapter)
         {
             this.playbackService = playbackService;
             this.navigate = navigate;
+            this.library = library;
             this.contentProvider = contentProvider;
             this.playerAdapter = playerAdapter;
             Cover = new BitmapImage(new Uri("ms-appx:///Assets/Image/DefaultCover.png"));
+            ToggleFavCommand = new AsyncRelayCommand(ToggleFavState);
             IsActive = true;
         }
 
         protected override void OnActivated()
         {
             base.OnActivated();
+            library.FavItemChanging += Library_FavItemChanging;
         }
 
         protected override void OnDeactivated()
         {
-
+            library.FavItemChanging -= Library_FavItemChanging;
             base.OnDeactivated();
+        }
+
+        private void Library_FavItemChanging(object sender, FavItemChangedEventArgs e)
+        {
+            if (e.ItemType == MediaPlayType.ContentDemand && e.MainId == ContentId)
+            {
+                IsFav = e.Action switch
+                {
+                    LibraryItemAction.Add => true,
+                    LibraryItemAction.Remove => false,
+                    LibraryItemAction.Update => true,
+                    _ => false,
+                };
+            }
+        }
+
+        private async void GetContentFavState()
+        {
+            if (ContentId != 0)
+            {
+                IsFav = await library.IsFavItem(MediaPlayType.ContentDemand, ContentId);
+            }
         }
 
         private async void GetContentDetail()
@@ -107,6 +141,7 @@ namespace PureRadio.Uwp.ViewModels
                     Attributes = result.Attributes;
                     _version = result.Version;
                     _contentDetail = result;
+                    itemSnapshot = playerAdapter.ConvertToPlayItemSnapshot(result);
                 }
                 IsInfoLoading = false;
                 if (!string.IsNullOrEmpty(_version))
@@ -138,6 +173,21 @@ namespace PureRadio.Uwp.ViewModels
                 //var playlist = playerAdapter.ConvertToPlayItemSnapshotList(_contentDetail, ContentPlaylists);
                 //playbackService.PlayContent(ContentId, programId, playlist);
                 playbackService.PlayContent(ContentId, programId, _version);
+            }
+        }
+
+        public async Task ToggleFavState()
+        {
+            if (ContentId != 0 && itemSnapshot != null)
+            {
+                if (IsFav)
+                {
+                    _ = await library.RemoveFromFav(MediaPlayType.ContentDemand, ContentId);
+                }
+                else
+                {
+                    _ = await library.AddToFav(itemSnapshot);
+                }
             }
         }
 

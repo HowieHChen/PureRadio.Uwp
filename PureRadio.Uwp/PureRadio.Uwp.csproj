@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PureRadio.Uwp</RootNamespace>
     <AssemblyName>PureRadio.Uwp</AssemblyName>
-    <DefaultLanguage>zh-CN</DefaultLanguage>
+    <DefaultLanguage>zh-cn</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.22000.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.18362.0</TargetPlatformMinVersion>
@@ -133,8 +133,14 @@
     <Compile Include="Models\Args\AppNavigationEventArgs.cs" />
     <Compile Include="Models\Args\AuthorizeStateChangedEventArgs.cs" />
     <Compile Include="Models\Args\ContentCategoryEventArgs.cs" />
+    <Compile Include="Models\Args\FavItemChangedEventArgs.cs" />
+    <Compile Include="Models\Args\HistoryItemChangedEventArgs.cs" />
     <Compile Include="Models\Args\PlayerItemChangedEventArgs.cs" />
     <Compile Include="Models\Args\PlayerStateChangedEventArgs.cs" />
+    <Compile Include="Models\Database\DbObject.cs" />
+    <Compile Include="Models\Database\FavContent.cs" />
+    <Compile Include="Models\Database\FavRadio.cs" />
+    <Compile Include="Models\Database\History.cs" />
     <Compile Include="Models\Data\Constants\ApiConstants.cs" />
     <Compile Include="Models\Data\Constants\AppConstants.cs" />
     <Compile Include="Models\Data\Constants\ServiceConstants.cs" />
@@ -146,6 +152,7 @@
     <Compile Include="Models\Data\Radio\RadioInfoDetail.cs" />
     <Compile Include="Models\Data\Radio\RadioInfoSearch.cs" />
     <Compile Include="Models\Data\Radio\RadioPlaylistDetail.cs" />
+    <Compile Include="Models\Enums\LibraryItemAction.cs" />
     <Compile Include="Models\Local\ResultSet.cs" />
     <Compile Include="Models\Data\Search\SearchSet.cs" />
     <Compile Include="Models\Data\User\AccountInfo.cs" />
@@ -200,6 +207,9 @@
     <Compile Include="Resources\Converter\AccountStateToDisplayConverter.cs" />
     <Compile Include="Resources\Converter\BooleanToDisplayConverter.cs" />
     <Compile Include="Resources\Converter\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Resources\Converter\DateTimeToDisplayConverter.cs" />
+    <Compile Include="Resources\Converter\FavStateToDisplayConverter.cs" />
+    <Compile Include="Resources\Converter\FavStateToIconConverter.cs" />
     <Compile Include="Resources\Converter\InverseBooleanConverter.cs" />
     <Compile Include="Resources\Converter\InverseBooleanToVisibilityConverter.cs" />
     <Compile Include="Resources\Converter\LanguageToDisplayConverter.cs" />
@@ -209,13 +219,18 @@
     <Compile Include="Resources\Converter\MutedStateToIconConverter.cs" />
     <Compile Include="Resources\Converter\ThemeToDisplayConverter.cs" />
     <Compile Include="Resources\Converter\ThemeToIndexConverter.cs" />
+    <Compile Include="Services\Interfaces\ILibraryService.cs" />
     <Compile Include="Services\Interfaces\INavigateService.cs" />
     <Compile Include="Services\Interfaces\IPlaybackService.cs" />
+    <Compile Include="Services\Interfaces\ISqliteService.cs" />
+    <Compile Include="Services\LibraryService.cs" />
     <Compile Include="Services\NavigateService.cs" />
     <Compile Include="Services\PlaybackService.cs" />
+    <Compile Include="Services\SqliteService.cs" />
     <Compile Include="ViewModels\ContentCategoryViewModel.cs" />
     <Compile Include="ViewModels\ContentDetailViewModel.cs" />
     <Compile Include="ViewModels\FullScreenPlayerViewModel.cs" />
+    <Compile Include="ViewModels\LibraryViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\NativePlayerViewModel.cs" />
     <Compile Include="ViewModels\RadioCategoryViewModel.cs" />
@@ -227,6 +242,9 @@
     </Compile>
     <Compile Include="Views\Main\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Main\LibraryPage.xaml.cs">
+      <DependentUpon>LibraryPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PlayerPage.xaml.cs">
       <DependentUpon>PlayerPage.xaml</DependentUpon>
@@ -405,6 +423,9 @@
     <PackageReference Include="Newtonsoft.Json">
       <Version>13.0.1</Version>
     </PackageReference>
+    <PackageReference Include="sqlite-net-pcl">
+      <Version>1.8.116</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -423,6 +444,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Main\HomePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Main\LibraryPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

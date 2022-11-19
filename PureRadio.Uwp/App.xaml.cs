@@ -147,6 +147,8 @@ namespace PureRadio.Uwp
                         .AddSingleton<ISettingsService, SettingsService>()
                         .AddSingleton<INavigateService, NavigateService>()
                         .AddSingleton<IPlaybackService, PlaybackService>()
+                        .AddSingleton<ISqliteService, SqliteService>()
+                        .AddSingleton<ILibraryService, LibraryService>()
                         // Adapters
                         .AddSingleton<IAccountAdapter, AccountAdapter>()
                         .AddSingleton<IContentAdapter, ContentAdapter>()
@@ -161,6 +163,7 @@ namespace PureRadio.Uwp
                         .AddSingleton<IContentProvider, ContentProvider>()
                         // Viewmodels
                         .AddTransient<MainViewModel>()
+                        .AddTransient<LibraryViewModel>()
                         .AddTransient<SettingsViewModel>()
                         .AddTransient<SearchViewModel>()
                         .AddTransient<RadioDetailViewModel>()

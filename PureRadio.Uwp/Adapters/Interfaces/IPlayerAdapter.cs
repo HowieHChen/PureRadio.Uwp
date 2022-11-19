@@ -29,6 +29,12 @@ namespace PureRadio.Uwp.Adapters.Interfaces
         /// <returns><see cref="PlayItemSnapshot"/></returns>
         PlayItemSnapshot ConvertToPlayItemSnapshot(RadioInfoDetail item);
         /// <summary>
+        /// 将内容详细信息 <see cref="RadioInfoDetail"/> 转换为播放项快照 <see cref="PlayItemSnapshot"/> (用于内容库支持).
+        /// </summary>
+        /// <param name="item">内容详细信息</param>
+        /// <returns><see cref="PlayItemSnapshot"/></returns>
+        PlayItemSnapshot ConvertToPlayItemSnapshot(ContentInfoDetail item);
+        /// <summary>
         /// 将电台详细信息 <see cref="RadioPlaylistDetail"/> 和节目列表 <see cref="RadioPlaylistDetail"/> 转换为播放项快照 <see cref="PlayItemSnapshot"/>.
         /// </summary>
         /// <param name="item">播放项快照</param>

@@ -167,12 +167,19 @@ namespace PureRadio.Uwp.Services
 
         private void AudioPlayer_MediaEnded(MediaPlayer sender, object args)
         {
-            _transportControls.IsEnabled = false;
-            PlayerStateChanged?.Invoke(this, new PlayerStateChangedEventArgs(
-                    GetCurrentPlayerState()));
-            _playItem = new PlayItemSnapshot(MediaPlayType.None, null, new Uri("ms-appx:///Assets/Image/DefaultCover.png"), string.Empty, string.Empty, 0, 0, 0);
-            PlayerItemChanged?.Invoke(this, new PlayerItemChangedEventArgs(
-                _playItem));
+            if(_currentType == MediaPlayType.ContentDemand)
+            {
+                if (_canNext) Next();
+            }
+            else
+            {
+                _transportControls.IsEnabled = false;
+                PlayerStateChanged?.Invoke(this, new PlayerStateChangedEventArgs(
+                        GetCurrentPlayerState()));
+                _playItem = new PlayItemSnapshot(MediaPlayType.None, null, new Uri("ms-appx:///Assets/Image/DefaultCover.png"), string.Empty, string.Empty, 0, 0, 0);
+                PlayerItemChanged?.Invoke(this, new PlayerItemChangedEventArgs(
+                    _playItem));
+            }            
         }
 
         private void AudioPlayer_MediaOpened(MediaPlayer sender, object args)
