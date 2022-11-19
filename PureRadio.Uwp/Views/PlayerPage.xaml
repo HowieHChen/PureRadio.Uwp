@@ -12,7 +12,7 @@
     xmlns:media="using:Microsoft.Toolkit.Uwp.UI.Media"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls" 
     xmlns:convert="using:PureRadio.Uwp.Resources.Converter"
-    xmlns:viewmodels="using:PureRadio.Uwp.ViewModels" 
+    xmlns:viewmodels="using:PureRadio.Uwp.ViewModels" xmlns:datamodel="using:PureRadio.Uwp.Models.Local"
     d:DataContext="{d:DesignInstance Type=viewmodels:FullScreenPlayerViewModel}"
     mc:Ignorable="d"
     RequestedTheme="Dark"
@@ -28,8 +28,32 @@
         <convert:MediaPlaybackStateToIconConverter x:Key="MediaPlaybackStateToIconConverter"/>
         <convert:MutedStateToIconConverter x:Key="MutedStateToIconConverter"/>
         <convert:MediaPositionToDisplayConverter x:Key="MediaPositionToDisplayConverter"/>
+        <convert:FavStateToIconConverter x:Key="FavStateToIconConverter"/>
+        <convert:DurationToDisplayConverter x:Key="DurationToDisplayConverter"/>
     </Page.Resources>
     <Grid>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="WideLayout">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="850" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="PlaylistPanelGrid.Visibility" Value="Visible"/>
+                        <Setter Target="PlaylistButtonGrid.Visibility" Value="Visible"/>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="NarrowLayout">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="PlaylistPanelGrid.Visibility" Value="Collapsed"/>
+                        <Setter Target="PlaylistButtonGrid.Visibility" Value="Collapsed"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
         <Border
             Background="#EBEBEB"
             x:Name="CoverLarge"
@@ -103,8 +127,8 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="auto" MinWidth="300" MaxWidth="360"/>
+                    <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="auto" />
                 </Grid.ColumnDefinitions>
                 <Grid
                     x:Name="PlayerPanel"
@@ -161,6 +185,7 @@
                                 </Storyboard>
                             </Border.Resources>
                             <Image 
+                                x:Name="CoverImage"
                                 Width="200" Height="200"
                                 Stretch="UniformToFill"
                                 Source="{x:Bind ViewModel.Cover, Mode=OneWay}" />
@@ -172,6 +197,7 @@
                     </Viewbox>
                     <Grid
                         Grid.Row="1"
+                        MaxWidth="360"
                         Margin="0,24,0,24">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
@@ -182,24 +208,44 @@
                             <RowDefinition Height="auto" />
                             <RowDefinition Height="auto" />
                         </Grid.RowDefinitions>
-                        <StackPanel 
+                        <Grid 
                             Grid.Row="0"
                             Grid.ColumnSpan="2"
-                            Orientation="Vertical" VerticalAlignment="Center">
+                            VerticalAlignment="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition Height="auto" />
+                            </Grid.RowDefinitions>
                             <TextBlock 
+                                Grid.Row="0" Grid.Column="0"
                                 Text="{x:Bind ViewModel.Title, Mode=OneWay}" 
                                 TextTrimming="CharacterEllipsis"
                                 MaxLines="1" FontWeight="Bold"
                                 Foreground="#FFFFFFFF"
                                 Style="{StaticResource SubtitleTextBlockStyle}"/>
                             <TextBlock 
+                                Grid.Row="1" Grid.Column="0"
                                 Margin="0,4,0,0" 
                                 Text="{x:Bind ViewModel.SubTitle, Mode=OneWay}" 
                                 TextTrimming="CharacterEllipsis"
                                 MaxLines="1" FontWeight="Medium"
-                                Foreground="#C0FFFFFF"
+                                Foreground="#FFFFFFFF"
                                 Style="{StaticResource SubtitleTextBlockStyle}"/>
-                        </StackPanel>
+                            <Button 
+                                Grid.RowSpan="2" Grid.Column="1"
+                                HorizontalAlignment="Center" VerticalAlignment="Center"
+                                Command="{x:Bind ViewModel.ToggleFavCommand}"
+                                Height="48" Width="48" BorderThickness="0" Background="Transparent">
+                                <FontIcon 
+                                    Foreground="#B4FFFFFF"
+                                    FontSize="24" FontFamily="{StaticResource FluentIcons}" 
+                                    Glyph="{x:Bind ViewModel.IsFav, Mode=OneWay, Converter={StaticResource FavStateToIconConverter}}"/>
+                            </Button>
+                        </Grid>
                         <Slider 
                             x:Name="MediaPosition"
                             Grid.Row="1"
@@ -220,9 +266,9 @@
                                         <ResourceDictionary x:Key="Default">
                                             <SolidColorBrush x:Key="SliderOuterThumbBackground" Color="#66FFFFFF"/>
                                             <SolidColorBrush x:Key="SliderThumbBorderBrush" Color="Transparent"/>
-                                            
+
                                             <SolidColorBrush x:Key="SliderContainerBackground" Color="Transparent"/>
-                                            <SolidColorBrush x:Key="SliderThumbBackground" Color="#E6FFFFFF"/>                                            
+                                            <SolidColorBrush x:Key="SliderThumbBackground" Color="#E6FFFFFF"/>
                                             <SolidColorBrush x:Key="SliderTrackFill" Color="#80FFFFFF"/>
                                             <SolidColorBrush x:Key="SliderTrackValueFill" Color="#E6FFFFFF"/>
 
@@ -291,7 +337,7 @@
                             HorizontalAlignment="Center" VerticalAlignment="Center"
                             Click="{x:Bind ViewModel.TryPrevious}"
                             IsEnabled="{x:Bind ViewModel.CanSkipPrevious, Mode=OneWay}" 
-                            Height="50" Width="50" BorderThickness="0" Background="Transparent">
+                            Height="48" Width="48" BorderThickness="0" Background="Transparent">
                             <FontIcon FontSize="24" FontFamily="{StaticResource FluentIcons}" Glyph="&#xF8AC;"/>
                             <Button.Resources>
                                 <ResourceDictionary>
@@ -318,7 +364,7 @@
                             HorizontalAlignment="Center" VerticalAlignment="Center"
                             Click="{x:Bind ViewModel.TryNext}"
                             IsEnabled="{x:Bind ViewModel.CanSkipNext, Mode=OneWay}" 
-                            Height="50" Width="50" BorderThickness="0" Background="Transparent">
+                            Height="48" Width="48" BorderThickness="0" Background="Transparent">
                             <FontIcon FontSize="24" FontFamily="{StaticResource FluentIcons}" Glyph="&#xF8AD;"/>
                             <Button.Resources>
                                 <ResourceDictionary>
@@ -337,7 +383,9 @@
                             Grid.Row="2" Grid.Column="0"
                             HorizontalAlignment="Center" VerticalAlignment="Center"
                             x:Name="VolumeButton" Height="48" Width="48" BorderThickness="0" Background="Transparent">
-                            <FontIcon FontSize="24" FontFamily="{StaticResource FluentIcons}" Glyph="&#xE767;" />
+                            <FontIcon 
+                                FontSize="20" FontFamily="{StaticResource FluentIcons}" Glyph="&#xE767;" 
+                                Foreground="#B4FFFFFF"/>
                             <Button.Flyout>
                                 <Flyout>
                                     <Flyout.FlyoutPresenterStyle>
@@ -368,7 +416,152 @@
                                 </Flyout>
                             </Button.Flyout>
                         </Button>
+                        <Grid
+                            x:Name="PlaylistButtonGrid"
+                            Grid.Row="2" Grid.Column="1">
+                            <ToggleButton 
+                                Grid.Row="2" Grid.Column="1"
+                                x:Name="PlaylistButton"
+                                Visibility="{x:Bind ViewModel.IsLive, Mode=OneWay, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
+                                IsChecked="{x:Bind ViewModel.IsPlaylistShown, Mode=TwoWay}"
+                                HorizontalAlignment="Center" VerticalAlignment="Center"
+                                Height="42" Width="42" BorderThickness="0">
+                                <FontIcon 
+                                FontFamily="{StaticResource FluentIcons}" Glyph="&#xE8FD;"/>
+                                <ToggleButton.Resources>
+                                    <ResourceDictionary>
+                                        <ResourceDictionary.ThemeDictionaries>
+                                            <ResourceDictionary x:Key="Default">
+                                                <SolidColorBrush x:Key="ToggleButtonBackground" Color="Transparent"/>
+                                                <SolidColorBrush x:Key="ToggleButtonBackgroundPointerOver" Color="#19FFFFFF"/>
+                                                <SolidColorBrush x:Key="ToggleButtonBackgroundPressed" Color="#0CFFFFFF"/>
+                                                <SolidColorBrush x:Key="ToggleButtonBackgroundChecked" Color="#B4FFFFFF"/>
+                                                <SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPointerOver" Color="#E6FFFFFF"/>
+                                                <SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPressed" Color="#C8FFFFFF"/>
+                                                <SolidColorBrush x:Key="ToggleButtonForeground" Color="#B4FFFFFF"/>
+                                                <SolidColorBrush x:Key="ToggleButtonForegroundPointerOver" Color="#B4FFFFFF"/>
+                                                <SolidColorBrush x:Key="ToggleButtonForegroundPressed" Color="#B4FFFFFF"/>
+                                                <SolidColorBrush x:Key="ToggleButtonForegroundChecked" Color="#B4000000"/>
+                                                <SolidColorBrush x:Key="ToggleButtonForegroundCheckedPointerOver" Color="#B4000000"/>
+                                                <SolidColorBrush x:Key="ToggleButtonForegroundCheckedPressed" Color="#B4000000"/>
+                                            </ResourceDictionary>
+                                        </ResourceDictionary.ThemeDictionaries>
+                                    </ResourceDictionary>
+                                </ToggleButton.Resources>
+                                <animations:Implicit.ShowAnimations>
+                                    <animations:OpacityAnimation From="0" To="1" Duration="0:0:0.2"/>
+                                </animations:Implicit.ShowAnimations>
+                                <animations:Implicit.HideAnimations>
+                                    <animations:OpacityAnimation From="1" To="0" Duration="0:0:0.2"/>
+                                </animations:Implicit.HideAnimations>
+                            </ToggleButton>
+                            <animations:Implicit.ShowAnimations>
+                                <animations:OpacityAnimation From="0" To="1" Duration="0:0:0.2"/>
+                            </animations:Implicit.ShowAnimations>
+                            <animations:Implicit.HideAnimations>
+                                <animations:OpacityAnimation From="1" To="0" Duration="0:0:0.2"/>
+                            </animations:Implicit.HideAnimations>
+                        </Grid>
+                        <Button 
+                            Grid.Row="2" Grid.Column="2"
+                            Click="NavDetailButton_Click"
+                            HorizontalAlignment="Center" VerticalAlignment="Center"
+                            Height="42" Width="42" BorderThickness="0" Background="Transparent">
+                            <FontIcon 
+                                FontFamily="{StaticResource FluentIcons}" Glyph="&#xE90B;" 
+                                Foreground="#B4FFFFFF"/>
+                        </Button>
                     </Grid>
+                    <animations:Implicit.Animations>
+                        <animations:OffsetAnimation Duration="0:0:0.5" />
+                    </animations:Implicit.Animations>
+                </Grid>
+                <Grid
+                    x:Name="PlaylistPanelGrid"
+                    Grid.Column="2">
+                    <Grid
+                        x:Name="PlaylistPanel"
+                        Visibility="{x:Bind ViewModel.IsPlaylistShown, Mode=OneWay}"
+                        Margin="40,0,0,0"
+                        Width="400">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="3*" />
+                            <RowDefinition Height="95*" MaxHeight="700" />
+                            <RowDefinition Height="2*" />
+                        </Grid.RowDefinitions>
+                        <Border
+                            Grid.Row="1"
+                            HorizontalAlignment="Stretch"
+                            MinWidth="300"
+                            Visibility="{x:Bind ViewModel.IsPlaylistLoading,Mode=OneWay,Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <muxc:ProgressRing Foreground="#80FFFFFF" />
+                        </Border>
+                        <ListView 
+                            x:Name="PlayListView" 
+                            Grid.Row="1"
+                            ItemsSource="{x:Bind ViewModel.Playlist, Mode=TwoWay}"
+                            IsItemClickEnabled="True"
+                            SelectionMode="None"
+                            ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                            ItemClick="PlayListView_ItemClick">
+                            <ListView.Transitions>
+                                <TransitionCollection>
+                                    <EntranceThemeTransition/>
+                                </TransitionCollection>
+                            </ListView.Transitions>
+                            <ListView.ItemTemplate>
+                                <DataTemplate x:Name="PlaylistTemplate" x:DataType="datamodel:PlayItemSnapshot">
+                                    <Grid VerticalAlignment="Center" Height="60" Margin="8,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition />
+                                            <ColumnDefinition Width="auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid Grid.Column="0"  VerticalAlignment="Center">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="auto" />
+                                                <RowDefinition Height="auto" />
+                                            </Grid.RowDefinitions>
+                                            <TextBlock 
+                                            Grid.Row="0" 
+                                            TextTrimming="CharacterEllipsis" MaxLines="1" 
+                                            Foreground="#C0FFFFFF" FontWeight="Medium"
+                                            Text="{x:Bind Title}" Style="{StaticResource BaseTextBlockStyle}"/>
+                                            <TextBlock 
+                                            Grid.Row="1" 
+                                            Margin="0,4,0,0" TextTrimming="CharacterEllipsis" MaxLines="1" 
+                                            Text="{x:Bind SubTitle}" 
+                                            Foreground="#B4FFFFFF" FontWeight="Normal"
+                                            Style="{StaticResource CaptionTextBlockStyle}"/>
+                                        </Grid>
+                                        <TextBlock 
+                                        Grid.Column="1" VerticalAlignment="Center" 
+                                        Text="{x:Bind Duration, Converter={StaticResource DurationToDisplayConverter}}" 
+                                        Foreground="#80FFFFFF"
+                                        Style="{StaticResource BaseTextBlockStyle}"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <animations:Implicit.ShowAnimations>
+                            <animations:OpacityAnimation From="0" To="1" Duration="0:0:0.3"/>
+                            <animations:TranslationAnimation From="60,0" To="0,0" Duration="0:0:0.5"/>
+                        </animations:Implicit.ShowAnimations>
+                        <animations:Implicit.HideAnimations>
+                            <animations:OpacityAnimation From="1" To="0" Duration="0:0:0.3"/>
+                            <animations:TranslationAnimation From="0,0" To="60,0" Duration="0:0:0.5"/>
+                        </animations:Implicit.HideAnimations>
+                    </Grid>
+                    <animations:Implicit.ShowAnimations>
+                        <animations:OpacityAnimation From="0" To="1" Duration="0:0:0.3"/>
+                        <animations:TranslationAnimation From="60,0" To="0,0" Duration="0:0:0.5"/>
+                    </animations:Implicit.ShowAnimations>
+                    <animations:Implicit.HideAnimations>
+                        <animations:OpacityAnimation From="1" To="0" Duration="0:0:0.3"/>
+                        <animations:TranslationAnimation From="0,0" To="60,0" Duration="0:0:0.5"/>
+                    </animations:Implicit.HideAnimations>
+                    <animations:Implicit.Animations>
+                        <animations:OffsetAnimation Duration="0:0:0.5" />
+                    </animations:Implicit.Animations>
                 </Grid>
             </Grid>
         </Grid>

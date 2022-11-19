@@ -86,27 +86,51 @@ namespace PureRadio.Uwp.Views
             MediaPosition.AddHandler(PointerReleasedEvent, new PointerEventHandler(MediaPositionLive_PointerReleased), true);
             VolumeControl.AddHandler(PointerReleasedEvent, new PointerEventHandler(VolumeControl_PointerReleased), true);
 
-            ApplicationViewTitleBar titleBar = ApplicationView.GetForCurrentView().TitleBar;
-            Color foreground = App.RootTheme switch
-            {
-                ElementTheme.Dark => Colors.White,
-                ElementTheme.Light => Colors.Black,
-                _ => Windows.UI.Xaml.Application.Current.RequestedTheme == ApplicationTheme.Dark ? Colors.White : Colors.Black,
-            };
-            titleBar.ButtonForegroundColor = foreground;
-            AppTitleTextBlock.Foreground = new SolidColorBrush(foreground);
+            NavigationCacheMode = NavigationCacheMode.Enabled;
         }
 
         private void MainPage_Unloaded(object sender, RoutedEventArgs e)
         {
-            Ioc.Default.GetRequiredService<INavigateService>().Navigating -= MainPage_Navigating;
+            // Ioc.Default.GetRequiredService<INavigateService>().Navigating -= MainPage_Navigating;
             Ioc.Default.GetRequiredService<ISettingsService>().SettingTheme -= MainPage_SettingTheme;
         }
 
         private void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
-            Ioc.Default.GetRequiredService<INavigateService>().Navigating += MainPage_Navigating;
+            // Ioc.Default.GetRequiredService<INavigateService>().Navigating += MainPage_Navigating;
             Ioc.Default.GetRequiredService<ISettingsService>().SettingTheme += MainPage_SettingTheme;
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            if (e.NavigationMode == NavigationMode.Back)
+            {
+                ConnectedAnimation animation =
+                ConnectedAnimationService.GetForCurrentView().GetAnimation("PlayerToMainAni");
+                if (animation != null)
+                {
+                    animation.TryStart(Cover);
+                }
+
+                ApplicationViewTitleBar titleBar = ApplicationView.GetForCurrentView().TitleBar;
+                Color foreground = App.RootTheme switch
+                {
+                    ElementTheme.Dark => Colors.White,
+                    ElementTheme.Light => Colors.Black,
+                    _ => Windows.UI.Xaml.Application.Current.RequestedTheme == ApplicationTheme.Dark ? Colors.White : Colors.Black,
+                };
+                titleBar.ButtonForegroundColor = foreground;
+                AppTitleTextBlock.Foreground = new SolidColorBrush(foreground);
+            }
+            Ioc.Default.GetRequiredService<INavigateService>().Navigating += MainPage_Navigating;
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            Ioc.Default.GetRequiredService<INavigateService>().Navigating -= MainPage_Navigating;
+
+            base.OnNavigatedFrom(e);
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
@@ -173,7 +197,8 @@ namespace PureRadio.Uwp.Views
             // Add handler for ContentFrame navigation.
             ContentFrame.Navigated += On_Navigated;
             // NavView doesn't load any page by default, so load home page.
-            NavigateToMainView(PageIds.Home, new EntranceNavigationTransitionInfo());
+            if(NavView.SelectedItem == null)
+                NavigateToMainView(PageIds.Home, new EntranceNavigationTransitionInfo());
             // Listen to the window directly so the app responds
             // to accelerator keys regardless of which element has focus.
             Window.Current.CoreWindow.Dispatcher.AcceleratorKeyActivated +=
@@ -182,8 +207,6 @@ namespace PureRadio.Uwp.Views
             Window.Current.CoreWindow.PointerPressed += CoreWindow_PointerPressed;
 
             SystemNavigationManager.GetForCurrentView().BackRequested += System_BackRequested;
-
-            NavigationCacheMode = NavigationCacheMode.Enabled;
         }
 
 
@@ -285,17 +308,7 @@ namespace PureRadio.Uwp.Views
             {
                 item = _secondaryPages.FirstOrDefault(p => p.Page == e.SourcePageType);
                 if (item.Tag != null) _currentPageId = item.pageIds;
-            }
-
-            if(e.NavigationMode == NavigationMode.New)
-            {
-                ConnectedAnimation animation =
-                ConnectedAnimationService.GetForCurrentView().GetAnimation("PlayerToMainAni");
-                if (animation != null)
-                {
-                    animation.TryStart(Cover);
-                }
-            }            
+            }           
         }
 
         private bool TryGoBack()

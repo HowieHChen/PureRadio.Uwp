@@ -556,10 +556,10 @@
                                 </animations:Implicit.Animations>
                             </StackPanel>
                             <Button 
-                                Click="{x:Bind PlayerViewModel.Refresh}"
+                                Click="{x:Bind PlayerViewModel.NavigateDetail}"
                                 Grid.Column="4" x:Name="ExtControlPanel"
                                 Margin="8,0,16,0" Height="42" Width="42" BorderThickness="0" Background="Transparent">
-                                <FontIcon FontSize="16" FontFamily="{StaticResource FluentIcons}" Glyph="&#xE72C;" />
+                                <FontIcon FontFamily="{StaticResource FluentIcons}" Glyph="&#xE90B;" />
                                 <animations:Implicit.Animations>
                                     <animations:OffsetAnimation Duration="0:0:0.1"/>
                                 </animations:Implicit.Animations>

@@ -186,8 +186,9 @@ namespace PureRadio.Uwp.Services
         {
             //PlayerStateChanged?.Invoke(this, new PlayerStateChangedEventArgs(
             //        GetCurrentPlayerState()));
-            PlayerItemChanged?.Invoke(this, new PlayerItemChangedEventArgs(
-                _playItem));
+            if(_currentType != MediaPlayType.RadioDemand)
+                PlayerItemChanged?.Invoke(this, new PlayerItemChangedEventArgs(
+                    _playItem));
         }
 
         private void AudioPlayer_SourceChanged(MediaPlayer sender, object args)
@@ -305,12 +306,14 @@ namespace PureRadio.Uwp.Services
         public async void PlayRadioDemand(int radioId, int index, List<PlayItemSnapshot> radioPlaylist)
         {
             _radioPlayListIndex = Convert.ToUInt32(index);
-            if(_currentType == MediaPlayType.RadioDemand && _playItem != null && _playItem.MainId == radioId && _playItem.DayOfWeek == radioPlaylist[index].DayOfWeek)
+            if (_currentType == MediaPlayType.RadioDemand && _playItem != null && _playItem.MainId == radioId && _playItem.DayOfWeek == radioPlaylist[index].DayOfWeek)
             {
                 (AudioPlayer.Source as MediaPlaybackList).MoveTo(_radioPlayListIndex);
                 Play();
                 return;
             }
+            else if (radioPlaylist == null)
+                return;
             if (_mediaPlaybackList != null) _mediaPlaybackList.CurrentItemChanged -= MediaPlaybackList_CurrentItemChanged;
             _mediaPlaybackList = new MediaPlaybackList();
             await Task.Run(() =>
@@ -342,6 +345,8 @@ namespace PureRadio.Uwp.Services
                 PlayContent(contentId, programId, _playList);
                 return;
             }
+            else if (version == string.Empty)
+                return;
             var detail = await _contentProvider.GetContentDetailInfo(contentId, CancellationToken.None);
             var contentPlaylist = await _contentProvider.GetContentProgramListFull(contentId, version, CancellationToken.None);
             var playlist = _playerAdapter.ConvertToPlayItemSnapshotList(detail, contentPlaylist);

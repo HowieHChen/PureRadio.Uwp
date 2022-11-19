@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.Toolkit.Uwp.UI.Animations;
+using PureRadio.Uwp.Models.Data.Content;
+using PureRadio.Uwp.Models.Local;
 using PureRadio.Uwp.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -53,7 +55,7 @@ namespace PureRadio.Uwp.Views
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             ViewModel.PlayerStateChanged -= PlayerStateChanged;
-
+            
             base.OnNavigatedFrom(e);
         }
 
@@ -66,9 +68,15 @@ namespace PureRadio.Uwp.Views
             if (animation != null)
             {
                 animation.TryStart(Cover);
+                animation.Completed += Animation_Completed;
             }
+        }
 
+        private void Animation_Completed(ConnectedAnimation sender, object args)
+        {
             ViewModel.PlayerStateChanged += PlayerStateChanged;
+            PlayerStateChanged(this, ViewModel.PlayerState);
+            sender.Completed -= Animation_Completed;
         }
 
         private void PlayerStateChanged(object sender, MediaPlaybackState e)
@@ -133,10 +141,36 @@ namespace PureRadio.Uwp.Views
 
         private void HideButton_Click(object sender, RoutedEventArgs e)
         {
-            //RootGrid.Background = new SolidColorBrush(Colors.White);
-            // CoverLargeImage.Source = new BitmapImage();
+            if (ViewModel.PlayerState == MediaPlaybackState.Paused)
+            {
+                CoverImage.Width = CoverImage.Height = Cover.Height = Cover.Width = 160;
+                Cover.Margin = new Thickness(20, 36, 20, 36);
+                ScaleTrans.ScaleX = ScaleTrans.ScaleY = 1;
+            }
+                
             ConnectedAnimationService.GetForCurrentView().PrepareToAnimate("PlayerToMainAni", Cover);
             ViewModel.NavigateBack();
+        }
+
+        private void PlayListView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            var item = e.ClickedItem as PlayItemSnapshot;
+            var list = sender as ListView;
+            int index = list.Items.IndexOf(item);
+            ViewModel.PlayItem(item, index);
+        }
+
+        private void NavDetailButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel.PlayerState == MediaPlaybackState.Paused)
+            {
+                CoverImage.Width = CoverImage.Height = Cover.Height = Cover.Width = 160;
+                Cover.Margin = new Thickness(20, 36, 20, 36);
+                ScaleTrans.ScaleX = ScaleTrans.ScaleY = 1;
+            }
+
+            ConnectedAnimationService.GetForCurrentView().PrepareToAnimate("PlayerToMainAni", Cover);
+            ViewModel.NavigateDetail();
         }
     }
 }

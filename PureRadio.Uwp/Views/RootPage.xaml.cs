@@ -116,7 +116,9 @@ namespace PureRadio.Uwp.Views
                     RootFrame.GoBack();
                 else
                     RootFrame.Navigate(typeof(MainPage), e.TransitionInfo);
-                Ioc.Default.GetRequiredService<INavigateService>();
+                var navigate = Ioc.Default.GetRequiredService<INavigateService>();
+                if (e.PageId == PageIds.RadioDetail || e.PageId == PageIds.ContentDetail)
+                    navigate.NavigateToSecondaryView(e.PageId, e.TransitionInfo, e.Parameter);
             }
         }
 

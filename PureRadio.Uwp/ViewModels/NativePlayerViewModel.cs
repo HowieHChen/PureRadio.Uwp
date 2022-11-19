@@ -15,6 +15,7 @@ using Windows.Media.Playback;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
 using static PureRadio.Uwp.Models.Data.Constants.ApiConstants;
 
@@ -23,6 +24,7 @@ namespace PureRadio.Uwp.ViewModels
     public sealed partial class NativePlayerViewModel : ObservableRecipient
     {
         private readonly IPlaybackService playService;
+        private readonly INavigateService navigate;
         private readonly ILibraryService library;
         private readonly DispatcherTimer _refreshTimer;
 
@@ -77,9 +79,11 @@ namespace PureRadio.Uwp.ViewModels
 
         public NativePlayerViewModel(
             IPlaybackService playbackService,
+            INavigateService navigateService,
             ILibraryService libraryService)
         {
             playService = playbackService;
+            navigate = navigateService;
             library = libraryService;
             UpdatePlayerState(playService.GetCurrentPlayerState());
             itemSnapshot = playService.GetCurrentPlayItem();
@@ -225,9 +229,10 @@ namespace PureRadio.Uwp.ViewModels
                     _currentType = playItem.Type;
                     if (playItem.Type == MediaPlayType.None)
                     {
-                        Cover = new BitmapImage(new Uri("ms-appx:///Assets/Image/DefaultCover.png"));
-                        Cover.DecodePixelHeight = Cover.DecodePixelWidth = 60;
-                        Cover.DecodePixelType = DecodePixelType.Logical;
+                        var cover = new BitmapImage(new Uri("ms-appx:///Assets/Image/DefaultCover.png"));
+                        cover.DecodePixelHeight = Cover.DecodePixelWidth = 60;
+                        cover.DecodePixelType = DecodePixelType.Logical;
+                        Cover = cover;
                         Title = SubTitle = NowPositonText = DurationText = StartTime = EndTime = string.Empty;
                         ShowElement = IsLive = false;
                         MediaTotalSeconds = MediaNowPosition = 0;
@@ -235,9 +240,10 @@ namespace PureRadio.Uwp.ViewModels
                     }
                     else
                     {
-                        Cover = (await ImageCache.Instance.GetFromCacheAsync(playItem.Cover)) ?? new BitmapImage(new Uri("ms-appx:///Assets/Image/DefaultCover.png"));
-                        Cover.DecodePixelHeight = Cover.DecodePixelWidth = 60;
-                        Cover.DecodePixelType = DecodePixelType.Logical;
+                        var cover = (await ImageCache.Instance.GetFromCacheAsync(playItem.Cover)) ?? new BitmapImage(new Uri("ms-appx:///Assets/Image/DefaultCover.png"));
+                        cover.DecodePixelHeight = Cover.DecodePixelWidth = 60;
+                        cover.DecodePixelType = DecodePixelType.Logical;
+                        Cover = cover;
                         Title = playItem.Title;
                         SubTitle = playItem.SubTitle;
                         if (_currentType == MediaPlayType.RadioLive)
@@ -328,10 +334,21 @@ namespace PureRadio.Uwp.ViewModels
                 playService.SetPosition(position);
         }
 
-        public void Refresh()
+        public void NavigateDetail()
         {
-            if(_currentType != MediaPlayType.None)
-                playService.Refresh();
+            switch (_currentType)
+            {
+                default:
+                case MediaPlayType.None:
+                    break;
+                case MediaPlayType.RadioLive:
+                case MediaPlayType.RadioDemand:
+                    navigate.NavigateToSecondaryView(PageIds.RadioDetail, new EntranceNavigationTransitionInfo(), itemSnapshot.MainId);
+                    break;
+                case MediaPlayType.ContentDemand:
+                    navigate.NavigateToSecondaryView(PageIds.ContentDetail, new EntranceNavigationTransitionInfo(), itemSnapshot.MainId);
+                    break;
+            }
         }
     }
 }

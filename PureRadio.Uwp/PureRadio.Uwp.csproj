@@ -208,6 +208,7 @@
     <Compile Include="Resources\Converter\BooleanToDisplayConverter.cs" />
     <Compile Include="Resources\Converter\BooleanToVisibilityConverter.cs" />
     <Compile Include="Resources\Converter\DateTimeToDisplayConverter.cs" />
+    <Compile Include="Resources\Converter\DurationToDisplayConverter.cs" />
     <Compile Include="Resources\Converter\FavStateToDisplayConverter.cs" />
     <Compile Include="Resources\Converter\FavStateToIconConverter.cs" />
     <Compile Include="Resources\Converter\InverseBooleanConverter.cs" />
