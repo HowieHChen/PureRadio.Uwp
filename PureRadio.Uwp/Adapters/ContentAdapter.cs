@@ -1,5 +1,6 @@
 ﻿using PureRadio.Uwp.Adapters.Interfaces;
 using PureRadio.Uwp.Models.Data.Content;
+using PureRadio.Uwp.Models.Local;
 using PureRadio.Uwp.Models.QingTing.Content;
 using System;
 using System.Collections.Generic;
@@ -39,6 +40,19 @@ namespace PureRadio.Uwp.Adapters
             => new ContentInfoCategory(
                 item.ContentId, item.Title, item.Description,
                 item.Cover, (float)item.Rating / 2, item.PlayCount);
-        
+
+        public ContentInfoRecommend ConvertToContentInfoRecommend(ContentRecommendItem item)
+        {
+            if (!int.TryParse(item.Link.ContentId, out int contentId))
+                contentId = 0;
+            return new ContentInfoRecommend(
+                item.Cover, item.Title, item.RecWords, item.PlayCount, (float)item.Score / 2, contentId);
+        }
+
+        public ContentRecommendSet ConvertToContentRecommendSet(ContentCategoriesItem item)
+        {
+            var items = item.CategoryItems.Select(p => ConvertToContentInfoRecommend(p)).ToList();
+            return new ContentRecommendSet(item.CategoryId, item.CategoryTittle, items);
+        }
     }
 }

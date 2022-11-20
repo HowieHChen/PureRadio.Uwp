@@ -59,6 +59,12 @@ namespace PureRadio.Uwp.Providers.Interfaces
         /// <returns>转换结果.</returns>
         Task<T> ParseAsync<T>(HttpResponseMessage response);
 
-
+        /// <summary>
+        /// 解析响应.
+        /// </summary>
+        /// <param name="response">得到的 <see cref="string"/>.</param>
+        /// <typeparam name="T">需要转换的目标类型.</typeparam>
+        /// <returns>转换结果.</returns>
+        T ParseAsync<T>(string response);
     }
 }

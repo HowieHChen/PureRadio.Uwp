@@ -58,7 +58,7 @@
                 HorizontalAlignment="Stretch" Margin="36,0,36,100">
                 <!-- Settings -->
                 <TextBlock
-                    x:Uid="PageSrttingsTitle"
+                    x:Uid="PageSettingsTitle"
                     Style="{StaticResource TitleTextBlockStyle}"
                     Margin="0,32,0,0"
                     Text="Settings" >

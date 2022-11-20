@@ -146,13 +146,17 @@
     <Compile Include="Models\Data\Constants\ServiceConstants.cs" />
     <Compile Include="Models\Data\Content\ContentInfoCategory.cs" />
     <Compile Include="Models\Data\Content\ContentInfoDetail.cs" />
+    <Compile Include="Models\Data\Content\ContentInfoRecommend.cs" />
     <Compile Include="Models\Data\Content\ContentInfoSearch.cs" />
     <Compile Include="Models\Data\Content\ContentPlaylistDetail.cs" />
-    <Compile Include="Models\Data\Radio\RadioInfoCategory.cs" />
+    <Compile Include="Models\Data\Radio\RadioInfoSummary.cs" />
     <Compile Include="Models\Data\Radio\RadioInfoDetail.cs" />
+    <Compile Include="Models\Data\Radio\RadioInfoRecommend.cs" />
     <Compile Include="Models\Data\Radio\RadioInfoSearch.cs" />
     <Compile Include="Models\Data\Radio\RadioPlaylistDetail.cs" />
     <Compile Include="Models\Enums\LibraryItemAction.cs" />
+    <Compile Include="Models\Local\ContentRecommendSet.cs" />
+    <Compile Include="Models\Local\RadioCategoryItem.cs" />
     <Compile Include="Models\Local\ResultSet.cs" />
     <Compile Include="Models\Data\Search\SearchSet.cs" />
     <Compile Include="Models\Data\User\AccountInfo.cs" />
@@ -171,6 +175,8 @@
     <Compile Include="Models\QingTing\Content\ContentDetailResponse.cs" />
     <Compile Include="Models\QingTing\Content\ContentProgramListItem.cs" />
     <Compile Include="Models\QingTing\Content\ContentProgramListResponse.cs" />
+    <Compile Include="Models\QingTing\Content\ContentRecommendItem.cs" />
+    <Compile Include="Models\QingTing\Content\ContentRecommendResponse.cs" />
     <Compile Include="Models\QingTing\Network\IPAddrItem.cs" />
     <Compile Include="Models\QingTing\Network\IPAddrResponse.cs" />
     <Compile Include="Models\QingTing\Radio\RadioBillboardRegionItem.cs" />
@@ -181,6 +187,8 @@
     <Compile Include="Models\QingTing\Radio\RadioDetailResponse.cs" />
     <Compile Include="Models\QingTing\Radio\RadioPlaylistItem.cs" />
     <Compile Include="Models\QingTing\Radio\RadioPlaylistResponse.cs" />
+    <Compile Include="Models\QingTing\Radio\RadioRecommendItem.cs" />
+    <Compile Include="Models\QingTing\Radio\RadioRecommendResponse.cs" />
     <Compile Include="Models\QingTing\Recommend\RecommendRadioLiveItem.cs" />
     <Compile Include="Models\QingTing\Recommend\RecommendRadioReplayItem.cs" />
     <Compile Include="Models\QingTing\Recommend\RecommendResponse.cs" />
@@ -218,6 +226,8 @@
     <Compile Include="Resources\Converter\MediaPlaybackStateToIconConverter.cs" />
     <Compile Include="Resources\Converter\MediaPositionToDisplayConverter.cs" />
     <Compile Include="Resources\Converter\MutedStateToIconConverter.cs" />
+    <Compile Include="Resources\Converter\ProvinceIdToDisplayConverter.cs" />
+    <Compile Include="Resources\Converter\RadioCategoryToDisplayConverter.cs" />
     <Compile Include="Resources\Converter\ThemeToDisplayConverter.cs" />
     <Compile Include="Resources\Converter\ThemeToIndexConverter.cs" />
     <Compile Include="Services\Interfaces\ILibraryService.cs" />
@@ -230,22 +240,30 @@
     <Compile Include="Services\SqliteService.cs" />
     <Compile Include="ViewModels\ContentCategoryViewModel.cs" />
     <Compile Include="ViewModels\ContentDetailViewModel.cs" />
+    <Compile Include="ViewModels\ContentViewModel.cs" />
     <Compile Include="ViewModels\FullScreenPlayerViewModel.cs" />
     <Compile Include="ViewModels\LibraryViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\NativePlayerViewModel.cs" />
     <Compile Include="ViewModels\RadioCategoryViewModel.cs" />
     <Compile Include="ViewModels\RadioDetailViewModel.cs" />
+    <Compile Include="ViewModels\RadioViewModel.cs" />
     <Compile Include="ViewModels\SearchViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Main\ContentPage.xaml.cs">
+      <DependentUpon>ContentPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Main\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Main\LibraryPage.xaml.cs">
       <DependentUpon>LibraryPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Main\RadioPage.xaml.cs">
+      <DependentUpon>RadioPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PlayerPage.xaml.cs">
       <DependentUpon>PlayerPage.xaml</DependentUpon>
@@ -328,33 +346,6 @@
     <Content Include="Assets\AppIcon\Wide310x150Logo.scale-400.png" />
     <Content Include="Assets\Image\DefaultAvatar.png" />
     <Content Include="Assets\Image\DefaultCover.png" />
-    <Content Include="Assets\Image\ProgramCategories\1599_ertong.png" />
-    <Content Include="Assets\Image\ProgramCategories\1737_xiaoyuan.png" />
-    <Content Include="Assets\Image\ProgramCategories\3251_tuokouxiu.png" />
-    <Content Include="Assets\Image\ProgramCategories\3276_xiqu.png" />
-    <Content Include="Assets\Image\ProgramCategories\3385_qiche.png" />
-    <Content Include="Assets\Image\ProgramCategories\3427_erciyuan.png" />
-    <Content Include="Assets\Image\ProgramCategories\3442_guangboju.png" />
-    <Content Include="Assets\Image\ProgramCategories\3496_pingshu.png" />
-    <Content Include="Assets\Image\ProgramCategories\3588_yingshi.png" />
-    <Content Include="Assets\Image\ProgramCategories\3600_pinpaidiantai.png" />
-    <Content Include="Assets\Image\ProgramCategories\3613_wenhua.png" />
-    <Content Include="Assets\Image\ProgramCategories\3631_lianhezhuanqu.png" />
-    <Content Include="Assets\Image\ProgramCategories\3636_chubanjingpin.png" />
-    <Content Include="Assets\Image\ProgramCategories\3637_chaojihuiyuan.png" />
-    <Content Include="Assets\Image\ProgramCategories\3670_shenghuo.png" />
-    <Content Include="Assets\Image\ProgramCategories\3675_muying.png" />
-    <Content Include="Assets\Image\ProgramCategories\521_xiaoshuo.png" />
-    <Content Include="Assets\Image\ProgramCategories\523_yinyue.png" />
-    <Content Include="Assets\Image\ProgramCategories\527_xiangshengxiaopin.png" />
-    <Content Include="Assets\Image\ProgramCategories\529_qinggan.png" />
-    <Content Include="Assets\Image\ProgramCategories\531_lishi.png" />
-    <Content Include="Assets\Image\ProgramCategories\533_caijing.png" />
-    <Content Include="Assets\Image\ProgramCategories\535_keji.png" />
-    <Content Include="Assets\Image\ProgramCategories\537_jiaoyu.png" />
-    <Content Include="Assets\Image\ProgramCategories\543_waiyu.png" />
-    <Content Include="Assets\Image\ProgramCategories\545_toutiao.png" />
-    <Content Include="Assets\Image\ProgramCategories\547_yule.png" />
     <Content Include="Assets\Image\Provinces\111_anhui.png" />
     <Content Include="Assets\Image\Provinces\129_fujian.png" />
     <Content Include="Assets\Image\Provinces\139_jiangxi.png" />
@@ -386,6 +377,19 @@
     <Content Include="Assets\Image\Provinces\83_shanghai.png" />
     <Content Include="Assets\Image\Provinces\85_jiangsu.png" />
     <Content Include="Assets\Image\Provinces\99_zhejiang.png" />
+    <Content Include="Assets\Image\RadioCategories\429.png" />
+    <Content Include="Assets\Image\RadioCategories\430.png" />
+    <Content Include="Assets\Image\RadioCategories\431.png" />
+    <Content Include="Assets\Image\RadioCategories\432.png" />
+    <Content Include="Assets\Image\RadioCategories\433.png" />
+    <Content Include="Assets\Image\RadioCategories\434.png" />
+    <Content Include="Assets\Image\RadioCategories\435.png" />
+    <Content Include="Assets\Image\RadioCategories\436.png" />
+    <Content Include="Assets\Image\RadioCategories\438.png" />
+    <Content Include="Assets\Image\RadioCategories\439.png" />
+    <Content Include="Assets\Image\RadioCategories\440.png" />
+    <Content Include="Assets\Image\RadioCategories\441.png" />
+    <Content Include="Assets\Image\RadioCategories\442.png" />
     <Content Include="Assets\SplashScreen\SplashScreen.scale-100.png" />
     <Content Include="Assets\SplashScreen\SplashScreen.scale-125.png" />
     <Content Include="Assets\SplashScreen\SplashScreen.scale-150.png" />
@@ -444,11 +448,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Main\ContentPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Main\HomePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Main\LibraryPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Main\RadioPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

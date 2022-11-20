@@ -45,7 +45,7 @@ namespace PureRadio.Uwp.ViewModels
         [ObservableProperty]
         private bool _isEmpty;
 
-        public IncrementalLoadingObservableCollection<RadioInfoCategory> RadioResult { get; set; }
+        public IncrementalLoadingObservableCollection<RadioInfoSummary> RadioResult { get; set; }
 
         public RadioCategoryViewModel(
             INavigateService navigate,
@@ -55,7 +55,7 @@ namespace PureRadio.Uwp.ViewModels
             this.radioProvider = radioProvider;
             page = 1;
             pageSize = 30;
-            RadioResult = new IncrementalLoadingObservableCollection<RadioInfoCategory>(RequestForRadioCategory);
+            RadioResult = new IncrementalLoadingObservableCollection<RadioInfoSummary>(RequestForRadioCategory);
             IsActive = true;
         }
 
@@ -74,7 +74,7 @@ namespace PureRadio.Uwp.ViewModels
             base.OnDeactivated();
         }
 
-        private async Task<IEnumerable<RadioInfoCategory>> RequestForRadioCategory(CancellationToken cancelToken)
+        private async Task<IEnumerable<RadioInfoSummary>> RequestForRadioCategory(CancellationToken cancelToken)
         {
             var resultSet = await radioProvider.GetRadioCategoryResult(CategoryId, cancelToken, page, pageSize);
             page++;

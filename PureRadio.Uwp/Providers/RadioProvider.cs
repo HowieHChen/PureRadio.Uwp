@@ -5,6 +5,7 @@ using PureRadio.Uwp.Models.Data.Radio;
 using PureRadio.Uwp.Models.Data.Search;
 using PureRadio.Uwp.Models.Enums;
 using PureRadio.Uwp.Models.Local;
+using PureRadio.Uwp.Models.QingTing.Content;
 using PureRadio.Uwp.Models.QingTing.Radio;
 using PureRadio.Uwp.Models.QingTing.Search;
 using PureRadio.Uwp.Providers.Interfaces;
@@ -13,8 +14,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Controls;
 
 namespace PureRadio.Uwp.Providers
 {
@@ -172,7 +175,7 @@ namespace PureRadio.Uwp.Providers
         }
 
 
-        public async Task<ResultSet<RadioInfoCategory>> GetRadioCategoryResult(int categoryId, CancellationToken cancellationToken, int page = 1, int pageSize = 30)
+        public async Task<ResultSet<RadioInfoSummary>> GetRadioCategoryResult(int categoryId, CancellationToken cancellationToken, int page = 1, int pageSize = 30)
         {
             Dictionary<string, string> parameters = new()
             {
@@ -184,9 +187,32 @@ namespace PureRadio.Uwp.Providers
             var response = await _httpProvider.SendAsync(request);
             var result = await _httpProvider.ParseAsync<RadioCategoryResponse>(response);
             var items = (cancellationToken.IsCancellationRequested || result.Data == null || result.Data?.Count == 0)
-                ? new List<RadioInfoCategory>()
-                : result.Data.Select(p => _radioAdapter.ConvertToRadioInfoCategory(p)).ToList();
-            return new ResultSet<RadioInfoCategory>(items, result.Data?.Count <= 0);
+                ? new List<RadioInfoSummary>()
+                : result.Data.Select(p => _radioAdapter.ConvertToRadioInfoSummary(p)).ToList();
+            return new ResultSet<RadioInfoSummary>(items, result.Data?.Count <= 0);
+        }
+
+        public async Task<List<RadioInfoRecommend>> GetRadioRecommendResult(CancellationToken cancellationToken)
+        {
+            var request = await _httpProvider.GetRequestMessageAsync(ApiConstants.Radio.Recommend, HttpMethod.Post, null, RequestType.RecommendRadio);
+            var response = await _httpProvider.SendAsync(request);
+            var result = await _httpProvider.ParseAsync<RadioRecommendResponse>(response);
+            var items = cancellationToken.IsCancellationRequested || result.Data.Radios?.RadioItems == null
+                ? new List<RadioInfoRecommend>()
+                : result.Data.Radios.RadioItems.Select(p => _radioAdapter.ConvertToRadioInfoRecommend(p)).ToList();
+            return items;
+        }
+
+        public async Task<List<RadioInfoSummary>> GetRadioBillboardResult(int regionId, CancellationToken cancellationToken)
+        {
+            string url = string.Format(ApiConstants.Radio.Billboard, regionId);
+            var request = await _httpProvider.GetRequestMessageAsync(url, HttpMethod.Get, null, RequestType.Default);
+            var response = await _httpProvider.SendAsync(request);
+            var result = await _httpProvider.ParseAsync<RadioCategoryResponse>(response);
+            var items = (cancellationToken.IsCancellationRequested || result.Data == null || result.Data?.Count == 0)
+                ? new List<RadioInfoSummary>()
+                : result.Data.Select(p => _radioAdapter.ConvertToRadioInfoSummary(p)).ToList();
+            return items;
         }
     }
 }

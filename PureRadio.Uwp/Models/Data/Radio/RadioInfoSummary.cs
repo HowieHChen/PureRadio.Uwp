@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace PureRadio.Uwp.Models.Data.Radio
 {
-    public class RadioInfoCategory
+    public class RadioInfoSummary
     {
-        public RadioInfoCategory(
+        public RadioInfoSummary(
             int radioId, Uri cover, string title, 
             string nowplaying, string description, string audienceCount)
         {

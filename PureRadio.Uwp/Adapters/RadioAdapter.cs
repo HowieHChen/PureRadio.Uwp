@@ -56,13 +56,18 @@ namespace PureRadio.Uwp.Adapters
                 item.RadioId, item.ProgramId, item.Title, boardcasters);
         }
 
-        public RadioInfoCategory ConvertToRadioInfoCategory(RadioCategoryItem item)
+        public RadioInfoSummary ConvertToRadioInfoSummary(RadioCategoryItem item)
         {
             var resourceLoader = new ResourceLoader();
             string nowPlaying = item.Nowplaying?.Title ?? resourceLoader.GetString("LangLiveProgramUnknown");
-            return new RadioInfoCategory(
+            return new RadioInfoSummary(
                 item.RadioId, new Uri(item.Cover), item.Title, 
                 nowPlaying, item.Description, item.AudienceCount.ToString());
+        }
+
+        public RadioInfoRecommend ConvertToRadioInfoRecommend(RadioRecommendItem item)
+        {
+            return new RadioInfoRecommend("https:" + item.Cover, item.Title, item.StartTime, item.EndTime + ":00", item.Nowplaying, item.RadioId);
         }
     }
 }

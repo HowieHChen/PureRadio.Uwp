@@ -7,6 +7,7 @@ using PureRadio.Uwp.Models.QingTing.User;
 using PureRadio.Uwp.Providers.Interfaces;
 using PureRadio.Uwp.Services.Interfaces;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -153,7 +154,8 @@ namespace PureRadio.Uwp.Views
                 var result = await httpProvider.ParseAsync<IPAddrResponse>(response);
                 if (result?.Code == 0)
                 {
-
+                    var regionId = AppConstants.ProvinceIdDict.FirstOrDefault(x => x.Value == result.Data.Region).Key;
+                    Ioc.Default.GetRequiredService<ISettingsService>().SetValue<int>(AppConstants.SettingsKey.LocalRegionId, regionId);
                 }
             }
             catch(Exception)

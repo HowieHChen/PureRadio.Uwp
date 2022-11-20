@@ -41,8 +41,8 @@ namespace PureRadio.Uwp.Views
         private readonly List<(string Tag, PageIds pageIds, Type Page)> _mainPages = new List<(string Tag, PageIds pageIds, Type Page)>
         {
             (((int)PageIds.Home).ToString(), PageIds.Home, typeof(HomePage)),
-            //(((int)PageIds.Radio).ToString(), typeof(CategoriesPage)),
-            //(((int)PageIds.Content).ToString(), typeof(RankPage)),
+            (((int)PageIds.Radio).ToString(), PageIds.Radio, typeof(RadioPage)),
+            (((int)PageIds.Content).ToString(),PageIds.Content, typeof(ContentPage)),
             (((int)PageIds.Library).ToString(),PageIds.Library, typeof(LibraryPage)),
             (((int)PageIds.Settings).ToString(), PageIds.Settings, typeof(SettingsPage))
         };
@@ -50,10 +50,10 @@ namespace PureRadio.Uwp.Views
         private readonly List<(string Tag, PageIds pageIds, Type Page)> _secondaryPages = new List<(string Tag, PageIds pageIds, Type Page)>
         {
             (((int)PageIds.Search).ToString(), PageIds.Search, typeof(SearchPage)),
-            //(((int)PageIds.Radio).ToString(), typeof(CategoriesPage)),
-            //(((int)PageIds.Content).ToString(), typeof(RankPage)),
-            //(((int)PageIds.Library).ToString(), typeof(ContentPage)),
-            //(((int)PageIds.Settings).ToString(),typeof(SettingsPage))
+            (((int)PageIds.RadioDetail).ToString(), PageIds.RadioDetail, typeof(RadioDetailPage)),
+            (((int)PageIds.ContentDetail).ToString(), PageIds.ContentDetail, typeof(ContentDetailPage)),
+            (((int)PageIds.RadioCategory).ToString(), PageIds.RadioCategory, typeof(RadioCategoryPage)),
+            (((int)PageIds.ContentCategory).ToString(), PageIds.ContentCategory, typeof(ContentCategoryPage))
         };
 
         private PageIds _currentPageId;
@@ -72,9 +72,6 @@ namespace PureRadio.Uwp.Views
             PlayerViewModel = Ioc.Default.GetRequiredService<NativePlayerViewModel>();
 
             CoreApplicationViewTitleBar coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
-
-            // Set XAML element as a drag region.
-            Window.Current.SetTitleBar(TitleBarHost);
 
             // Register a handler for when the title bar visibility changes.
             // For example, when the title bar is invoked in full screen mode.
@@ -124,6 +121,8 @@ namespace PureRadio.Uwp.Views
                 AppTitleTextBlock.Foreground = new SolidColorBrush(foreground);
             }
             Ioc.Default.GetRequiredService<INavigateService>().Navigating += MainPage_Navigating;
+            // Set XAML element as a drag region.
+            Window.Current.SetTitleBar(TitleBarHost);
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -222,10 +221,10 @@ namespace PureRadio.Uwp.Views
                     pageType = typeof(HomePage);
                     break;
                 case PageIds.Radio:
-
+                    pageType = typeof(RadioPage);
                     break;
                 case PageIds.Content:
-
+                    pageType = typeof(ContentPage);
                     break;
                 case PageIds.Library:
                     pageType = typeof(LibraryPage);

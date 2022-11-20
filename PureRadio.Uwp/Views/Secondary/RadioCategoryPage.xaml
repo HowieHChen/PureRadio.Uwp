@@ -20,7 +20,7 @@
         <convert:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
         <DataTemplate
             x:Key="RadioInfoCategoryTemplate"
-            x:DataType="modelRadio:RadioInfoCategory">
+            x:DataType="modelRadio:RadioInfoSummary">
             <Grid
                 x:Name="CardCantainer"
                 Style="{StaticResource CardViewContainer}"

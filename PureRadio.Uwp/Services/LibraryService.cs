@@ -45,8 +45,8 @@ namespace PureRadio.Uwp.Services
             else if (item.Type == MediaPlayType.RadioLive)
             {
                 var resourceLoader = new ResourceLoader();
-                title = item.SubTitle;
-                subTitle = resourceLoader.GetString("LangLiveNow");
+                title = resourceLoader.GetString("LangLiveNow");
+                subTitle = item.SubTitle;
             }
             else
             {

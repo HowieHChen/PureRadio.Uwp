@@ -3,16 +3,19 @@ using PureRadio.Uwp.Adapters.Interfaces;
 using PureRadio.Uwp.Models.Data.Constants;
 using PureRadio.Uwp.Models.Data.Content;
 using PureRadio.Uwp.Models.Data.Radio;
+using PureRadio.Uwp.Models.Data.Search;
 using PureRadio.Uwp.Models.Enums;
 using PureRadio.Uwp.Models.Local;
 using PureRadio.Uwp.Models.QingTing.Content;
 using PureRadio.Uwp.Models.QingTing.Radio;
+using PureRadio.Uwp.Models.QingTing.Search;
 using PureRadio.Uwp.Providers.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -90,6 +93,19 @@ namespace PureRadio.Uwp.Providers
                 ? new List<ContentInfoCategory>()
                 : result.Data.Contents.Select(p => _contentAdapter.ConvertToContentInfoCategory(p)).ToList();
             return new ResultSet<ContentInfoCategory>(items, result.Total <= page * 12);
+        }
+
+        public async Task<List<ContentRecommendSet>> GetContentRecommendResult(CancellationToken cancellationToken)
+        {
+            var request = await _httpProvider.GetRequestMessageAsync(ApiConstants.Content.Recommend, HttpMethod.Post, null, RequestType.RecommendContent);
+            var response = await _httpProvider.SendAsync(request);
+            var responseString = await response.Content.ReadAsStringAsync();
+            responseString = Regex.Replace(responseString, "\\{\"type\":\"Banner\"(.)*]\\}\\},", string.Empty);
+            var result = _httpProvider.ParseAsync<ContentRecommendResponse>(responseString);
+            var items = cancellationToken.IsCancellationRequested || result.Data.Contents?.Categories == null
+                ? new List<ContentRecommendSet>()
+                : result.Data.Contents.Categories.Select(p => _contentAdapter.ConvertToContentRecommendSet(p)).ToList();
+            return items;
         }
     }
 }

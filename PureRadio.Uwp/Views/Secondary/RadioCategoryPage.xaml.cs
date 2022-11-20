@@ -44,7 +44,7 @@ namespace PureRadio.Uwp.Views.Secondary
 
         private void AdaptiveGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            if (e.ClickedItem != null && e.ClickedItem is RadioInfoCategory radioInfo)
+            if (e.ClickedItem != null && e.ClickedItem is RadioInfoSummary radioInfo)
             {
                 (sender as AdaptiveGridView).PrepareConnectedAnimation("RadioToDetailAni", radioInfo, "RadioCover");
                 ViewModel.Navigate(PageIds.RadioDetail, radioInfo.RadioId);

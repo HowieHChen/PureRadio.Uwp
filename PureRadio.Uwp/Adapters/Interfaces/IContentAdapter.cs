@@ -1,5 +1,6 @@
 ﻿using PureRadio.Uwp.Models.Data.Content;
 using PureRadio.Uwp.Models.Data.Radio;
+using PureRadio.Uwp.Models.Local;
 using PureRadio.Uwp.Models.QingTing.Content;
 using PureRadio.Uwp.Models.QingTing.Radio;
 using System;
@@ -37,5 +38,20 @@ namespace PureRadio.Uwp.Adapters.Interfaces
         /// <param name="item">来自 Web 的分类专辑节目列表项.</param>
         /// <returns><see cref="ContentInfoCategory"/>.</returns>
         ContentInfoCategory ConvertToContentInfoCategory(ContentCategoryItem item);
+
+        /// <summary>
+        /// 将来自 Web 的分类的专辑推荐项 <see cref="ContentRecommendItem"/> 转换为本地的分类的专辑推荐项 <see cref="ContentInfoRecommend"/> .
+        /// </summary>
+        /// <param name="item">来自 Web 的分类的专辑推荐项</param>
+        /// <returns><see cref="ContentInfoRecommend"/>.</returns>
+        ContentInfoRecommend ConvertToContentInfoRecommend(ContentRecommendItem item);
+
+        /// <summary>
+        /// 将来自 Web 的分类的专辑推荐列表 <see cref="ContentCategoriesItem"/> 转换为本地的分类的专辑推荐列表 <see cref="ContentRecommendSet"/> .
+        /// </summary>
+        /// <param name="item">来自 Web 的分类的专辑推荐列表</param>
+        /// <returns><see cref="ContentRecommendSet"/>.</returns>
+        ContentRecommendSet ConvertToContentRecommendSet(ContentCategoriesItem item);
+
     }
 }

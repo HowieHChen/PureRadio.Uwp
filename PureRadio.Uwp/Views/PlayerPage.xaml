@@ -502,7 +502,7 @@
                             ItemsSource="{x:Bind ViewModel.Playlist, Mode=TwoWay}"
                             IsItemClickEnabled="True"
                             SelectionMode="None"
-                            ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                            ShowsScrollingPlaceholders="False"
                             ItemClick="PlayListView_ItemClick">
                             <ListView.Transitions>
                                 <TransitionCollection>

@@ -6,9 +6,13 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="Transparent">
 
-    <Grid>
+    <Grid
+        CornerRadius="8,0,0,0"
+        Background="{ThemeResource LayerFillColorDefaultBrush}"
+        BorderThickness="1,1,0,0"
+        BorderBrush="{ThemeResource NavigationViewContentGridBorderBrush}">
         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Home"/>
     </Grid>
 </Page>

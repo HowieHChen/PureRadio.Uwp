@@ -300,6 +300,12 @@
   <data name="PageContentDetailUpdateTime.Text" xml:space="preserve">
     <value>Last update: </value>
   </data>
+  <data name="PageContentSeeAllButton.Content" xml:space="preserve">
+    <value>See all</value>
+  </data>
+  <data name="PageContentTitle.Text" xml:space="preserve">
+    <value>Content</value>
+  </data>
   <data name="PageDetailCantPlayTip.CloseButtonContent" xml:space="preserve">
     <value>Got it!</value>
   </data>
@@ -330,6 +336,9 @@
   <data name="PageLibraryTitleButton.Content" xml:space="preserve">
     <value>Clear all</value>
   </data>
+  <data name="PageRadioCategoriesTitle.Text" xml:space="preserve">
+    <value>Category</value>
+  </data>
   <data name="PageRadioDetailNavBYDAY.Content" xml:space="preserve">
     <value>Two days ago</value>
   </data>
@@ -344,6 +353,18 @@
   </data>
   <data name="PageRadioDetailPodcaster.Text" xml:space="preserve">
     <value>Podcasters: </value>
+  </data>
+  <data name="PageRadioLocalTrend" xml:space="preserve">
+    <value>trending</value>
+  </data>
+  <data name="PageRadioNetTrendTitle.Text" xml:space="preserve">
+    <value>Internet trending</value>
+  </data>
+  <data name="PageRadioRecTitle.Text" xml:space="preserve">
+    <value>Picked for you</value>
+  </data>
+  <data name="PageRadioTitle.Text" xml:space="preserve">
+    <value>Radio</value>
   </data>
   <data name="PageSearchNoResult.Text" xml:space="preserve">
     <value>No results found for you</value>
@@ -420,7 +441,7 @@
   <data name="PageSettingsTimerTitle.Text" xml:space="preserve">
     <value>Sleep timer</value>
   </data>
-  <data name="PageSrttingsTitle.Text" xml:space="preserve">
+  <data name="PageSettingsTitle.Text" xml:space="preserve">
     <value>Settings</value>
   </data>
 </root>

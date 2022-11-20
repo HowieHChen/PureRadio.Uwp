@@ -118,6 +118,9 @@ namespace PureRadio.Uwp.Providers
                 case RequestType.Search:
 
                     break;
+                case RequestType.RecommendRadio:
+                case RequestType.RecommendContent:
+                    break;
                 case RequestType.PlayContent:
                     parameters.Add(ServiceConstants.Params.AccessToken, token);
                     parameters.Add(ServiceConstants.Params.DeviceId, "MOBILESITE");
