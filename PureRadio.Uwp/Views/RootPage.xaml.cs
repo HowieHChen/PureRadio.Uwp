@@ -154,7 +154,7 @@ namespace PureRadio.Uwp.Views
                 var result = await httpProvider.ParseAsync<IPAddrResponse>(response);
                 if (result?.Code == 0)
                 {
-                    if (AppConstants.ProvinceIdDict.TryGetValue(result.Data.Region, out int regionId))
+                    if (!AppConstants.ProvinceIdDict.TryGetValue(result.Data.Region, out int regionId))
                         regionId = 0;
                     Ioc.Default.GetRequiredService<ISettingsService>().SetValue<int>(AppConstants.SettingsKey.LocalRegionId, regionId);
                 }

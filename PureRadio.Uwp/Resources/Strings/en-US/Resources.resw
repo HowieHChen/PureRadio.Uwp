@@ -411,6 +411,18 @@
   <data name="PageDetailCantPlayTip.Title" xml:space="preserve">
     <value>Temporarily unavailable</value>
   </data>
+  <data name="PageHomeRecContentTitle.Text" xml:space="preserve">
+    <value>Most popular content</value>
+  </data>
+  <data name="PageHomeRecRadioLiveTitle.Text" xml:space="preserve">
+    <value>Trending live radio</value>
+  </data>
+  <data name="PageHomeRecRadioReplayTitle.Text" xml:space="preserve">
+    <value>Trending radio replay</value>
+  </data>
+  <data name="PageHomeTitle.Text" xml:space="preserve">
+    <value>Home</value>
+  </data>
   <data name="PageLibraryAddTime.Text" xml:space="preserve">
     <value>Time added: </value>
   </data>

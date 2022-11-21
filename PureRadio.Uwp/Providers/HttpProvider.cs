@@ -118,6 +118,9 @@ namespace PureRadio.Uwp.Providers
                     case RequestType.RecommendContent:
                         content = ApiConstants.Content.RecommendRequest;
                         break;
+                    case RequestType.HomeRadioRecommend:
+                        content = ApiConstants.Radio.HomeRecommend;
+                        break;
                 }
                 requestMessage.Content = new StringContent(content, Encoding.UTF8, "application/json");
             }

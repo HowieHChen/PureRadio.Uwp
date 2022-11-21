@@ -39,5 +39,9 @@ namespace PureRadio.Uwp.Models.Enums
         /// 播放点播内容(专辑内的节目)
         /// </summary>
         PlayContent,
+        /// <summary>
+        /// 主页电台推荐(Post GraphQL)
+        /// </summary>
+        HomeRadioRecommend,
     }
 }

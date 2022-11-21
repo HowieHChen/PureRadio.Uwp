@@ -155,6 +155,7 @@
     <Compile Include="Models\Data\Radio\RadioInfoRecommend.cs" />
     <Compile Include="Models\Data\Radio\RadioInfoSearch.cs" />
     <Compile Include="Models\Data\Radio\RadioPlaylistDetail.cs" />
+    <Compile Include="Models\Data\Radio\RadioReplayInfo.cs" />
     <Compile Include="Models\Enums\LibraryItemAction.cs" />
     <Compile Include="Models\Local\ContentRecommendSet.cs" />
     <Compile Include="Models\Local\RadioCategoryItem.cs" />
@@ -243,6 +244,7 @@
     <Compile Include="ViewModels\ContentDetailViewModel.cs" />
     <Compile Include="ViewModels\ContentViewModel.cs" />
     <Compile Include="ViewModels\FullScreenPlayerViewModel.cs" />
+    <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\LibraryViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\NativePlayerViewModel.cs" />

@@ -1,5 +1,6 @@
 ﻿using PureRadio.Uwp.Models.Data.Radio;
 using PureRadio.Uwp.Models.QingTing.Radio;
+using PureRadio.Uwp.Models.QingTing.Recommend;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,5 +41,19 @@ namespace PureRadio.Uwp.Adapters.Interfaces
         /// <param name="item">来自 Web 的电台推荐项</param>
         /// <returns><see cref="RadioInfoRecommend"/>.</returns>
         RadioInfoRecommend ConvertToRadioInfoRecommend(RadioRecommendItem item);
+
+        /// <summary>
+        /// 将来自 Web 的电台直播推荐项 <see cref="RecommendRadioLiveItem"/> 转换为本地电台详情条目 <see cref="RadioInfoDetail"/> .
+        /// </summary>
+        /// <param name="item">来自 Web 的电台直播推荐项</param>
+        /// <returns><see cref="RadioInfoDetail"/>.</returns>
+        RadioInfoDetail ConvertToRadioInfoDetail(RecommendRadioLiveItem item);
+
+        /// <summary>
+        /// 将来自 Web 的电台回放推荐项 <see cref="RecommendRadioReplayItem"/> 转换为本地电台节目推荐项 <see cref="RadioReplayInfo"/> .
+        /// </summary>
+        /// <param name="item">来自 Web 的电台回放推荐项</param>
+        /// <returns><see cref="RadioReplayInfo"/>.</returns>
+        RadioReplayInfo ConvertToRadioReplayInfo(RecommendRadioReplayItem item);
     }
 }

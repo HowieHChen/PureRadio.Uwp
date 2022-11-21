@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 
@@ -21,6 +22,7 @@ namespace PureRadio.Uwp.ViewModels
         private readonly INavigateService navigate;
         private readonly IRadioProvider radioProvider;
         private readonly ISettingsService settings;
+        private readonly DispatcherTimer _refreshTimer;
 
         [ObservableProperty]
         private bool _isRecLoading;
@@ -62,7 +64,37 @@ namespace PureRadio.Uwp.ViewModels
             ListRecommend = new List<RadioInfoRecommend>();
             ListNetTrend = new List<RadioInfoSummary>();
             ListLocalTrend = new List<RadioInfoSummary>();
+            _refreshTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromMinutes(3),
+            };
             GetRadioData();
+            IsActive = true;
+        }
+
+        protected override void OnActivated()
+        {
+            base.OnActivated();
+            _refreshTimer.Tick += OnRefreshTimerTick;
+            if (!_refreshTimer.IsEnabled)
+                _refreshTimer.Start();
+        }
+
+        protected override void OnDeactivated()
+        {
+            if (_refreshTimer.IsEnabled)
+                _refreshTimer.Stop();
+            _refreshTimer.Tick -= OnRefreshTimerTick;
+            base.OnDeactivated();
+        }
+
+        private void OnRefreshTimerTick(object sender, object e)
+        {
+            int minute = DateTime.Now.Minute;
+            if ((0 < minute && minute <= 3) || (30 < minute && minute <= 33))
+            {
+                GetRadioData();
+            }
         }
 
         public async void GetRadioData()

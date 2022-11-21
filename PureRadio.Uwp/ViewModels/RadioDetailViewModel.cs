@@ -245,7 +245,18 @@ namespace PureRadio.Uwp.ViewModels
                         {
                             if(DateTime.Now > _endDateTime)
                             {
-                                var playList = playerAdapter.ConvertToPlayItemSnapshotList(radioDetail, RadioPlaylist);
+                                int canPlayIndex = index;
+                                for (int i = canPlayIndex; i < RadioPlaylist.Count; i++)
+                                {
+                                    if (DateTime.TryParse(RadioPlaylist[i].EndTime, out DateTime end) && DateTime.Now > end)
+                                        continue;
+                                    else
+                                    {
+                                        canPlayIndex = i - 1;
+                                        break;
+                                    }                                        
+                                }
+                                var playList = playerAdapter.ConvertToPlayItemSnapshotList(radioDetail, RadioPlaylist.GetRange(0, canPlayIndex + 1));
                                 playbackService.PlayRadioDemand(RadioId, index, playList);
                             }
                             else

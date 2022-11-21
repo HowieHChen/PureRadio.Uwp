@@ -7,6 +7,7 @@ using PureRadio.Uwp.Models.Enums;
 using PureRadio.Uwp.Models.Local;
 using PureRadio.Uwp.Models.QingTing.Content;
 using PureRadio.Uwp.Models.QingTing.Radio;
+using PureRadio.Uwp.Models.QingTing.Recommend;
 using PureRadio.Uwp.Models.QingTing.Search;
 using PureRadio.Uwp.Providers.Interfaces;
 using System;
@@ -213,6 +214,20 @@ namespace PureRadio.Uwp.Providers
                 ? new List<RadioInfoSummary>()
                 : result.Data.Select(p => _radioAdapter.ConvertToRadioInfoSummary(p)).ToList();
             return items;
+        }
+
+        public async Task<(List<RadioInfoDetail>, List<RadioReplayInfo>)> GetRadioHomeRecResult(CancellationToken cancellationToken)
+        {
+            var request = await _httpProvider.GetRequestMessageAsync(ApiConstants.Radio.Recommend, HttpMethod.Post, null, RequestType.HomeRadioRecommend);
+            var response = await _httpProvider.SendAsync(request);
+            var result = await _httpProvider.ParseAsync<RecommendResponse>(response);
+            var live = cancellationToken.IsCancellationRequested || result.Data.RadioData?.LivingRadios == null
+                ? new List<RadioInfoDetail>()
+                : result.Data.RadioData.LivingRadios.Select(p => _radioAdapter.ConvertToRadioInfoDetail(p)).ToList();
+            var replay = cancellationToken.IsCancellationRequested || result.Data.RadioData?.ReplayRadios == null
+                ? new List<RadioReplayInfo>()
+                : result.Data.RadioData.ReplayRadios.Select(p => _radioAdapter.ConvertToRadioReplayInfo(p)).ToList();
+            return (live, replay);
         }
     }
 }

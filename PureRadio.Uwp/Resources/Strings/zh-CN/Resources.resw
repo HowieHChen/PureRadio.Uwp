@@ -411,6 +411,18 @@
   <data name="PageDetailCantPlayTip.Title" xml:space="preserve">
     <value>暂时无法播放</value>
   </data>
+  <data name="PageHomeRecContentTitle.Text" xml:space="preserve">
+    <value>最受欢迎</value>
+  </data>
+  <data name="PageHomeRecRadioLiveTitle.Text" xml:space="preserve">
+    <value>正在热播</value>
+  </data>
+  <data name="PageHomeRecRadioReplayTitle.Text" xml:space="preserve">
+    <value>热门回听</value>
+  </data>
+  <data name="PageHomeTitle.Text" xml:space="preserve">
+    <value>主页</value>
+  </data>
   <data name="PageLibraryAddTime.Text" xml:space="preserve">
     <value>添加时间: </value>
   </data>

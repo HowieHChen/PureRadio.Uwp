@@ -134,6 +134,10 @@ namespace PureRadio.Uwp.Models.Data.Constants
             /// 电台排行榜请求
             /// </summary>
             public const string Billboard = "https://rapi.qtfm.cn/billboards/0/{0}/channels";
+            /// <summary>
+            /// 电台主页推荐请求
+            /// </summary>
+            public const string HomeRecommend = "{\"query\":\"{radioPage {radioPlaying,replayRadio}}\"}";
         }
 
         /// <summary>

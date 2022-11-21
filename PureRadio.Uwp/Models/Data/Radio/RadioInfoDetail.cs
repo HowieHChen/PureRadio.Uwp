@@ -27,7 +27,7 @@ namespace PureRadio.Uwp.Models.Data.Radio
             RegionId = regionId;
             CityId = cityId;
             UpdateTime = updateTime;
-            StartTIme = startTime;
+            StartTime = startTime;
             EndTime = endTime;
         }
 
@@ -79,7 +79,7 @@ namespace PureRadio.Uwp.Models.Data.Radio
         /// <summary>
         /// 当前节目开始时间
         /// </summary>
-        public string StartTIme { get; set; }
+        public string StartTime { get; set; }
         /// <summary>
         /// 当前节目结束时间
         /// </summary>

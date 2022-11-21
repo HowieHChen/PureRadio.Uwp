@@ -88,7 +88,8 @@ d:DataContext="{d:DesignInstance Type=viewmodels:ContentViewModel}"
                     <Grid.Background>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
                             <GradientStop Color="#00000000" Offset="0"/>
-                            <GradientStop Color="#00000000" Offset="0.6"/>
+                            <GradientStop Color="#00000000" Offset="0.4"/>
+                            <GradientStop Color="#1A000000" Offset="0.6"/>
                             <GradientStop Color="#CC000000" Offset="1"/>
                         </LinearGradientBrush>
                     </Grid.Background>

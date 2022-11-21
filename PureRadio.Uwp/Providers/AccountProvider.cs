@@ -130,6 +130,7 @@ namespace PureRadio.Uwp.Providers
                     break;
                 case RequestType.RecommendRadio:
                 case RequestType.RecommendContent:
+                case RequestType.HomeRadioRecommend:
                     break;
                 case RequestType.PlayContent:
                     parameters.Add(ServiceConstants.Params.AccessToken, token);

@@ -1,4 +1,10 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.DependencyInjection;
+using Microsoft.Toolkit.Uwp.UI.Controls;
+using PureRadio.Uwp.Models.Data.Content;
+using PureRadio.Uwp.Models.Data.Radio;
+using PureRadio.Uwp.Models.Enums;
+using PureRadio.Uwp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -22,9 +28,41 @@ namespace PureRadio.Uwp.Views.Main
     /// </summary>
     public sealed partial class HomePage : Page
     {
+        public HomeViewModel ViewModel => (HomeViewModel)DataContext;
+
         public HomePage()
         {
             this.InitializeComponent();
+
+            DataContext = Ioc.Default.GetRequiredService<HomeViewModel>();
+
+        }
+
+        private void RecRadioLiveResult_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            if (e.ClickedItem != null && e.ClickedItem is RadioInfoDetail radioInfo)
+            {
+                (sender as AdaptiveGridView).PrepareConnectedAnimation("RadioToDetailAni", radioInfo, "RecRadioLiveCover");
+                ViewModel.Navigate(PageIds.RadioDetail, radioInfo.RadioId);
+            }
+        }
+
+        private void RecRadioReplayResult_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            if (e.ClickedItem != null && e.ClickedItem is RadioReplayInfo contentInfo)
+            {
+                (sender as AdaptiveGridView).PrepareConnectedAnimation("ContentToDetailAni", contentInfo, "RecRadioReplayCover");
+                ViewModel.Navigate(PageIds.ContentDetail, contentInfo.ContentId);
+            }
+        }
+
+        private void RecContentResult_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            if (e.ClickedItem != null && e.ClickedItem is ContentInfoCategory contentInfo)
+            {
+                (sender as AdaptiveGridView).PrepareConnectedAnimation("ContentToDetailAni", contentInfo, "RecContentCover");
+                ViewModel.Navigate(PageIds.ContentDetail, contentInfo.ContentId);
+            }
         }
     }
 }

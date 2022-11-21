@@ -15,7 +15,7 @@ namespace PureRadio.Uwp.Resources.Converter
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             if((int)value == 0) return string.Empty;
-            if (AppConstants.ProvinceDict.TryGetValue((int)value, out string region))
+            if (!AppConstants.ProvinceDict.TryGetValue((int)value, out string region))
                 region = "LangProvinceUnknown";
             var resourceLoader = new ResourceLoader();
             return resourceLoader.GetString(region) + " " + resourceLoader.GetString("PageRadioLocalTrend");

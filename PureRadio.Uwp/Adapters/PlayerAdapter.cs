@@ -32,13 +32,13 @@ namespace PureRadio.Uwp.Adapters
         {
             Uri sourceUri = new(string.Format(ApiConstants.Radio.Live, item.RadioId));
             int duration = 0;
-            if(TimeSpan.TryParse(item.StartTIme, out TimeSpan startSpan) && TimeSpan.TryParse(item.EndTime, out TimeSpan endSpan))
+            if(TimeSpan.TryParse(item.StartTime, out TimeSpan startSpan) && TimeSpan.TryParse(item.EndTime, out TimeSpan endSpan))
             {
                 duration = (int)(endSpan - startSpan).TotalSeconds;
                 if (item.EndTime == "23:59:00") duration += 60;
             }
             return new PlayItemSnapshot(
-                MediaPlayType.RadioLive, sourceUri, item.Cover, item.Nowplaying, item.Title, item.RadioId, 0, duration, item.StartTIme, item.EndTime);
+                MediaPlayType.RadioLive, sourceUri, item.Cover, item.Nowplaying, item.Title, item.RadioId, 0, duration, item.StartTime, item.EndTime);
         }
 
         public PlayItemSnapshot ConvertToPlayItemSnapshot(ContentInfoDetail item)
