@@ -9,7 +9,7 @@ using Windows.ApplicationModel.Resources;
 
 namespace PureRadio.Uwp.Models.Data.User
 {
-    public class AccountInfo
+    public class AccountInfo 
     {
         /// <summary>
         /// 完整构造(在线账号)

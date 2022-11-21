@@ -1,8 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.DependencyInjection;
+using Microsoft.Toolkit.Extensions;
+using Microsoft.Toolkit.Uwp.Helpers;
 using PureRadio.Uwp.Adapters.Interfaces;
 using PureRadio.Uwp.Models.Args;
 using PureRadio.Uwp.Models.Data.Constants;
 using PureRadio.Uwp.Models.Data.User;
+using PureRadio.Uwp.Models.Database;
 using PureRadio.Uwp.Models.Enums;
 using PureRadio.Uwp.Models.QingTing.User;
 using PureRadio.Uwp.Providers.Interfaces;
@@ -14,23 +17,30 @@ using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Documents;
 using static PureRadio.Uwp.Models.Data.Constants.ServiceConstants;
+using static SQLite.SQLite3;
 
 namespace PureRadio.Uwp.Providers
 {
     public class AccountProvider : IAccountProvider
     {
         private readonly ISettingsService settings;// = Ioc.Default.GetRequiredService<ISettingsService>();
+        private readonly ISqliteService sqliteService;
         private readonly IAccountAdapter accountAdapter;
         private AuthorizeState _state;
         private AccountInfo _accountInfo;
         private TokenInfo _tokenInfo;
         private DateTimeOffset _lastAuthorizeTime;
 
-        public AccountProvider(ISettingsService settings, IAccountAdapter accountAdapter)
+        public AccountProvider(
+            ISettingsService settings, 
+            ISqliteService sqliteService,
+            IAccountAdapter accountAdapter)
         {
             this.settings = settings;
+            this.sqliteService = sqliteService;
             this.accountAdapter = accountAdapter;
         }
 
@@ -141,15 +151,27 @@ namespace PureRadio.Uwp.Providers
                 {
                     if (IsTokenValidAsync())
                     {
-                        State = AuthorizeState.SignedIn;
-                        return _tokenInfo.AccessToken;
+                        int expireIn = (int)(_lastAuthorizeTime.AddSeconds(_tokenInfo.ExpiresIn) - DateTimeOffset.Now).TotalSeconds;
+                        if (expireIn > 60)
+                        {
+                            State = AuthorizeState.SignedIn;
+                            return _tokenInfo.AccessToken;
+                        }
+                        else
+                        {
+                            var token = await InternalRefreshTokenAsync();
+                            if (!string.IsNullOrEmpty(token))
+                            {
+                                return _tokenInfo.AccessToken;
+                            }
+                        }
                     }
                     else
                     {
-                        var tokenInfo = await InternalRefreshTokenAsync();
-                        if (tokenInfo != null)
+                        var result = await TrySignInAsync();
+                        if (result && _tokenInfo != null)
                         {
-                            return tokenInfo;
+                            return _tokenInfo.AccessToken;
                         }
                     }
                 }
@@ -192,6 +214,12 @@ namespace PureRadio.Uwp.Providers
                         _tokenInfo = solved.Item2;
                         State = AuthorizeState.SignedIn;
                         _lastAuthorizeTime = DateTimeOffset.Now;
+                        DateTimeOffset expireTime = DateTimeOffset.Now.AddSeconds(_tokenInfo.ExpiresIn);
+                        settings.SetValue(AppConstants.SettingsKey.RefreshToken, _tokenInfo.RefreshToken);
+                        settings.SetValue(AppConstants.SettingsKey.QingTingId, _tokenInfo.QingtingId);
+                        settings.SetValue(AppConstants.SettingsKey.ExpireTime, expireTime);
+                        _ = await sqliteService.ClearAsync<AccountSnapshot>();
+                        _ = await sqliteService.UpsertAsync(accountAdapter.ConvertToAccountSnapshot(AccountInfo));
                         return true;
                     }
                 }
@@ -210,6 +238,9 @@ namespace PureRadio.Uwp.Providers
             settings.SetValue(AppConstants.SettingsKey.AccountOnline, false);
             settings.SetValue(AppConstants.SettingsKey.AccountPhone, string.Empty);
             settings.SetValue(AppConstants.SettingsKey.AccountPassword, string.Empty);
+            settings.SetValue(AppConstants.SettingsKey.RefreshToken, string.Empty);
+            settings.SetValue(AppConstants.SettingsKey.QingTingId, string.Empty);
+            settings.SetValue(AppConstants.SettingsKey.ExpireTime, DateTimeOffset.Now);
             if (_tokenInfo != null)
             {
                 _tokenInfo = null;
@@ -232,21 +263,50 @@ namespace PureRadio.Uwp.Providers
             return isLocalValid;
         }
 
+        public async Task<bool> RefreshTokenOrSignInAsync()
+        {
+            if (!settings.GetValue<bool>(AppConstants.SettingsKey.AccountOnline))
+            {
+                await SignOutAsync();
+                return false;
+            }
+            string refreshToken = settings.GetValue<string>(AppConstants.SettingsKey.RefreshToken);
+            string qingtingId = settings.GetValue<string>(AppConstants.SettingsKey.QingTingId);
+            DateTimeOffset expireTime =  settings.GetValue<DateTimeOffset>(AppConstants.SettingsKey.ExpireTime);
+            int expireIn = (int)(expireTime - DateTimeOffset.Now).TotalSeconds;
+            if (expireIn > 60 && !string.IsNullOrEmpty(refreshToken) && !string.IsNullOrEmpty(qingtingId))
+            {
+                _tokenInfo = new TokenInfo(qingtingId, string.Empty, refreshToken, expireIn);
+                string token = await InternalRefreshTokenAsync();
+                if (!string.IsNullOrEmpty(token))
+                {
+                    var snapshot = await sqliteService.GetItemAsync<AccountSnapshot>(0);
+                    AccountInfo = snapshot == null ? new AccountInfo() : accountAdapter.ConvertToAccountInfo(snapshot);
+                    return true;
+                }
+            }
+            return await TrySignInAsync();
+        }
+
         internal async Task<string> InternalRefreshTokenAsync()
         {
             var httpProvider = Ioc.Default.GetRequiredService<IHttpProvider>();
             var request = await httpProvider.GetRequestMessageAsync(ApiConstants.Account.RefreshToken, HttpMethod.Post, null, RequestType.Auth, false, false);
             var response = await httpProvider.SendAsync(request);
             var result = await httpProvider.ParseAsync<TokenInfoResponse>(response);
-            if (result.ErrorNo != 0)
+            if (result.ErrorNo == 0)
             {
                 _tokenInfo = result.Data;
                 State = AuthorizeState.SignedIn;
                 _lastAuthorizeTime = DateTimeOffset.Now;
+                DateTimeOffset expireTime = DateTimeOffset.Now.AddSeconds(_tokenInfo.ExpiresIn);
+                settings.SetValue(AppConstants.SettingsKey.RefreshToken, _tokenInfo.RefreshToken);
+                settings.SetValue(AppConstants.SettingsKey.QingTingId, _tokenInfo.QingtingId);
+                settings.SetValue(AppConstants.SettingsKey.ExpireTime, expireTime);
                 return _tokenInfo.AccessToken;
             }
-            await SignOutAsync();
-            return null;
+            _tokenInfo = null;
+            return (await TrySignInAsync()) ? _tokenInfo.AccessToken : string.Empty;
         }
 
         internal string GenerateSign(
@@ -281,9 +341,9 @@ namespace PureRadio.Uwp.Providers
 
         public async Task<bool> TrySignInAsync(string phone, string password)
         {
-            settings.SetValue<bool>(AppConstants.SettingsKey.AccountOnline, true);
-            settings.SetValue<string>(AppConstants.SettingsKey.AccountPhone, phone);
-            settings.SetValue<string>(AppConstants.SettingsKey.AccountPassword, password);
+            settings.SetValue(AppConstants.SettingsKey.AccountOnline, true);
+            settings.SetValue(AppConstants.SettingsKey.AccountPhone, phone);
+            settings.SetValue(AppConstants.SettingsKey.AccountPassword, password);
             return await TrySignInAsync();
         }
     }

@@ -1,4 +1,5 @@
 ﻿using PureRadio.Uwp.Models.Data.User;
+using PureRadio.Uwp.Models.Database;
 using PureRadio.Uwp.Models.QingTing.Search;
 using PureRadio.Uwp.Models.QingTing.User;
 using System;
@@ -19,5 +20,17 @@ namespace PureRadio.Uwp.Adapters.Interfaces
         /// </summary>
         /// <param name="item">来自 Web 的搜索建议条目.</param>
         (AccountInfo, TokenInfo) ConvertToAccountInfo(SignInUserItem item, string phoneNumber);
+
+        /// <summary>
+        /// 将本地账号信息 <see cref="AccountInfo"/> 转换为数据库账号信息 <see cref="AccountSnapshot"/>.
+        /// </summary>
+        /// <param name="item">本地账号信息</param>
+        AccountSnapshot ConvertToAccountSnapshot(AccountInfo item);
+
+        /// <summary>
+        /// 将数据库账号信息 <see cref="AccountInfo"/> 转换为本地账号信息 <see cref="AccountSnapshot"/>.
+        /// </summary>
+        /// <param name="item">数据库账号信息</param>
+        AccountInfo ConvertToAccountInfo(AccountSnapshot item);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using PureRadio.Uwp.Models.Data.User;
+using PureRadio.Uwp.Models.Database;
 using PureRadio.Uwp.Models.QingTing.User;
 using System;
 using System.Collections.Generic;
@@ -21,5 +22,16 @@ namespace PureRadio.Uwp.Adapters.Interfaces
 
             return (accountInfo, tokenInfo);
         }
+
+        public AccountInfo ConvertToAccountInfo(AccountSnapshot item)
+            => new AccountInfo(
+                item.QingtingId, item.NickName, item.UserName, item.CreateTime,
+                item.Birthday, item.Gender, item.Location, item.Signature,
+                item.Avatar, item.IsBlocked, item.PhoneNumber);
+
+        public AccountSnapshot ConvertToAccountSnapshot(AccountInfo item)
+            => new AccountSnapshot(0, item.IsOnline, item.PhoneNumber, item.QingtingId,
+                item.NickName, item.UserName, item.CreateTime, item.Birthday, item.Gender,
+                item.Location, item.Signature, item.Avatar.OriginalString, item.IsBlocked);
     }
 }

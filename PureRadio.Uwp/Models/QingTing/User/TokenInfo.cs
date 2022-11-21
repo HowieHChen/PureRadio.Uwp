@@ -31,7 +31,7 @@ namespace PureRadio.Uwp.Models.QingTing.User
         /// <summary>
         /// 用户Id.
         /// </summary>
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore, PropertyName = "qingting_id ", Required = Required.Default)]
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore, PropertyName = "qingting_id", Required = Required.Default)]
         public string QingtingId { get; set; }
 
         /// <summary>

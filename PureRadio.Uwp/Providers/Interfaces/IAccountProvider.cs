@@ -77,5 +77,11 @@ namespace PureRadio.Uwp.Providers.Interfaces
         /// </summary>
         /// <returns>有效为<c>true</c>，无效为<c>false</c>.</returns>
         bool IsTokenValidAsync();
+
+        /// <summary>
+        /// 尝试刷新Token或登录
+        /// </summary>
+        /// <returns>是否成功</returns>
+        Task<bool> RefreshTokenOrSignInAsync();
     }
 }

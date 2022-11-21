@@ -318,7 +318,7 @@
                 </muxc:NavigationViewItem>
                 <muxc:NavigationViewItem Tag="2" x:Uid="navRadio">
                     <muxc:NavigationViewItem.Icon>
-                        <FontIcon FontFamily="{StaticResource FluentIcons}" Glyph="&#xE74C;"/>
+                        <FontIcon FontFamily="{StaticResource FluentIcons}" Glyph="&#xE95A;"/>
                     </muxc:NavigationViewItem.Icon>
                 </muxc:NavigationViewItem>
                 <muxc:NavigationViewItem Tag="3" x:Uid="navContent">

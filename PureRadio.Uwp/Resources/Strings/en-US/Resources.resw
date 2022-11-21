@@ -168,6 +168,102 @@
   <data name="LangPodcasterUnknown" xml:space="preserve">
     <value>Unknown</value>
   </data>
+  <data name="LangProvince111" xml:space="preserve">
+    <value>Anhui</value>
+  </data>
+  <data name="LangProvince129" xml:space="preserve">
+    <value>Fujian</value>
+  </data>
+  <data name="LangProvince139" xml:space="preserve">
+    <value>Jiangxi</value>
+  </data>
+  <data name="LangProvince151" xml:space="preserve">
+    <value>Shandong</value>
+  </data>
+  <data name="LangProvince169" xml:space="preserve">
+    <value>Henan</value>
+  </data>
+  <data name="LangProvince187" xml:space="preserve">
+    <value>Hubei</value>
+  </data>
+  <data name="LangProvince19" xml:space="preserve">
+    <value>Shanxi</value>
+  </data>
+  <data name="LangProvince202" xml:space="preserve">
+    <value>Hunan</value>
+  </data>
+  <data name="LangProvince217" xml:space="preserve">
+    <value>Guangdong</value>
+  </data>
+  <data name="LangProvince239" xml:space="preserve">
+    <value>Guangxi</value>
+  </data>
+  <data name="LangProvince254" xml:space="preserve">
+    <value>Hainan</value>
+  </data>
+  <data name="LangProvince257" xml:space="preserve">
+    <value>Chongqing</value>
+  </data>
+  <data name="LangProvince259" xml:space="preserve">
+    <value>Sichuan</value>
+  </data>
+  <data name="LangProvince281" xml:space="preserve">
+    <value>Guizhou</value>
+  </data>
+  <data name="LangProvince291" xml:space="preserve">
+    <value>Yunnan</value>
+  </data>
+  <data name="LangProvince3" xml:space="preserve">
+    <value>Beijing</value>
+  </data>
+  <data name="LangProvince308" xml:space="preserve">
+    <value>Tibet</value>
+  </data>
+  <data name="LangProvince31" xml:space="preserve">
+    <value>Inner Mongoria</value>
+  </data>
+  <data name="LangProvince316" xml:space="preserve">
+    <value>Shaanxi</value>
+  </data>
+  <data name="LangProvince327" xml:space="preserve">
+    <value>Gansu</value>
+  </data>
+  <data name="LangProvince342" xml:space="preserve">
+    <value>Qinghai</value>
+  </data>
+  <data name="LangProvince351" xml:space="preserve">
+    <value>Ningxia</value>
+  </data>
+  <data name="LangProvince357" xml:space="preserve">
+    <value>Xinjiang</value>
+  </data>
+  <data name="LangProvince44" xml:space="preserve">
+    <value>Liaoning</value>
+  </data>
+  <data name="LangProvince5" xml:space="preserve">
+    <value>Tianjing</value>
+  </data>
+  <data name="LangProvince59" xml:space="preserve">
+    <value>Jilin</value>
+  </data>
+  <data name="LangProvince69" xml:space="preserve">
+    <value>Heilongjiang</value>
+  </data>
+  <data name="LangProvince7" xml:space="preserve">
+    <value>Hebei</value>
+  </data>
+  <data name="LangProvince83" xml:space="preserve">
+    <value>Shanghai</value>
+  </data>
+  <data name="LangProvince85" xml:space="preserve">
+    <value>Jiangsu</value>
+  </data>
+  <data name="LangProvince99" xml:space="preserve">
+    <value>Zhejiang</value>
+  </data>
+  <data name="LangProvinceUnknown" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
   <data name="LangRadioCategory429" xml:space="preserve">
     <value>Traffic</value>
   </data>

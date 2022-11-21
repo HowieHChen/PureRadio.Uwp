@@ -137,6 +137,7 @@
     <Compile Include="Models\Args\HistoryItemChangedEventArgs.cs" />
     <Compile Include="Models\Args\PlayerItemChangedEventArgs.cs" />
     <Compile Include="Models\Args\PlayerStateChangedEventArgs.cs" />
+    <Compile Include="Models\Database\AccountSnapshot.cs" />
     <Compile Include="Models\Database\DbObject.cs" />
     <Compile Include="Models\Database\FavContent.cs" />
     <Compile Include="Models\Database\FavRadio.cs" />

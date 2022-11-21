@@ -168,6 +168,102 @@
   <data name="LangPodcasterUnknown" xml:space="preserve">
     <value>未知</value>
   </data>
+  <data name="LangProvince111" xml:space="preserve">
+    <value>安徽</value>
+  </data>
+  <data name="LangProvince129" xml:space="preserve">
+    <value>福建</value>
+  </data>
+  <data name="LangProvince139" xml:space="preserve">
+    <value>江西</value>
+  </data>
+  <data name="LangProvince151" xml:space="preserve">
+    <value>山东</value>
+  </data>
+  <data name="LangProvince169" xml:space="preserve">
+    <value>河南</value>
+  </data>
+  <data name="LangProvince187" xml:space="preserve">
+    <value>湖北</value>
+  </data>
+  <data name="LangProvince19" xml:space="preserve">
+    <value>山西</value>
+  </data>
+  <data name="LangProvince202" xml:space="preserve">
+    <value>湖南</value>
+  </data>
+  <data name="LangProvince217" xml:space="preserve">
+    <value>广东</value>
+  </data>
+  <data name="LangProvince239" xml:space="preserve">
+    <value>广西</value>
+  </data>
+  <data name="LangProvince254" xml:space="preserve">
+    <value>海南</value>
+  </data>
+  <data name="LangProvince257" xml:space="preserve">
+    <value>重庆</value>
+  </data>
+  <data name="LangProvince259" xml:space="preserve">
+    <value>四川</value>
+  </data>
+  <data name="LangProvince281" xml:space="preserve">
+    <value>贵州</value>
+  </data>
+  <data name="LangProvince291" xml:space="preserve">
+    <value>云南</value>
+  </data>
+  <data name="LangProvince3" xml:space="preserve">
+    <value>北京</value>
+  </data>
+  <data name="LangProvince308" xml:space="preserve">
+    <value>西藏</value>
+  </data>
+  <data name="LangProvince31" xml:space="preserve">
+    <value>内蒙古</value>
+  </data>
+  <data name="LangProvince316" xml:space="preserve">
+    <value>陕西</value>
+  </data>
+  <data name="LangProvince327" xml:space="preserve">
+    <value>甘肃</value>
+  </data>
+  <data name="LangProvince342" xml:space="preserve">
+    <value>青海</value>
+  </data>
+  <data name="LangProvince351" xml:space="preserve">
+    <value>宁夏</value>
+  </data>
+  <data name="LangProvince357" xml:space="preserve">
+    <value>新疆</value>
+  </data>
+  <data name="LangProvince44" xml:space="preserve">
+    <value>辽宁</value>
+  </data>
+  <data name="LangProvince5" xml:space="preserve">
+    <value>天津</value>
+  </data>
+  <data name="LangProvince59" xml:space="preserve">
+    <value>吉林</value>
+  </data>
+  <data name="LangProvince69" xml:space="preserve">
+    <value>黑龙江</value>
+  </data>
+  <data name="LangProvince7" xml:space="preserve">
+    <value>河北</value>
+  </data>
+  <data name="LangProvince83" xml:space="preserve">
+    <value>上海</value>
+  </data>
+  <data name="LangProvince85" xml:space="preserve">
+    <value>江苏</value>
+  </data>
+  <data name="LangProvince99" xml:space="preserve">
+    <value>浙江</value>
+  </data>
+  <data name="LangProvinceUnknown" xml:space="preserve">
+    <value>未知</value>
+  </data>
   <data name="LangRadioCategory429" xml:space="preserve">
     <value>交通台</value>
   </data>

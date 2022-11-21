@@ -1,4 +1,5 @@
 ﻿using Microsoft.Toolkit.Uwp.UI.Animations;
+using PureRadio.Uwp.Models.Data.User;
 using PureRadio.Uwp.Models.Database;
 using PureRadio.Uwp.Services.Interfaces;
 using SQLite;
@@ -45,6 +46,7 @@ namespace PureRadio.Uwp.Services
             _ = await _asyncDb.CreateTableAsync<FavRadio>();
             _ = await _asyncDb.CreateTableAsync<FavContent>();
             _ = await _asyncDb.CreateTableAsync<History>();
+            _ = await _asyncDb.CreateTableAsync<AccountSnapshot>();
             
             _upsertQueue ??= new();
         }

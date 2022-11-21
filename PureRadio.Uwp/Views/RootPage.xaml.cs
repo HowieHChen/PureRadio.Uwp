@@ -154,7 +154,8 @@ namespace PureRadio.Uwp.Views
                 var result = await httpProvider.ParseAsync<IPAddrResponse>(response);
                 if (result?.Code == 0)
                 {
-                    var regionId = AppConstants.ProvinceIdDict.FirstOrDefault(x => x.Value == result.Data.Region).Key;
+                    if (AppConstants.ProvinceIdDict.TryGetValue(result.Data.Region, out int regionId))
+                        regionId = 0;
                     Ioc.Default.GetRequiredService<ISettingsService>().SetValue<int>(AppConstants.SettingsKey.LocalRegionId, regionId);
                 }
             }
@@ -167,7 +168,7 @@ namespace PureRadio.Uwp.Views
             ImageCache.Instance.MaxMemoryCacheCount = 100;
 
 
-            await Ioc.Default.GetRequiredService<IAccountProvider>().TrySignInAsync();
+            _ = await Ioc.Default.GetRequiredService<IAccountProvider>().RefreshTokenOrSignInAsync();
             DismissExtendedSplash();
         }
 

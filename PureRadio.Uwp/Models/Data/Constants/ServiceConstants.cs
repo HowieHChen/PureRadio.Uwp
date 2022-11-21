@@ -38,7 +38,7 @@ namespace PureRadio.Uwp.Models.Data.Constants
         {
             public const string GrantType = "grant_type";
             public const string RefreshToken = "refresh_token";
-            public const string QingTingId = "qtId";
+            public const string QingTingId = "qingting_id";
             public const string Order = "order";
             public const string AccountType = "account_type";
             public const string DeviceId = "device_id";
