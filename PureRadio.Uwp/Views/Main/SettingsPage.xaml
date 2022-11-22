@@ -362,6 +362,56 @@
                         </StackPanel>
                     </muxc:Expander.Content>
                 </muxc:Expander>
+                <!-- Version -->
+                <muxc:Expander 
+                    Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
+                    HorizontalAlignment="Stretch" 
+                    HorizontalContentAlignment="Stretch"
+                    CornerRadius="4"
+                    Margin="0,4,0,0">
+                    <animations:Implicit.Animations>
+                        <animations:OffsetAnimation Duration="0:0:0.2"/>
+                    </animations:Implicit.Animations>
+                    <muxc:Expander.Header>
+                        <Grid Height="68">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <FontIcon 
+                                Grid.Column="0"
+                                Width="24"
+                                Height="24"
+                                FontFamily="{StaticResource FluentIcons}" 
+                                Glyph="&#xE946;"/>
+                            <TextBlock 
+                                Grid.Column="1"
+                                VerticalAlignment="Center"
+                                Margin="16,0,0,0"
+                                Text="{x:Bind ViewModel.VersionInfo,Mode=OneWay}"/>
+                        </Grid>
+                    </muxc:Expander.Header>
+                    <muxc:Expander.Content>
+                        <StackPanel Margin="28,0,0,0" Orientation="Vertical">
+                            <TextBlock
+                                Margin="12,0,0,0"
+                                Text="{x:Bind ViewModel.VersionInfo,Mode=TwoWay}"
+                                Foreground="{ThemeResource CustomNavigationViewItemForeground}"
+                                Style="{StaticResource CaptionTextBlockStyle}"/>
+                            <TextBlock
+                                Margin="12,2,0,4"
+                                Text="©2022 Howie, GPL-3.0 license"
+                                Foreground="{ThemeResource CustomNavigationViewItemForeground}"
+                                Style="{StaticResource CaptionTextBlockStyle}"/>
+                            <HyperlinkButton NavigateUri="https://github.com/HowieHChen/PureRadio.Uwp" >
+                                <TextBlock 
+                                    x:Uid="PageSettingsSourceCode" 
+                                    Text="Source code" TextTrimming="CharacterEllipsis"
+                                    Style="{StaticResource CaptionTextBlockStyle}"/>
+                            </HyperlinkButton>
+                        </StackPanel>
+                    </muxc:Expander.Content>
+                </muxc:Expander>
                 <animations:Implicit.Animations>
                     <animations:OffsetAnimation Duration="0:0:0.3"/>
                 </animations:Implicit.Animations>

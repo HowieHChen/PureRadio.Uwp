@@ -528,6 +528,9 @@
   <data name="PageSettingsRestartDialog.Title" xml:space="preserve">
     <value>Restart the application</value>
   </data>
+  <data name="PageSettingsSourceCode.Text" xml:space="preserve">
+    <value>Source code</value>
+  </data>
   <data name="PageSettingsThemeDark.Content" xml:space="preserve">
     <value>Dark</value>
   </data>

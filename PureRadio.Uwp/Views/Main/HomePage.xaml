@@ -270,6 +270,7 @@
                         Grid.Row="3" Grid.ColumnSpan="3"
                         Text="{x:Bind Description}"
                         Style="{StaticResource CaptionTextBlockStyle}"
+                        Foreground="{ThemeResource CustomNavigationViewItemForeground}"
                         TextTrimming="CharacterEllipsis"
                         MaxLines="2"/>
                 </Grid>

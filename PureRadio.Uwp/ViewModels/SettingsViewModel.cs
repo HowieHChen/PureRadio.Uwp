@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.ApplicationModel;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -94,6 +95,9 @@ namespace PureRadio.Uwp.ViewModels
         [ObservableProperty]
         private bool _clearingCache;
 
+        [ObservableProperty]
+        private string _versionInfo;
+
         public SettingsViewModel(ISettingsService settings)
         {
             this.settings = settings;
@@ -108,6 +112,12 @@ namespace PureRadio.Uwp.ViewModels
             _timerStatus = settings.TimerStatus;
             _closeTime = settings.ShutdownTimeString;
             Delay = null;
+            VersionInfo = string.Format("{0} {1}.{2}.{3}.{4}",
+                Package.Current.DisplayName,
+                Package.Current.Id.Version.Major,
+                Package.Current.Id.Version.Minor,
+                Package.Current.Id.Version.Build,
+                Package.Current.Id.Version.Revision);
         }
 
 

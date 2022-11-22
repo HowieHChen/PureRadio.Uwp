@@ -8,15 +8,15 @@
   IgnorableNamespaces="uap mp uap3">
 
   <Identity
-    Name="0d00bd04-a56c-4e92-bb9e-c5acb5dce620"
+    Name="Dev.Howie.PureRadio"
     Publisher="CN=howie"
-    Version="1.0.0.0" />
+    Version="1.0.1.0" />
 
   <mp:PhoneIdentity PhoneProductId="0d00bd04-a56c-4e92-bb9e-c5acb5dce620" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>ms-resource:AppName</DisplayName>
-    <PublisherDisplayName>howie</PublisherDisplayName>
+    <PublisherDisplayName>Howie</PublisherDisplayName>
     <Logo>Assets\AppIcon\StoreLogo.png</Logo>
   </Properties>
 
