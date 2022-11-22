@@ -31,10 +31,10 @@ namespace PureRadio.Uwp.Adapters
         }
 
 
-        public ContentPlaylistDetail ConvertToContentPlaylistItem(ContentProgramListItem item, string version)
+        public ContentPlaylistDetail ConvertToContentPlaylistItem(ContentProgramListItem item, string version, bool isContentFree)
             => new ContentPlaylistDetail(
                 version, item.ProgramId, item.Title, item.Duration, item.UpdateTime,
-                item.Sequence, item.IsFree, new Uri(item.Cover), item.ContentType, item.PlayCount);
+                item.Sequence, isContentFree || item.IsFree, new Uri(item.Cover), item.ContentType, item.PlayCount);
 
         public ContentInfoCategory ConvertToContentInfoCategory(ContentCategoryItem item)
             => new ContentInfoCategory(

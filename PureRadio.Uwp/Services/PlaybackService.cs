@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Mime;
 using System.Reflection;
 using System.Text;
 using System.Threading;
@@ -349,7 +350,7 @@ namespace PureRadio.Uwp.Services
             else if (version == string.Empty)
                 return;
             var detail = await _contentProvider.GetContentDetailInfo(contentId, CancellationToken.None);
-            var contentPlaylist = await _contentProvider.GetContentProgramListFull(contentId, version, CancellationToken.None);
+            var contentPlaylist = await _contentProvider.GetContentProgramListFull(contentId, version, detail.ContentType == "free", CancellationToken.None);
             var playlist = _playerAdapter.ConvertToPlayItemSnapshotList(detail, contentPlaylist);
             PlayContent(contentId, programId, playlist);
         }

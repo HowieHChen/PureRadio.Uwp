@@ -31,6 +31,7 @@ namespace PureRadio.Uwp.ViewModels
 
         private string _version;
         private int _contentId;
+        private bool _isFree;
         private ContentInfoDetail _contentDetail;
         private PlayItemSnapshot itemSnapshot;
         public int ContentId
@@ -141,6 +142,7 @@ namespace PureRadio.Uwp.ViewModels
                     Attributes = result.Attributes;
                     _version = result.Version;
                     _contentDetail = result;
+                    _isFree = result.ContentType == "free";
                     itemSnapshot = playerAdapter.ConvertToPlayItemSnapshot(result);
                 }
                 IsInfoLoading = false;
@@ -156,7 +158,7 @@ namespace PureRadio.Uwp.ViewModels
             if (ContentId != 0 && !string.IsNullOrEmpty(_version))
             {
                 IsPlaylistLoading = true;
-                var result = await contentProvider.GetContentProgramListFull(ContentId, _version, CancellationToken.None);
+                var result = await contentProvider.GetContentProgramListFull(ContentId, _version, _isFree, CancellationToken.None);
                 if (result != null)
                 {
                     ContentPlaylists = result;

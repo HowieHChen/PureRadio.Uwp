@@ -46,7 +46,7 @@ namespace PureRadio.Uwp.Providers
             return items;
         }
 
-        public async Task<List<ContentPlaylistDetail>> GetContentProgramListFull(int contentId, string version, CancellationToken cancellationToken)
+        public async Task<List<ContentPlaylistDetail>> GetContentProgramListFull(int contentId, string version, bool isContentFree, CancellationToken cancellationToken)
         {
             List<ContentPlaylistDetail> items = new();
             string url = ApiConstants.Content.PList + contentId.ToString() + "/programs/" + version.ToString();
@@ -71,7 +71,7 @@ namespace PureRadio.Uwp.Providers
                 else
                 {
                     _total = result.Data.Total;
-                    items.AddRange(result.Data.Programs.Select(p => _contentAdapter.ConvertToContentPlaylistItem(p, version)).ToList());
+                    items.AddRange(result.Data.Programs.Select(p => _contentAdapter.ConvertToContentPlaylistItem(p, version, isContentFree)).ToList());
                 }
             }
             while (items.Count < _total);

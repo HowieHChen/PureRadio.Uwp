@@ -235,23 +235,23 @@
                                 <ColumnDefinition Width="auto" />
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition />
-                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
                             <TextBlock 
                                 Grid.Row="0" Grid.Column="0"
                                 Text="{x:Bind ViewModel.Title, Mode=OneWay}" 
                                 TextTrimming="CharacterEllipsis"
                                 MaxLines="1" FontWeight="Bold"
-                                Foreground="#FFFFFFFF"
+                                Foreground="#E6FFFFFF"
                                 Style="{StaticResource SubtitleTextBlockStyle}"/>
                             <TextBlock 
                                 Grid.Row="1" Grid.Column="0"
-                                Margin="0,4,0,0" 
+                                Margin="0,2,0,0" 
                                 Text="{x:Bind ViewModel.SubTitle, Mode=OneWay}" 
                                 TextTrimming="CharacterEllipsis"
                                 MaxLines="1" FontWeight="Medium"
-                                Foreground="#FFFFFFFF"
+                                Foreground="#B4FFFFFF"
                                 Style="{StaticResource SubtitleTextBlockStyle}"/>
                             <Button 
                                 Grid.RowSpan="2" Grid.Column="1"

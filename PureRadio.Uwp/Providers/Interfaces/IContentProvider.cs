@@ -28,9 +28,10 @@ namespace PureRadio.Uwp.Providers.Interfaces
         /// </summary>
         /// <param name="contentId">需获取的专辑ID.</param>
         /// <param name="version">专辑版本号</param>
+        /// <param name="isContentFree">专辑是否付费</param>
         /// <param name="cancellationToken">异步中止令牌.</param>
         /// <returns>专辑播放列表</returns>
-        Task<List<ContentPlaylistDetail>> GetContentProgramListFull(int contentId, string version, CancellationToken cancellationToken);
+        Task<List<ContentPlaylistDetail>> GetContentProgramListFull(int contentId, string version, bool isContentFree, CancellationToken cancellationToken);
 
         /// <summary>
         /// 获取指定分类和属性的专辑结果.
