@@ -53,6 +53,24 @@
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
+            <VisualStateGroup>
+                <VisualState x:Name="HighLayout">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowHeight="700" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="ExtraButtonRow.Height" Value="auto" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="LowLayout">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowHeight="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="ExtraButtonRow.Height" Value="0" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
         <Border
             Background="#EBEBEB"
@@ -325,7 +343,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto" />
                             <RowDefinition Height="24" />
-                            <RowDefinition Height="auto" />
+                            <RowDefinition x:Name="ExtraButtonRow" Height="auto" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="3*" />

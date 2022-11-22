@@ -306,7 +306,8 @@ namespace PureRadio.Uwp.Services
         public async void PlayRadioDemand(int radioId, int index, List<PlayItemSnapshot> radioPlaylist)
         {
             _radioPlayListIndex = Convert.ToUInt32(index);
-            if (_currentType == MediaPlayType.RadioDemand && _playItem != null && _playItem.MainId == radioId && _playItem.DayOfWeek == radioPlaylist[index].DayOfWeek)
+            if (_currentType == MediaPlayType.RadioDemand && _playItem != null && _playItem.MainId == radioId && 
+                _playItem.DayOfWeek == radioPlaylist[index].DayOfWeek && _playList.Count == radioPlaylist.Count)
             {
                 (AudioPlayer.Source as MediaPlaybackList).MoveTo(_radioPlayListIndex);
                 Play();
