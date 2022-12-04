@@ -9,14 +9,14 @@
 
   <Identity
     Name="Dev.Howie.PureRadio"
-    Publisher="CN=howie"
-    Version="1.0.1.0" />
+    Publisher="CN=HowieC"
+    Version="1.1.1.0" />
 
   <mp:PhoneIdentity PhoneProductId="0d00bd04-a56c-4e92-bb9e-c5acb5dce620" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>ms-resource:AppName</DisplayName>
-    <PublisherDisplayName>Howie</PublisherDisplayName>
+    <PublisherDisplayName>HowieC</PublisherDisplayName>
     <Logo>Assets\AppIcon\StoreLogo.png</Logo>
   </Properties>
 

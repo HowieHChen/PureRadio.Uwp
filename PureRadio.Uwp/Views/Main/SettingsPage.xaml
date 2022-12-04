@@ -400,7 +400,7 @@
                                 Style="{StaticResource CaptionTextBlockStyle}"/>
                             <TextBlock
                                 Margin="12,2,0,4"
-                                Text="©2022 Howie, GPL-3.0 license"
+                                Text="©2022 HowieC, GPL-3.0 license"
                                 Foreground="{ThemeResource CustomNavigationViewItemForeground}"
                                 Style="{StaticResource CaptionTextBlockStyle}"/>
                             <HyperlinkButton NavigateUri="https://github.com/HowieHChen/PureRadio.Uwp" >
