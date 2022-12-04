@@ -10,7 +10,7 @@
   <Identity
     Name="Dev.Howie.PureRadio"
     Publisher="CN=HowieC"
-    Version="1.1.1.0" />
+    Version="1.1.2.0" />
 
   <mp:PhoneIdentity PhoneProductId="0d00bd04-a56c-4e92-bb9e-c5acb5dce620" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
