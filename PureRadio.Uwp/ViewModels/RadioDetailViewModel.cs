@@ -243,7 +243,7 @@ namespace PureRadio.Uwp.ViewModels
                     case PlaylistDay.Today:
                         if (DateTime.TryParse(RadioPlaylist[index].EndTime, out DateTime _endDateTime))
                         {
-                            if(DateTime.Now > _endDateTime)
+                            if(DateTime.Now > _endDateTime.AddMinutes(5))
                             {
                                 int canPlayIndex = index;
                                 for (int i = canPlayIndex; i < RadioPlaylist.Count; i++)

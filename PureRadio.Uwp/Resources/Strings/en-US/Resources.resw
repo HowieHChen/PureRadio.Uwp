@@ -162,6 +162,9 @@
   <data name="LangNowPlaying.Text" xml:space="preserve">
     <value>Live: </value>
   </data>
+  <data name="LangPlay.Text" xml:space="preserve">
+    <value>Play</value>
+  </data>
   <data name="LangPlayCount.Text" xml:space="preserve">
     <value>plays</value>
   </data>

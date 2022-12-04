@@ -162,6 +162,9 @@
   <data name="LangNowPlaying.Text" xml:space="preserve">
     <value>正在直播: </value>
   </data>
+  <data name="LangPlay.Text" xml:space="preserve">
+    <value>播放</value>
+  </data>
   <data name="LangPlayCount.Text" xml:space="preserve">
     <value>次播放</value>
   </data>

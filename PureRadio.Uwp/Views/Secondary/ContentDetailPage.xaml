@@ -186,7 +186,7 @@
                                 HorizontalAlignment="Stretch" Style="{StaticResource AccentButtonStyle}" >
                                 <StackPanel Orientation="Horizontal">
                                     <FontIcon FontFamily="{StaticResource FluentIcons}" Glyph="&#xF5B0;"/>
-                                    <TextBlock x:Uid="DetailPagePlayButton" Margin="12,0" Text="Play"/>
+                                    <TextBlock x:Uid="LangPlay" Margin="12,0" Text="Play"/>
                                 </StackPanel>
                             </Button>
                             <Button HorizontalAlignment="Stretch" Margin="0,8"
